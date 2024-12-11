@@ -9,9 +9,15 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    code/core/board.cpp \
+    code/core/cube.cpp \
+    code/core/vector2.cpp \
     main.cpp
 
-HEADERS +=
+HEADERS += \
+    code/core/board.h \
+    code/core/cube.h \
+    code/core/vector2.h
 
 FORMS +=
 
