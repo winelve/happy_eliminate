@@ -286,15 +286,26 @@ void Board::Fall(){
                 empty_row--; // 更新下一个空位的位置
             }
         }
+    }
+}
 
-        // // 在剩余的空位上方生成新的方块
-        // for(int row = empty_row; row >= 0; --row){
-        //     board_[row][col] = GenerateNewCube(); // 实现该函数以生成新方块
-        // }
+void Board::Fill(){
+    for(int col = 0; col < GetWidth(); ++col){
+        // 从底部开始向上遍历每一行
+        for(int row = GetHeight() - 1; row >= 0; --row){
+            if(board_[row][col].Empty()){
+                // 如果当前单元为空，则生成一个新的方块填充
+                board_[row][col] = GenerateCube();
+            }
+        }
     }
 }
 
 
+Cube Board::GenerateCube(){
+    int new_type = rand() % Board::ktype_size + 1;
+    return Cube(new_type);
+}
 
 
 

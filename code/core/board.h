@@ -39,6 +39,14 @@ public:
         Fall();
         qDebug() << "\nFall:";
         PrintBoard();
+        Fill();
+        qDebug() << "\nFill:";
+        PrintBoard();
+        qDebug() << "\nNewDel:";
+        ClearCube(CheckBoard());
+        PrintBoard();
+
+
     }
 
 
@@ -53,6 +61,7 @@ private:
 
     void DelCube(int row,int col); //删除一个单元
     void OnCubeDel(); //用于处理cube删除后的逻辑
+    Cube GenerateCube(); //生成随机新的方块
 
     //游戏规则
     std::vector<std::vector<Vector2>> CheckBoard(); //检查当前棋盘是否有可消除元素
@@ -60,6 +69,7 @@ private:
     void Fall();
     void Swap(Vector2 pos_1,Vector2 pos_2);
     void OnSwap(); //处理交换后的逻辑
+    void Fill(); //填充
 
 };
 
