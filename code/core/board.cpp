@@ -1,17 +1,104 @@
 #include "board.h"
 #include <queue>
 
-
+const int Board::ktype_size = 6;
 Board::Board(const std::vector<std::vector<int>> &board,QObject *parent)
     : QObject{parent}
 {
     InitBoard(board);
 }
+
 Board::Board(const std::vector<std::vector<Cube>> &board,QObject *parent)
     : QObject{parent}
 {
     InitBoard(board);
 }
+
+Board::Board(int width,int height,QObject *parent)
+    : QObject{parent}
+{
+    InitRandomBoard(width,height);
+}
+
+// 初始化随机棋盘，确保没有初始消除组合
+void Board::InitRandomBoard(int width, int height){
+    board_.resize(height, std::vector<Cube>(width, Cube())); // 预先设置为空
+
+    for(int row = 0; row < height; ++row){
+        for(int col = 0; col < width; ++col){
+            bool valid = false;
+            int attempts = 0;
+            const int MAX_ATTEMPTS = 100; // 防止无限循环
+
+            while(!valid && attempts < MAX_ATTEMPTS){
+                int type = rand() % Board::ktype_size + 1; // 假设有5种类型
+                if(!CausesMatch(row, col, type)){
+                    board_[row][col] = Cube(type);
+                    valid = true;
+                }
+                attempts++;
+            }
+
+            if(!valid){
+                // 如果经过多次尝试仍未找到合适的类型，强制设置（可能导致匹配）
+                board_[row][col] = Cube(rand() % Board::ktype_size);
+                qDebug() << "Warning: Could not find non-matching type for (" << row << "," << col << ")";
+            }
+        }
+    }
+}
+
+// 检查当前赋值是否会导致消除组合
+bool Board::CausesMatch(int row, int col, int type){
+    // 检查水平
+    int match_count = 1;
+    // 向左检查
+    for(int i = 1; i <= 2; ++i){
+        if(col - i < 0) break;
+        if(board_[row][col - i].GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    // 向右检查
+    for(int i = 1; i <= 2; ++i){
+        if(col + i >= GetWidth()) break;
+        if(board_[row][col + i].GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    if(match_count >= 3) return true;
+
+    // 检查垂直
+    match_count = 1;
+    // 向上检查
+    for(int i = 1; i <= 2; ++i){
+        if(row - i < 0) break;
+        if(board_[row - i][col].GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    // 向下检查
+    for(int i = 1; i <= 2; ++i){
+        if(row + i >= GetHeight()) break;
+        if(board_[row + i][col].GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    if(match_count >= 3) return true;
+
+    return false;
+}
+
+
+
 
 void Board::InitBoard(const std::vector<std::vector<Cube>> &board)
 {
@@ -45,13 +132,23 @@ void Board::PrintBoard(){
     }
 }
 
-void Board::SetBoard(int row,int col,int type){
+void Board::DelCube(int row,int col){
     //判断是否有效访问
     if (row < 0 || row >= board_.size() || col < 0 || col >= board_[row].size()) {
         qDebug() << "Out of bounding::In SetBoard.";
     }
 
-    board_[row][col].SetType(type);
+    board_[row][col].SetType(0);
+    //或许下面还应该执行一些消除后的逻辑
+}
+
+void Board::SetCube(Vector2 pos,const Cube cube){
+    int row = pos.GetRow(), col = pos.GetColumn();
+    if (row < 0 || row >= board_.size() || col < 0 || col >= board_[row].size()) {
+        qDebug() << "Out of bounding::In SetBoard.";
+        return ;
+    }
+    board_[pos.GetRow()][pos.GetColumn()] = cube;
 }
 
 
@@ -158,17 +255,45 @@ int Board::ClearCube(std::vector<std::vector<Vector2>> cubes_remove)
     //清除
     for(auto &cube_list: cubes_remove){
         for(const Vector2 &pos:cube_list){
-            SetBoard(pos.GetRow(),pos.GetColumn(),0);
+            DelCube(pos.GetRow(),pos.GetColumn());
         }
     }
 
     return total_size;
 }
 
+void Board::Swap(Vector2 pos_1,Vector2 pos_2){
+    Cube cube = GetCube(pos_1);
+    SetCube(pos_1,GetCube(pos_2));
+    SetCube(pos_2,cube);
+}
+
+
 
 void Board::Fall(){
+    for(int col = 0; col < GetWidth(); ++col){
+        int empty_row = GetHeight() - 1; // 从该列的底部开始
 
+        // 从底部向上遍历每一行
+        for(int row = GetHeight() - 1; row >= 0; --row){
+            if(!board_[row][col].Empty()){ // 如果当前方块不是空的
+                if(row != empty_row){
+                    // 将当前方块下移到空位
+                    board_[empty_row][col] = board_[row][col];
+                    // 将原位置设置为空
+                    board_[row][col] = Cube(); // 假设默认构造的 Cube 是空的
+                }
+                empty_row--; // 更新下一个空位的位置
+            }
+        }
+
+        // // 在剩余的空位上方生成新的方块
+        // for(int row = empty_row; row >= 0; --row){
+        //     board_[row][col] = GenerateNewCube(); // 实现该函数以生成新方块
+        // }
+    }
 }
+
 
 
 

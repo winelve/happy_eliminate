@@ -16,6 +16,7 @@ public:
 
     void SetType(int type) { type_ = type; }
     int GetType() { return type_; }
+    bool Empty() { return type_==0 ? true:false; }
 
 
     bool operator==(const Cube& other) const {
