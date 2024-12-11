@@ -29,23 +29,6 @@ public:
     int GetHeight() { return board_.size(); }
 
     void test_check_board(){
-        PrintBoard();
-        qDebug() << "";
-        std::vector<std::vector<Vector2>> pos_list = CheckBoard();
-        qDebug() << "size:" << pos_list.size();
-        ClearCube(pos_list);
-        qDebug() << "\nAfter:";
-        PrintBoard();
-        Fall();
-        qDebug() << "\nFall:";
-        PrintBoard();
-        Fill();
-        qDebug() << "\nFill:";
-        PrintBoard();
-        qDebug() << "\nNewDel:";
-        ClearCube(CheckBoard());
-        PrintBoard();
-
 
     }
 
