@@ -12,14 +12,17 @@ SOURCES += \
     code/core/board.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
+    code/windows/gamewidget.cpp \
     main.cpp
 
 HEADERS += \
     code/core/board.h \
     code/core/cube.h \
-    code/core/vector2.h
+    code/core/vector2.h \
+    code/windows/gamewidget.h
 
-FORMS +=
+FORMS += \
+    code/windows/gamewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
