@@ -9,8 +9,10 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    code/core/Animation/animationmanager.cpp \
     code/core/Animation/atlas.cpp \
     code/core/Animation/frameanimation.cpp \
+    code/core/Animation/resourcemanager.cpp \
     code/core/board.cpp \
     code/core/boardwidget.cpp \
     code/core/constants.cpp \
@@ -20,8 +22,10 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    code/core/Animation/animationmanager.h \
     code/core/Animation/atlas.h \
     code/core/Animation/frameanimation.h \
+    code/core/Animation/resourcemanager.h \
     code/core/board.h \
     code/core/boardwidget.h \
     code/core/constants.h \

@@ -6,21 +6,21 @@
 #include <vector>
 #include <QPixmap>
 
+//资源管理器,用于存储所有的图集资源
 class Atlas
 {
 public:
     Atlas();
 
-    void Load(QString path,int num);
+    void Load(const QString &path,int num);
     void Clear();
     int GetSize();
-    QPixmap* GetFrame(int idx);
-    void AddFrame(const QPixmap &frame);
+    QPixmap* GetAtlas(int idx);
+    void AddAtlas(const QPixmap &frame);
     bool Empty() { return !GetSize(); }
 
 private:
-    std::vector<QPixmap> frame_list_;
-
+    std::vector<QPixmap> atlas_list;
 };
 
 #endif // ATLAS_H

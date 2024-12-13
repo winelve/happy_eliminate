@@ -2,8 +2,11 @@
 #define GAMEWIDGET_H
 
 #include "code/core/boardwidget.h"
+#include "code/core/Animation/animationmanager.h"
+
 #include <QWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 namespace Ui {
 class GameWidget;
@@ -22,6 +25,11 @@ private:
     BoardWidget board_widget_;
 
     QTimer game_timer_;
+    QElapsedTimer elapsed_timer_;
+
+    AnimationManager *animation_manager_;
+
+
 
 private slots:
     void onUpdate(); //更新整体的数据

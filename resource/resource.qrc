@@ -26,5 +26,11 @@
         <file>cubes/frog/frog_column_28.png</file>
         <file>cubes/frog/frog_line_28.png</file>
         <file>cubes/frog/frog_wrap_49.png</file>
+        <file>cubes/bear/bear_cube.png</file>
+        <file>cubes/cat/cat_cube.png</file>
+        <file>cubes/chicken/chicken_cube.png</file>
+        <file>cubes/fox/fox_cube.png</file>
+        <file>cubes/frog/frog_cube.png</file>
+        <file>cubes/horse/horse_cube.png</file>
     </qresource>
 </RCC>

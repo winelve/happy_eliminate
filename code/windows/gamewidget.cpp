@@ -1,5 +1,6 @@
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
+
 #include <QVBoxLayout>
 
 GameWidget::GameWidget(QWidget *parent)
@@ -17,10 +18,17 @@ GameWidget::GameWidget(QWidget *parent)
     // 设置定时器，定期调用 Update
     connect(&game_timer_, &QTimer::timeout, this, &GameWidget::onUpdate);
     game_timer_.start(16); // 大约60FPS
+    elapsed_timer_.start();
+
+    animation_manager_ = AnimationManager::GetInstance();
 }
 
 void GameWidget::onUpdate() {
+    // 计算自上一次更新以来经过的时间（ms）
+    int delta_time = elapsed_timer_.restart();
+
     board_widget_.onUpdate();
+    animation_manager_->UpdateAll(delta_time);
 }
 
 GameWidget::~GameWidget()
