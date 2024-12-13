@@ -308,7 +308,7 @@ int Board::ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove) {
 }
 
 
-void Board::Swap(Vector2 pos_1,Vector2 pos_2){
+void Board::Swap(const Vector2 &pos_1,const Vector2 &pos_2){
     Cube cube = GetCube(pos_1);
     SetCube(pos_1,GetCube(pos_2));
     SetCube(pos_2,cube);
@@ -358,8 +358,54 @@ Cube Board::GenerateCube(){
     return Cube(new_type);
 }
 
+// 运行游戏逻辑：交换两个方块并处理消除
+void Board::RunGameLogic(const Vector2 &pos_1, const Vector2 &pos_2) {
+    // 交换 pos_1 和 pos_2 的方块
+    Swap(pos_1, pos_2);
+    qDebug() << "Swapped (" << pos_1.GetRow() << "," << pos_1.GetColumn()
+             << ") with (" << pos_2.GetRow() << "," << pos_2.GetColumn() << ")";
 
+    // 检查是否有可消除的组合
+    std::vector<std::vector<Vector2>> matches = CheckBoard();
 
+    if (!matches.empty()) {
+        qDebug() << "Matches found:";
+
+        // 打印匹配的坐标（可选，用于调试）
+        for (const auto &group : matches) {
+            QString groupStr;
+            for (const auto &pos : group) {
+                groupStr += QString("(%1,%2) ").arg(pos.GetRow()).arg(pos.GetColumn());
+            }
+            qDebug() << groupStr;
+        }
+
+        // 清除匹配的方块
+        int cleared = ClearCube(matches);
+        qDebug() << "Cleared cubes:" << cleared;
+
+        // 执行下落
+        Fall();
+        qDebug() << "Cubes have fallen.";
+
+        // 填充新的方块
+        Fill();
+        qDebug() << "New cubes have been filled.";
+
+        // 可选：检查是否有新的匹配（级联消除）
+        while (true) {
+            matches = CheckBoard();
+            if (matches.empty()) break;
+            ClearCube(matches);
+            Fall();
+            Fill();
+        }
+    } else {
+        qDebug() << "No matches found. Swapping back.";
+        // 没有消除，交换回去
+        Swap(pos_1, pos_2);
+    }
+}
 
 
 

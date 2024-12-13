@@ -14,6 +14,10 @@ public:
 
     void paintEvent(QPaintEvent *event) override;
     QSize GetBoardSize() { return QSize(width_*cell_size_,height_*cell_size_); }
+    void onUpdate();
+
+protected:
+    void mousePressEvent(QMouseEvent *ev) override;
 
 private:
     Board *board_;
@@ -21,6 +25,47 @@ private:
     int width_; int height_;
     int cell_size_;
     int padding_;   // 边距
+    int click_time; //测试点击
+
+    Vector2 first_pos_;
+    Vector2 second_pos_;
+
+    void Draw(QPainter &painter); //用于渲染
+    void DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter); //绘制背景
+
+    // 辅助函数：将像素坐标转换为棋盘坐标
+    bool PixelToBoard(int x, int y,Vector2 &pos) const;
+    // 辅助函数：检查两个位置是否相邻
+    bool areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const;
+
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif // BOARDWIDGET_H
+
+
+
+
+
+
+
+
+
+
+
+

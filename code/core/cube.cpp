@@ -6,10 +6,10 @@
 #include <QDebug>
 
 Cube::Cube()
-    : type_(0){}
+    : type_(0),isChoosed_(false) {}
 
 Cube::Cube(int type)
-    : type_(type){}
+    : type_(type),isChoosed_(false) {}
 
 
 void Cube::paint(QPainter &painter){
@@ -30,7 +30,14 @@ void Cube::paint(QPainter &painter){
     }
 
     painter.setBrush(QBrush(color));
-    painter.setPen(Qt::NoPen);
+
+
+    // 设置边框
+    if(isChoosed_){
+        painter.setPen(QPen(Qt::cyan, 4)); // 选中时的边框颜色和宽度
+    } else {
+        painter.setPen(QPen(Qt::black, 2)); // 默认边框颜色和宽度
+    }
 
     int x = padding + pos_.GetColumn() * cell_size;
     int y = padding + pos_.GetRow() * cell_size;
@@ -51,3 +58,5 @@ void Cube::paint(QPainter &painter){
     // 在方块中心绘制文本
     painter.drawText(x, y, cell_size, cell_size, Qt::AlignCenter, text);
 }
+
+

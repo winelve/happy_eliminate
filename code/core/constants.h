@@ -3,7 +3,7 @@
 
 namespace Constants {
 const int k_board_padding = 20;
-const int k_cell_size = 50;
+const int k_cell_size = 64;
 }
 
 

@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cubes/horse/horse_click_30.png</file>
+        <file>cubes/horse/horse_column_30.png</file>
+        <file>cubes/horse/horse_line_30.png</file>
+        <file>cubes/horse/horse_wrap_49.png</file>
+        <file>cubes/bear/bear_click_30.png</file>
+        <file>cubes/bear/bear_column_30.png</file>
+        <file>cubes/bear/bear_line_30.png</file>
+        <file>cubes/bear/bear_wrap_49.png</file>
+        <file>cubes/bird/bird_effect_20.png</file>
+        <file>cubes/bird/bird_select_30.png</file>
+        <file>cubes/cat/cat_click_30.png</file>
+        <file>cubes/cat/cat_column_29.png</file>
+        <file>cubes/cat/cat_line_29.png</file>
+        <file>cubes/cat/cat_wrap_49.png</file>
+        <file>cubes/chicken/chicken_click_30.png</file>
+        <file>cubes/chicken/chicken_column_29.png</file>
+        <file>cubes/chicken/chicken_line_29.png</file>
+        <file>cubes/chicken/chicken_wrap_49.png</file>
+        <file>cubes/fox/fox_click_29.png</file>
+        <file>cubes/fox/fox_column_29.png</file>
+        <file>cubes/fox/fox_line_29.png</file>
+        <file>cubes/fox/fox_wrap_48.png</file>
+        <file>cubes/frog/frog_click_29.png</file>
+        <file>cubes/frog/frog_column_28.png</file>
+        <file>cubes/frog/frog_line_28.png</file>
+        <file>cubes/frog/frog_wrap_49.png</file>
+    </qresource>
+</RCC>

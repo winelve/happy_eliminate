@@ -29,8 +29,12 @@ public:
     int GetWidth() { return board_.size()>0 ? board_[0].size() : 0; }
     int GetHeight() { return board_.size(); }
 
-    void test_check_board(){
+    void Swap(const Vector2 &pos_1,const Vector2 &pos_2);
 
+    void RunGameLogic(const Vector2 &pos_1,const Vector2 &pos_2);
+
+    void test_check_board(){
+        ClearCube(CheckBoard());
     }
 
 
@@ -50,8 +54,9 @@ private:
     //游戏规则
     std::vector<std::vector<Vector2>> CheckBoard(); //检查当前棋盘是否有可消除元素
     int ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove); // << 清楚给定的方块
+
+public:
     void Fall();
-    void Swap(Vector2 pos_1,Vector2 pos_2);
     void OnSwap(); //处理交换后的逻辑
     void Fill(); //填充
 
