@@ -1,6 +1,7 @@
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
 
+#include "code/core/boardwidget.h"
 #include <QWidget>
 
 namespace Ui {
@@ -17,6 +18,9 @@ public:
 
 private:
     Ui::GameWidget *ui;
+    BoardWidget board_widget_;
+
+
 };
 
 #endif // GAMEWIDGET_H

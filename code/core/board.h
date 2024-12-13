@@ -15,16 +15,17 @@ public:
     explicit Board(const std::vector<std::vector<int>> &board,QObject *parent = nullptr);
     explicit Board(const std::vector<std::vector<Cube>> &board,QObject *parent = nullptr);
     explicit Board(int width,int height,QObject *parent = nullptr);
+    Board(QObject *parent = nullptr);
 
     const static int ktype_size;
 
     void PrintBoard();
     void SetCubesToMove(std::vector<std::vector<Vector2>> data) { cubes_to_remove_ = data; }
 
-    Cube GetCube(int row,int col) const { return board_[row][col]; };
-    Cube GetCube(Vector2 pos) const { return board_[pos.GetRow()][pos.GetColumn()]; }
+    Cube& GetCube(int row,int col)  { return board_[row][col]; };
+    Cube& GetCube(Vector2 pos)  { return board_[pos.GetRow()][pos.GetColumn()]; }
 
-    void SetCube(Vector2 pos,const Cube cube);
+    void SetCube(Vector2 pos,const Cube &cube);
     int GetWidth() { return board_.size()>0 ? board_[0].size() : 0; }
     int GetHeight() { return board_.size(); }
 
@@ -48,7 +49,7 @@ private:
 
     //游戏规则
     std::vector<std::vector<Vector2>> CheckBoard(); //检查当前棋盘是否有可消除元素
-    int ClearCube(std::vector<std::vector<Vector2>> cubes_remove); // << 清楚给定的方块
+    int ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove); // << 清楚给定的方块
     void Fall();
     void Swap(Vector2 pos_1,Vector2 pos_2);
     void OnSwap(); //处理交换后的逻辑

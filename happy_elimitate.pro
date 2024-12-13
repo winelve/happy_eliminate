@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     code/core/board.cpp \
+    code/core/boardwidget.cpp \
+    code/core/constants.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
     code/windows/gamewidget.cpp \
@@ -17,6 +19,8 @@ SOURCES += \
 
 HEADERS += \
     code/core/board.h \
+    code/core/boardwidget.h \
+    code/core/constants.h \
     code/core/cube.h \
     code/core/vector2.h \
     code/windows/gamewidget.h
