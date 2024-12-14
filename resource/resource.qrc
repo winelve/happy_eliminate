@@ -26,5 +26,33 @@
         <file>cubes/frog/frog_column_28.png</file>
         <file>cubes/frog/frog_line_28.png</file>
         <file>cubes/frog/frog_wrap_49.png</file>
+        <file>gui/mainWindow/2.png</file>
+        <file>gui/mainWindow/3.png</file>
+        <file>gui/mainWindow/4.png</file>
+        <file>gui/mainWindow/5.png</file>
+        <file>gui/mainWindow/6.png</file>
+        <file>gui/mainWindow/tittle.png</file>
+        <file>gui/mainWindow/background.jpg</file>
+        <file>gui/mainWindow/1.png</file>
+        <file>gui/mainWindow/6-.png</file>
+        <file>gui/mainWindow/1--.png</file>
+        <file>gui/mainWindow/2--.png</file>
+        <file>gui/mainWindow/3--.png</file>
+        <file>gui/mainWindow/4--.png</file>
+        <file>gui/mainWindow/5-.png</file>
+        <file>gui/aboutWindow/2-.png</file>
+        <file>gui/aboutWindow/2.png</file>
+        <file>gui/aboutWindow/1.png</file>
+        <file>gui/aboutWindow/bk.jpg</file>
+        <file>gui/mainWindow/bk.jpg</file>
+        <file>gui/settingWindow/1.png</file>
+        <file>gui/settingWindow/2.png</file>
+        <file>gui/settingWindow/3.png</file>
+        <file>gui/settingWindow/bk.jpg</file>
+        <file>font/font.ttf</file>
+        <file>gui/settingWindow/1-.png</file>
+        <file>gui/settingWindow/2-.png</file>
+        <file>gui/settingWindow/3-.png</file>
     </qresource>
+    <qresource prefix="/images"/>
 </RCC>

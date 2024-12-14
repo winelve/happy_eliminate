@@ -1,12 +1,14 @@
 
 #include <QApplication>
 
-
+#include "./code/windows/mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    // QApplication a(argc, argv);
     qDebug() << "Hello happy_elimitate" ;
-    // return a.exec();
-    return 0;
+    // return 0;
+    QApplication a(argc, argv);
+    MainWindow m;
+    m.show();
+    return a.exec();
 }

@@ -16,7 +16,11 @@ SOURCES += \
     code/core/constants.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
+    code/windows/aboutwindow.cpp \
+    code/windows/framelesswindow.cpp \
     code/windows/gamewidget.cpp \
+    code/windows/mainwindow.cpp \
+    code/windows/settingwindow.cpp \
     main.cpp
 
 HEADERS += \
@@ -27,10 +31,18 @@ HEADERS += \
     code/core/constants.h \
     code/core/cube.h \
     code/core/vector2.h \
-    code/windows/gamewidget.h
+    code/windows/aboutwindow.h \
+    code/windows/framelesswindow.h \
+    code/windows/gamewidget.h \
+    code/windows/mainwindow.h \
+    code/windows/settingwindow.h
 
 FORMS += \
-    code/windows/gamewidget.ui
+    code/windows/aboutwindow.ui \
+    code/windows/framelesswindow.ui \
+    code/windows/gamewidget.ui \
+    code/windows/mainwindow.ui \
+    code/windows/settingwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
