@@ -6,6 +6,7 @@ const int k_board_padding = 20;
 const int k_cell_size = 50;
 const int k_duration_time = 16;
 const int ktype_size = 5;
+const float move_speed = 400;
 }
 
 

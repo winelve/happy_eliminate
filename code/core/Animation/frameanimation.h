@@ -10,8 +10,8 @@ class FrameAnimation
 {
 public:
     FrameAnimation();
-    FrameAnimation(float x,float y);
-    FrameAnimation(float x,float y,std::vector<QPixmap> frame_list);
+    FrameAnimation(QPointF pos);
+    FrameAnimation(QPointF pos,std::vector<QPixmap> frame_list);
 
     void AddFrame(const QPixmap &img);
     void AddFrameList(const std::vector<QPixmap> &frame_list);
@@ -22,13 +22,14 @@ public:
     void SetFrameDuration(int ms); // 设置每帧持续时间（毫秒）
     void SetPosition(float x, float y); // 设置动画位置
     bool IsPlaying() { return is_playing_; }
+    void SetPlaying(bool playing) { is_playing_ = playing; }
 
     virtual void update(int delta_time) = 0; //ms
+    virtual void draw(QPainter &painter) = 0;
 protected:
 
     //动画的坐标位置
-    float x_;
-    float y_;
+    QPointF start_pos_;
 
     bool is_loop_; //是否是循环
     bool is_playing_; //是否正在播放

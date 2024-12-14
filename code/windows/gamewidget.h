@@ -27,7 +27,7 @@ private:
     QTimer game_timer_;
     QElapsedTimer elapsed_timer_;
 
-    AnimationManager *animation_manager_;
+
 
 
 

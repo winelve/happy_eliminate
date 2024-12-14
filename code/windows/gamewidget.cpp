@@ -20,15 +20,15 @@ GameWidget::GameWidget(QWidget *parent)
     game_timer_.start(16); // 大约60FPS
     elapsed_timer_.start();
 
-    animation_manager_ = AnimationManager::GetInstance();
+    // AnimationManager* animation_manager_ = AnimationManager::GetInstance();
 }
 
 void GameWidget::onUpdate() {
     // 计算自上一次更新以来经过的时间（ms）
     int delta_time = elapsed_timer_.restart();
 
-    board_widget_.onUpdate();
-    animation_manager_->UpdateAll(delta_time);
+    board_widget_.onUpdate(delta_time);
+    // animation_manager_->UpdateAll(delta_time);
 }
 
 GameWidget::~GameWidget()

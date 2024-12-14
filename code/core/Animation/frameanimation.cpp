@@ -2,25 +2,22 @@
 #include "../constants.h"
 
 FrameAnimation::FrameAnimation()
-    : x_(0.0f),
-    y_(0.0f),
+    : start_pos_(),
     is_loop_(true),
     current_frame_idx_(0),
     frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
     elapsed_time_(0) {}
 
 
-FrameAnimation::FrameAnimation(float x,float y)
-    : x_(x),
-    y_(y),
+FrameAnimation::FrameAnimation(QPointF pos)
+    : start_pos_(pos),
     is_loop_(true),
     current_frame_idx_(0),
     frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
     elapsed_time_(0) {}
 
-FrameAnimation::FrameAnimation(float x,float y,std::vector<QPixmap> frame_list)
-    : x_(x),
-    y_(y),
+FrameAnimation::FrameAnimation(QPointF pos,std::vector<QPixmap> frame_list)
+    : start_pos_(pos),
     is_loop_(true),
     current_frame_idx_(0),
     frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
@@ -58,8 +55,8 @@ void FrameAnimation::SetFrameDuration(int ms)
 
 void FrameAnimation::SetPosition(float x, float y)
 {
-    x_ = x;
-    y_ = y;
+    start_pos_.setX(x);
+    start_pos_.setY(y);
 }
 
 const QPixmap& FrameAnimation::GetCurrentFrame() const

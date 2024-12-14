@@ -27,6 +27,7 @@ public:
     void SetPos(const Vector2 &new_pos) { pos_ = new_pos; }
     bool IsChoosed() { return is_choosed_; }
     void SetChoosed(bool status) { is_choosed_ = status; }
+    void SetPlaying(bool play) { is_playing_animation_ = play; }
 
     void paint(QPainter &painter);
 

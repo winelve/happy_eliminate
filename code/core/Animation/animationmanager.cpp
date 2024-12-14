@@ -10,15 +10,35 @@ AnimationManager* AnimationManager::GetInstance(){
 
 void AnimationManager::UpdateAll(int delta_time_ms)
 {
-
     for (auto& animation : animation_list_)
     {
-        if (animation->IsPlaying())
-        {
-            animation->update(delta_time_ms);
+        if(animation){ //先判断空不空
+            if (animation->IsPlaying()){
+                qDebug() << "!!!!!!!!!!!!!!";
+                animation->update(delta_time_ms);
+            } else {
+                qDebug() << "End";
+                //不播放就删除
+                RemoveAnimation(animation);
+                qDebug() << "End After";
+            }
         }
     }
 }
+
+void AnimationManager::DrawAll(QPainter &painter)
+{
+    // 遍历所有动画并调用它们的 draw 函数
+    for (const auto& animation : animation_list_)
+    {
+        if (animation) { // 确保动画指针有效
+            animation->draw(painter);
+        }
+    }
+}
+
+
+
 
 void AnimationManager::AddAnimation(const std::shared_ptr<FrameAnimation>& animation)
 {

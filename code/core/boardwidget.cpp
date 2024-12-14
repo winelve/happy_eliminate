@@ -36,6 +36,7 @@ void BoardWidget::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
     QPainter painter(this);
     Draw(painter);
+    animation_manager_->DrawAll(painter);
 }
 
 void BoardWidget::DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter){
@@ -86,8 +87,9 @@ void BoardWidget::Draw(QPainter &painter){
 
 }
 
-void BoardWidget::onUpdate(){
+void BoardWidget::onUpdate(int delta_time){
     // board
+    animation_manager_->UpdateAll(delta_time);
     update(); //用于重绘
 }
 
@@ -153,7 +155,6 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev){
         qDebug() << "Right";
     }
 
-    onUpdate();
     // 调用基类的事件处理
     QWidget::mousePressEvent(ev);
 }

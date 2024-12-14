@@ -11,6 +11,7 @@ class AnimationManager
 public:
 
     void UpdateAll(int delta_time_ms);
+    void DrawAll(QPainter &painter);
     void AddAnimation(const std::shared_ptr<FrameAnimation>& animation);
     void AddAnimationList(const std::vector<std::shared_ptr<FrameAnimation>>& animations);
     void RemoveAnimation(const std::shared_ptr<FrameAnimation>& animation);

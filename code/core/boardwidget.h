@@ -5,6 +5,7 @@
 #include <QPixmap>
 
 #include "board.h"
+#include "Animation/animationmanager.h"
 
 class BoardWidget : public QWidget
 {
@@ -14,7 +15,7 @@ public:
 
     void paintEvent(QPaintEvent *event) override;
     QSize GetBoardSize() { return QSize(width_*cell_size_,height_*cell_size_); }
-    void onUpdate();
+    void onUpdate(int delta_time);
 
 protected:
     void mousePressEvent(QMouseEvent *ev) override;
@@ -29,6 +30,8 @@ private:
 
     Vector2 first_pos_;
     Vector2 second_pos_;
+
+    AnimationManager *animation_manager_ = AnimationManager::GetInstance();
 
     void Draw(QPainter &painter); //用于渲染
     void DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter); //绘制背景

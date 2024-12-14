@@ -3,10 +3,13 @@
 
 #include "cube.h"
 #include "vector2.h"
+#include "Animation/animationfactory.h"
+#include "Animation/animationmanager.h"
 
 #include <QObject>
 #include<vector>
 #include <QDebug>
+
 
 class Board : public QObject
 {
@@ -36,11 +39,16 @@ public:
     void test_check_board(){
         ClearCube(CheckBoard());
     }
+    static QPointF GetRenderPos(int row, int col);
+    static QPointF GetRenderPos(Vector2 pos);
 
 
 private:
     std::vector<std::vector<Cube>> board_; //游戏棋盘
     std::vector<std::vector<Vector2>> cubes_to_remove_; //已分类的,要清理的cube
+    AnimationFactory& ani_factory_ = AnimationFactory::GetInstance();
+    AnimationManager* ani_manager_ = AnimationManager::GetInstance();
+
 
     void InitBoard(const std::vector<std::vector<int>> &board);
     void InitBoard(const std::vector<std::vector<Cube>> &board);
@@ -54,6 +62,7 @@ private:
     //游戏规则
     std::vector<std::vector<Vector2>> CheckBoard(); //检查当前棋盘是否有可消除元素
     int ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove); // << 清楚给定的方块
+
 
 public:
     void Fall();

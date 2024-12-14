@@ -63,6 +63,28 @@ void Board::InitRandomBoard(int width, int height){
     }
 }
 
+// 新增的 GetRenderPosition 函数实现，返回 QPointF 以提高精度
+QPointF Board::GetRenderPos(int row, int col) {
+    qreal cell_size = static_cast<qreal>(Constants::k_cell_size);
+    qreal padding = static_cast<qreal>(Constants::k_board_padding);
+
+    qreal x = padding + col * cell_size;
+    qreal y = padding + row * cell_size;
+
+    return QPointF(x, y);
+}
+
+// 新增的 GetRenderPosition 函数实现，返回 QPointF 以提高精度
+QPointF Board::GetRenderPos(Vector2 pos) {
+    qreal cell_size = static_cast<qreal>(Constants::k_cell_size);
+    qreal padding = static_cast<qreal>(Constants::k_board_padding);
+
+    qreal x = padding + pos.GetColumn() * cell_size;
+    qreal y = padding + pos.GetRow() * cell_size;
+
+    return QPointF(x, y);
+}
+
 // 检查当前赋值是否会导致消除组合
 bool Board::CausesMatch(int row, int col, int type){
     if(type == 0) return false; // 假设类型0表示空
@@ -310,9 +332,19 @@ int Board::ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove) {
 
 
 void Board::Swap(const Vector2 &pos_1,const Vector2 &pos_2){
-    Cube cube = GetCube(pos_1);
-    SetCube(pos_1,GetCube(pos_2));
-    SetCube(pos_2,cube);
+    Cube cube_1 = GetCube(pos_1);
+    Cube cube_2 = GetCube(pos_2);
+    SetCube(pos_1,cube_2);
+    SetCube(pos_2,cube_1);
+
+    cube_1.SetPlaying(true);
+    cube_2.SetPlaying(true);
+
+    QPointF start_1 = GetRenderPos(pos_1); QPointF end_1 = GetRenderPos(pos_2);
+    QPointF start_2 = GetRenderPos(pos_2); QPointF end_2 = GetRenderPos(pos_1);
+
+    ani_manager_->AddAnimation(ani_factory_.MakeMoveAnimation(start_1,end_1,cube_1.GetType()));
+    ani_manager_->AddAnimation(ani_factory_.MakeMoveAnimation(start_2,end_2,cube_2.GetType()));
 }
 
 
