@@ -29,16 +29,6 @@ BoardWidget::BoardWidget(QWidget *parent)
     setFixedSize(GetBoardSize() + QSize(2 * padding_, 2 * padding_));
 }
 
-
-
-
-void BoardWidget::paintEvent(QPaintEvent *event){
-    Q_UNUSED(event);
-    QPainter painter(this);
-    Draw(painter);
-    animation_manager_->DrawAll(painter);
-}
-
 void BoardWidget::DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter){
     painter.setRenderHint(QPainter::Antialiasing);
 
@@ -88,9 +78,7 @@ void BoardWidget::Draw(QPainter &painter){
 }
 
 void BoardWidget::onUpdate(int delta_time){
-    // board
-    animation_manager_->UpdateAll(delta_time);
-    update(); //用于重绘
+
 }
 
 

@@ -13,9 +13,9 @@ class BoardWidget : public QWidget
 public:
     explicit BoardWidget(QWidget *parent = nullptr);
 
-    void paintEvent(QPaintEvent *event) override;
     QSize GetBoardSize() { return QSize(width_*cell_size_,height_*cell_size_); }
     void onUpdate(int delta_time);
+    void Draw(QPainter &painter); //用于渲染
 
 protected:
     void mousePressEvent(QMouseEvent *ev) override;
@@ -31,9 +31,6 @@ private:
     Vector2 first_pos_;
     Vector2 second_pos_;
 
-    AnimationManager *animation_manager_ = AnimationManager::GetInstance();
-
-    void Draw(QPainter &painter); //用于渲染
     void DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter); //绘制背景
 
     // 辅助函数：将像素坐标转换为棋盘坐标

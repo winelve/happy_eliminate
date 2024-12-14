@@ -26,8 +26,9 @@ private:
 
     QTimer game_timer_;
     QElapsedTimer elapsed_timer_;
+    AnimationManager *animation_manager_ = AnimationManager::GetInstance();
 
-
+    void paintEvent(QPaintEvent *event) override;
 
 
 

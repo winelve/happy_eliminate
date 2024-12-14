@@ -2,6 +2,7 @@
 #include "ui_gamewidget.h"
 
 #include <QVBoxLayout>
+#include <QPainter>
 
 GameWidget::GameWidget(QWidget *parent)
     :QWidget(parent)
@@ -28,8 +29,20 @@ void GameWidget::onUpdate() {
     int delta_time = elapsed_timer_.restart();
 
     board_widget_.onUpdate(delta_time);
-    // animation_manager_->UpdateAll(delta_time);
+    animation_manager_->UpdateAll(delta_time);
+    update();
 }
+
+
+void GameWidget::paintEvent(QPaintEvent *event){
+    Q_UNUSED(event);
+    QPainter painter(this);
+    board_widget_.Draw(painter);
+    animation_manager_->DrawAll(painter);
+}
+
+
+
 
 GameWidget::~GameWidget()
 {
