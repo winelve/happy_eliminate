@@ -112,7 +112,9 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev){
                 // 记录第一次点击的坐标
                 first_pos_ = board_pos;
                 board_->GetCube(first_pos_).SetChoosed(true);
-                qDebug() << "First position recorded:" << first_pos_.GetRow() << "," << first_pos_.GetColumn();
+
+                qDebug() << "First position recorded:" << first_pos_.GetRow() << "," << first_pos_.GetColumn()
+                         << "\ttype:" << board_->GetCube(first_pos_).GetType();;
 
             }
             else if(click_time == 2){

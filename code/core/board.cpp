@@ -1,8 +1,9 @@
 #include "board.h"
 #include <queue>
 #include <random>
+#include "constants.h"
 
-const int Board::ktype_size = 6;
+
 Board::Board(const std::vector<std::vector<int>> &board,QObject *parent)
     : QObject{parent}
 {
@@ -35,7 +36,7 @@ void Board::InitRandomBoard(int width, int height){
     // 使用现代随机数生成器
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, Board::ktype_size); // 假设类型从1开始
+    std::uniform_int_distribution<> dis(1, Constants::ktype_size); // 假设类型从1开始
 
     for(int row = 0; row < height; ++row){
         for(int col = 0; col < width; ++col){
@@ -54,7 +55,7 @@ void Board::InitRandomBoard(int width, int height){
 
             if(!valid){
                 // 如果经过多次尝试仍未找到合适的类型，强制设置（可能导致匹配）
-                int forced_type = (rand() % Board::ktype_size) + 1; // 确保类型范围一致
+                int forced_type = (rand() % Constants::ktype_size) + 1; // 确保类型范围一致
                 SetCube(Vector2(row, col), Cube(forced_type));
                 qDebug() << "Warning: Could not find non-matching type for (" << row << "," << col << ")";
             }
@@ -153,7 +154,7 @@ void Board::InitBoard(const std::vector<std::vector<int>> &board)
     for(int row = 0; row < row_total; row++){
         for(int col = 0; col < board[row].size(); col++){
             int type = board[row][col];
-            if(type < 0 || type > Board::ktype_size){
+            if(type < 0 || type > Constants::ktype_size){
                 qDebug() << "Board_Warning: Invalid type " << type << " at (" << row << "," << col << ")";
                 type = 0; // 默认设置为空或其他处理方式
             }
@@ -354,7 +355,7 @@ void Board::Fill(){
 
 
 Cube Board::GenerateCube(){
-    int new_type = rand() % Board::ktype_size + 1;
+    int new_type = rand() % Constants::ktype_size + 1;
     return Cube(new_type);
 }
 

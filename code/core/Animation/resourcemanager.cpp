@@ -3,6 +3,7 @@
 ResourceManager::ResourceManager(){
 
     // 加载立方体纹理列表
+    cube_texture_list_.push_back(QPixmap());
     cube_texture_list_.push_back(LoadSingleImg(":/cubes/bear/bear_cube.png"));
     cube_texture_list_.push_back(LoadSingleImg(":/cubes/cat/cat_cube.png"));
     cube_texture_list_.push_back(LoadSingleImg(":/cubes/chicken/chicken_cube.png"));
