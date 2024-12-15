@@ -48,6 +48,14 @@ public:
     static QPointF GetRenderPos(int row, int col);
     static QPointF GetRenderPos(Vector2 pos);
 
+
+    void HandleMouseClick(const Vector2 &pos);
+    void ResetSelection();
+    Vector2 first_click_pos_;
+    Vector2 second_click_pos_;
+    bool choose_one_ = false;
+    bool areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const;
+
 private:
     std::vector<std::vector<std::shared_ptr<Cube>>> board_; // 游戏棋盘
     std::vector<std::vector<Vector2>> cubes_to_remove_; // 已分类的,要清理的cube

@@ -80,8 +80,6 @@ void BoardWidget::onUpdate(int delta_time)
 void BoardWidget::mousePressEvent(QMouseEvent *ev)
 {
     if(ev->button() == Qt::LeftButton){
-        click_time++;
-
         // 获取鼠标点击的像素坐标
         int x = ev->pos().x();
         int y = ev->pos().y();
@@ -90,64 +88,20 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev)
         bool valid = PixelToBoard(x, y, board_pos);
 
         if(valid){
-            qDebug() << "Clicked on board position: Row =" << board_pos.GetRow() << ", Column =" << board_pos.GetColumn();
+            qDebug() << "Clicked on board position: Row =" << board_pos.GetRow()
+            << ", Column =" << board_pos.GetColumn();
 
-            if(click_time == 1){
-                // 记录第一次点击的坐标
-                first_pos_ = board_pos;
-                std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
-                if(first_cube){
-                    first_cube->SetChoosed(true);
-                }
-
-                qDebug() << "First position recorded:" << first_pos_.GetRow() << "," << first_pos_.GetColumn()
-                         << "\ttype:" << (first_cube ? first_cube->GetType() : -1);
-
-            }
-            else if(click_time == 2){
-                // 记录第二次点击的坐标
-                second_pos_ = board_pos;
-                qDebug() << "Second position recorded:" << second_pos_.GetRow() << "," << second_pos_.GetColumn();
-
-                // 检查两个位置是否相邻
-                if(areAdjacent(first_pos_, second_pos_)){
-                    qDebug() << "Positions are adjacent. Proceeding with swap.";
-                    board_->RunGameLogic(first_pos_, second_pos_);
-                }
-                else{
-                    qDebug() << "Positions are not adjacent. Cancelling selection.";
-                    // 这里可以添加用户反馈，例如显示消息框或其他方式提示用户
-                    // QMessageBox::information(this, "Invalid Move", "Selected cubes are not adjacent.");
-
-                    // 取消选择，可以通过重绘来更新边框颜色
-                    std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
-                    if(first_cube){
-                        first_cube->SetChoosed(false);
-                    }
-                }
-
-                // 重置点击计数
-                std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
-                if(first_cube){
-                    first_cube->SetChoosed(false);
-                }
-                click_time = 0;
-            }
+            // 将点击事件传递给Board处理
+            board_->HandleMouseClick(board_pos);
         }
         else{
             qDebug() << "Clicked outside the board.";
         }
 
-        // 触发重绘
-        update();
     }
     else if(ev->button() == Qt::RightButton){
-        // 重置点击状态
-        click_time = 0;
-        std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
-        if(first_cube){
-            first_cube->SetChoosed(false);
-        }
+        // 右键点击，重置选择状态
+        board_->ResetSelection();
         qDebug() << "Right button clicked. Resetting selection.";
     }
 

@@ -424,6 +424,73 @@ void Board::Fill(){
 }
 
 
+void Board::HandleMouseClick(const Vector2 &pos) {
+    qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! State: " << choose_one_;
+    // Only handle clicks when the game is in the WaitingForInput state
+    if (currentState_ != State::WaitingForInput) {
+        qDebug() << "HandleMouseClick: Ignored click because current state is not WaitingForInput.";
+        return;
+    }
+
+    // If no cube is currently selected, record the first click
+    if (!choose_one_) {
+        first_click_pos_ = pos;
+        choose_one_ = true;
+        GetCube(first_click_pos_)->SetChoosed(true);
+        qDebug() << "HandleMouseClick: First cube selected at ("
+                 << first_click_pos_.GetRow() << ", " << first_click_pos_.GetColumn() << ").";
+    }
+    else {
+        // Second cube selection
+        second_click_pos_ = pos;
+        qDebug() << "HandleMouseClick: Second cube selected at ("
+                 << second_click_pos_.GetRow() << ", " << second_click_pos_.GetColumn() << ").";
+
+        // Check if the second click is on the same cube as the first
+        if (first_click_pos_.GetRow() == second_click_pos_.GetRow() &&
+            first_click_pos_.GetColumn() == second_click_pos_.GetColumn()) {
+            qDebug() << "HandleMouseClick: Second click is the same as the first. Selection reset.";
+            ResetSelection();
+            return;
+        }
+
+        // Check if the two selected cubes are adjacent
+        if (areAdjacent(first_click_pos_, second_click_pos_)) {
+            qDebug() << "HandleMouseClick: Selected cubes are adjacent. Initiating swap.";
+            GetCube(first_click_pos_)->SetChoosed(false);
+            choose_one_ = false;
+            emit userSelectedTwoPieces(first_click_pos_,second_click_pos_);
+        }
+        else {
+            qDebug() << "HandleMouseClick: Selected cubes are not adjacent. Selection reset.";
+            ResetSelection();
+        }
+    }
+}
+
+void Board::ResetSelection()
+{
+    if(first_click_pos_.GetRow() > -1 || first_click_pos_.GetColumn() > -1){
+        std::shared_ptr<Cube> first_cube = GetCube(first_click_pos_);
+        if(first_cube){
+            first_cube->SetChoosed(false);
+        }
+        first_click_pos_ = Vector2(); // 重置为无效状态
+    }
+    second_click_pos_ = Vector2();
+    qDebug() << "选择状态已重置。";
+    choose_one_ = false;
+}
+
+bool Board::areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const
+{
+    int rowDiff = abs(pos1.GetRow() - pos2.GetRow());
+    int colDiff = abs(pos1.GetColumn() - pos2.GetColumn());
+
+    // 检查是否在上下左右相邻
+    return ( (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) );
+}
+
 // 生成一个新的随机方块
 std::shared_ptr<Cube> Board::GenerateCube(){
     int new_type = (rand() % Constants::ktype_size) + 1;
