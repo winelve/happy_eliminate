@@ -21,7 +21,6 @@ GameWidget::GameWidget(QWidget *parent)
     game_timer_.start(16); // 大约60FPS
     elapsed_timer_.start();
 
-    // AnimationManager* animation_manager_ = AnimationManager::GetInstance();
 }
 
 void GameWidget::onUpdate() {

@@ -32,5 +32,11 @@
         <file>cubes/fox/fox_cube.png</file>
         <file>cubes/frog/frog_cube.png</file>
         <file>cubes/horse/horse_cube.png</file>
+        <file>cubes/effect/kai_231_destroy_light_10.png</file>
+        <file>cubes/effect/kai_231_destroy_light_11.png</file>
+        <file>cubes/effect/kai_231_destroy_light_12.png</file>
+        <file>cubes/effect/kai_231_destroy_light_13.png</file>
+        <file>cubes/effect/kai_231_destroy_light_14.png</file>
+        <file>cubes/effect/kai_231_destroy_light_15.png</file>
     </qresource>
 </RCC>

@@ -19,6 +19,7 @@ private:
 public:
     Cube();
     Cube(int type);
+    Cube(int type, const Vector2& pos); // 新增的构造函数，接受类型和位置
 
     void SetType(int type) { type_ = type; }
     int GetType() { return type_; }

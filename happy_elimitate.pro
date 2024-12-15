@@ -12,6 +12,7 @@ SOURCES += \
     code/core/Animation/animationfactory.cpp \
     code/core/Animation/animationmanager.cpp \
     code/core/Animation/atlas.cpp \
+    code/core/Animation/effectanimation.cpp \
     code/core/Animation/frameanimation.cpp \
     code/core/Animation/moveanimation.cpp \
     code/core/Animation/resourcemanager.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     code/core/Animation/animationfactory.h \
     code/core/Animation/animationmanager.h \
     code/core/Animation/atlas.h \
+    code/core/Animation/effectanimation.h \
     code/core/Animation/frameanimation.h \
     code/core/Animation/moveanimation.h \
     code/core/Animation/resourcemanager.h \

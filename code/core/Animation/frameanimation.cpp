@@ -1,29 +1,40 @@
+// frameanimation.cpp
 #include "frameanimation.h"
 #include "../constants.h"
 
-FrameAnimation::FrameAnimation()
-    : start_pos_(),
+// 构造函数实现，接受 std::shared_ptr<Cube>
+FrameAnimation::FrameAnimation(std::shared_ptr<Cube> cube)
+    : cube_(cube),
+    start_pos_(),
     is_loop_(true),
-    current_frame_idx_(0),
-    frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
-    elapsed_time_(0) {}
-
-
-FrameAnimation::FrameAnimation(QPointF pos)
-    : start_pos_(pos),
-    is_loop_(true),
-    current_frame_idx_(0),
-    frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
-    elapsed_time_(0) {}
-
-FrameAnimation::FrameAnimation(QPointF pos,std::vector<QPixmap> frame_list)
-    : start_pos_(pos),
-    is_loop_(true),
+    is_playing_(false),
     current_frame_idx_(0),
     frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
     elapsed_time_(0)
 {
-    SetFrameList(frame_list);
+}
+
+FrameAnimation::FrameAnimation(std::shared_ptr<Cube> cube, QPointF pos)
+    : cube_(cube),
+    start_pos_(pos),
+    is_loop_(true),
+    is_playing_(false),
+    current_frame_idx_(0),
+    frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
+    elapsed_time_(0)
+{
+}
+
+FrameAnimation::FrameAnimation(std::shared_ptr<Cube> cube, QPointF pos, std::vector<QPixmap> frame_list)
+    : cube_(cube),
+    start_pos_(pos),
+    is_loop_(true),
+    is_playing_(false),
+    current_frame_idx_(0),
+    frame_duration_(Constants::k_duration_time), // 默认每帧100毫秒（即10帧/秒）
+    elapsed_time_(0),
+    frame_list_(frame_list)
+{
 }
 
 void FrameAnimation::AddFrame(const QPixmap &img)
@@ -67,8 +78,3 @@ const QPixmap& FrameAnimation::GetCurrentFrame() const
     }
     return frame_list_[current_frame_idx_];
 }
-
-
-
-
-

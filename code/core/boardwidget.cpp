@@ -4,32 +4,25 @@
 #include <QPainter>
 #include <vector>
 #include <QMouseEvent>
-
+#include <QDebug>
 
 BoardWidget::BoardWidget(QWidget *parent)
-    : QWidget(parent),click_time(0)
+    : QWidget(parent), click_time(0)
 {
     cell_size_ = Constants::k_cell_size;
     padding_ = Constants::k_board_padding;
     width_ = 8;
     height_ = 8;
 
+    qDebug() << "Before::";
+    board_ = std::make_shared<Board>(width_,height_);
 
-    board_ = new Board(width_,height_);
-
-    // std::vector<std::vector<int>> matrix =
-    // {
-    //     {2, 3, 4, 4, 1},
-    //     {1, 1, 2, 1, 5},
-    //     {3, 6, 1, 2, 6},
-    //     {1, 2, 1, 3, 5},
-    // };
-    // board_ = new Board(matrix);
     // 设置窗口大小
     setFixedSize(GetBoardSize() + QSize(2 * padding_, 2 * padding_));
 }
 
-void BoardWidget::DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter){
+void BoardWidget::DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter) const
+{
     painter.setRenderHint(QPainter::Antialiasing);
 
     // 绘制背景（可选）
@@ -37,7 +30,8 @@ void BoardWidget::DrawBK(int start_x,int start_y,int board_width,int board_heigh
     painter.drawRect(start_x, start_y, board_width, board_height);
 }
 
-void BoardWidget::Draw(QPainter &painter){
+void BoardWidget::Draw(QPainter &painter) const
+{
     // 获取棋盘的尺寸
     int rows = board_->GetHeight();
     int cols = board_->GetWidth();
@@ -46,11 +40,11 @@ void BoardWidget::Draw(QPainter &painter){
     int board_width = cols * cell_size_;
     int board_height = rows * cell_size_;
 
-    // 设置棋盘的起始位置（居中或根据需要调整）
+    // 设置棋盘的起始位置（根据需要调整）
     int start_x = padding_;
     int start_y = padding_;
 
-    DrawBK(start_x,start_y,board_width,board_height,painter);
+    DrawBK(start_x, start_y, board_width, board_height, painter);
 
     // 绘制垂直线条
     painter.setPen(QPen(Qt::black, 2));
@@ -65,26 +59,26 @@ void BoardWidget::Draw(QPainter &painter){
         painter.drawLine(start_x, y, start_x + board_width, y);
     }
 
-    // 可选：绘制每个 Cube 的类型
+    // 绘制每个 Cube 的类型
     for(int row = 0; row < rows; ++row){
         for(int col = 0; col < cols; ++col){
-            Cube cube = board_->GetCube(row, col);
-            if(!cube.Empty()){
-                cube.paint(painter);
+            std::shared_ptr<Cube> cube = board_->GetCube(row, col);
+            if(cube && !cube->Empty()){
+                cube->paint(painter); // 确保 Cube 类的 paint 方法是 const
             }
         }
     }
-
 }
 
-void BoardWidget::onUpdate(int delta_time){
+void BoardWidget::onUpdate(int delta_time)
+{
 
 }
-
 
 // BoardWidget.cpp
 
-void BoardWidget::mousePressEvent(QMouseEvent *ev){
+void BoardWidget::mousePressEvent(QMouseEvent *ev)
+{
     if(ev->button() == Qt::LeftButton){
         click_time++;
 
@@ -101,10 +95,13 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev){
             if(click_time == 1){
                 // 记录第一次点击的坐标
                 first_pos_ = board_pos;
-                board_->GetCube(first_pos_).SetChoosed(true);
+                std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
+                if(first_cube){
+                    first_cube->SetChoosed(true);
+                }
 
                 qDebug() << "First position recorded:" << first_pos_.GetRow() << "," << first_pos_.GetColumn()
-                         << "\ttype:" << board_->GetCube(first_pos_).GetType();;
+                         << "\ttype:" << (first_cube ? first_cube->GetType() : -1);
 
             }
             else if(click_time == 2){
@@ -123,10 +120,17 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev){
                     // QMessageBox::information(this, "Invalid Move", "Selected cubes are not adjacent.");
 
                     // 取消选择，可以通过重绘来更新边框颜色
+                    std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
+                    if(first_cube){
+                        first_cube->SetChoosed(false);
+                    }
                 }
 
                 // 重置点击计数
-                board_->GetCube(first_pos_).SetChoosed(false);
+                std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
+                if(first_cube){
+                    first_cube->SetChoosed(false);
+                }
                 click_time = 0;
             }
         }
@@ -134,20 +138,22 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev){
             qDebug() << "Clicked outside the board.";
         }
 
-        // 触发重绘（如果需要）
+        // 触发重绘
+        update();
     }
-
     else if(ev->button() == Qt::RightButton){
-        click_time=0;
-        board_->GetCube(first_pos_).SetChoosed(false);
-        qDebug() << "Right";
+        // 重置点击状态
+        click_time = 0;
+        std::shared_ptr<Cube> first_cube = board_->GetCube(first_pos_);
+        if(first_cube){
+            first_cube->SetChoosed(false);
+        }
+        qDebug() << "Right button clicked. Resetting selection.";
     }
 
     // 调用基类的事件处理
     QWidget::mousePressEvent(ev);
 }
-
-
 
 bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos) const
 {
@@ -173,14 +179,11 @@ bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos) const
 }
 
 // 辅助函数：检查两个位置是否相邻
-bool BoardWidget::areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const {
+bool BoardWidget::areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const
+{
     int rowDiff = abs(pos1.GetRow() - pos2.GetRow());
     int colDiff = abs(pos1.GetColumn() - pos2.GetColumn());
 
     // 检查是否在上下左右相邻
     return ( (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) );
 }
-
-
-
-

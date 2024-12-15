@@ -20,6 +20,13 @@ Cube::Cube(int type)
 }
 
 
+Cube::Cube(int type, const Vector2& pos)
+    : type_(type), pos_(pos), is_choosed_(false),is_playing_animation_(false)
+{
+    cube_texture = ResourceManager::Instance().GetCube(type);
+}
+
+
 void Cube::paint(QPainter &painter){
     int cell_size = Constants::k_cell_size;
     int padding = Constants::k_board_padding;

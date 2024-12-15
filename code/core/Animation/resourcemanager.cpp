@@ -11,6 +11,15 @@ ResourceManager::ResourceManager(){
     cube_texture_list_.push_back(LoadSingleImg(":/cubes/frog/frog_cube.png"));
     cube_texture_list_.push_back(LoadSingleImg(":/cubes/horse/horse_cube.png"));
 
+
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_10.png"));
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_11.png"));
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_12.png"));
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_13.png"));
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_14.png"));
+    destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_15.png"));
+
+
     LoadAllAniResources();
 }
 

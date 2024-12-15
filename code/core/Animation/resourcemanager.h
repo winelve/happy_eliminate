@@ -36,19 +36,26 @@ public:
     ResourceManager& operator=(const ResourceManager&) = delete;
 
     std::vector<QPixmap> GetAniResource(AnimalType animal, AnimationType animType) const;
-    QPixmap GetCube(int type) { return cube_texture_list_[type]; };
+    QPixmap GetCube(int type) { return cube_texture_list_[type]; }
 
+    std::vector<QPixmap> GetDestroyEffect() { return destroy_texture_list_; }
 private:
     // 私有构造函数
     ResourceManager();
     // 资源存储结构，使用资源ID作为键
     bool ImportResource(AnimalType animal, AnimationType animType, const QString& path, int num);
-    std::unordered_map<int, std::vector<QPixmap>> ani_resources_;
-    std::vector<QPixmap> cube_texture_list_;
+
     int CalculateResourceID(AnimalType animal, AnimationType animType) const;
     static std::vector<QPixmap> LoadAtlas(const QString& path, int num);
     QPixmap LoadSingleImg(const QString &path);
     void LoadAllAniResources(); //导入所有的动画资源
+
+
+
+
+    std::unordered_map<int, std::vector<QPixmap>> ani_resources_;
+    std::vector<QPixmap> cube_texture_list_;
+    std::vector<QPixmap> destroy_texture_list_;
 };
 
 #endif // RESOURCEMANAGER_H

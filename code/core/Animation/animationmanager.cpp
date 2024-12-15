@@ -2,7 +2,6 @@
 #include <QDebug>
 
 
-
 AnimationManager* AnimationManager::GetInstance(){
     static AnimationManager manager;
     return &manager;
@@ -10,77 +9,130 @@ AnimationManager* AnimationManager::GetInstance(){
 
 void AnimationManager::UpdateAll(int delta_time_ms)
 {
-    for (auto& animation : animation_list_)
-    {
-        if(animation){ //先判断空不空
-            if (animation->IsPlaying()){
-                qDebug() << "!!!!!!!!!!!!!!";
+    QMutexLocker locker(&mutex_);
+
+    std::set<AnimType> finishedTypes;
+
+    // Lambda 函数用于更新动画并收集完成的类型
+    auto updateAnimations = [&](std::vector<std::shared_ptr<FrameAnimation>>& animations, AnimType type) {
+        for (auto it = animations.begin(); it != animations.end(); ) {
+            // qDebug() << "Update:: type=" << static_cast<int>(type) << " size=" << animations.size();
+            auto animation = *it;
+            if (animation && animation->IsPlaying()) {
                 animation->update(delta_time_ms);
-            } else {
-                qDebug() << "End";
-                //不播放就删除
-                RemoveAnimation(animation);
-                qDebug() << "End After";
+                if (!animation->IsPlaying()) {
+                    it = animations.erase(it);
+                    finishedTypes.insert(type);
+                    qDebug() << "Animation finished for type:" << static_cast<int>(type);
+                    continue;
+                }
             }
+            ++it;
         }
-    }
+    };
+
+    // 并行更新所有动画类型
+    updateAnimations(swap_animations_, AnimType::Swap);
+    updateAnimations(clear_animations_, AnimType::Clear);
+    updateAnimations(fall_animations_, AnimType::Fall);
+    updateAnimations(extra_animations_, AnimType::Extra);
+
+    // 在所有更新完成后，发射信号
+    CheckAndEmitFinished(finishedTypes);
 }
 
 void AnimationManager::DrawAll(QPainter &painter)
 {
-    // 遍历所有动画并调用它们的 draw 函数
-    for (const auto& animation : animation_list_)
-    {
-        if (animation) { // 确保动画指针有效
-            animation->draw(painter);
+    // 绘制所有动画
+    for (const auto& animation : swap_animations_)
+        if (animation) animation->draw(painter);
+    for (const auto& animation : clear_animations_)
+        if (animation) animation->draw(painter);
+    for (const auto& animation : fall_animations_)
+        if (animation) animation->draw(painter);
+    for (const auto& animation : extra_animations_)
+        if (animation) animation->draw(painter);
+}
+
+void AnimationManager::CheckAndEmitFinished(const std::set<AnimType>& finishedTypes)
+{
+    for (const auto& type : finishedTypes) {
+        switch (type) {
+        case AnimType::Swap:
+            if (swap_animations_.empty()) {
+                emit swapAnimationsFinished();
+                qDebug() << "Emitted swapAnimationsFinished";
+            }
+            break;
+        case AnimType::Clear:
+            if (clear_animations_.empty()) {
+                emit clearAnimationsFinished();
+                qDebug() << "````````````````````````Emitted clearAnimationsFinished";
+            }
+            break;
+        case AnimType::Fall:
+            if (fall_animations_.empty()) {
+                emit fallAnimationsFinished();
+                qDebug() << "Emitted fallAnimationsFinished";
+            }
+            break;
+        case AnimType::Extra:
+            if (extra_animations_.empty()) {
+                emit extraAnimationsFinished();
+                qDebug() << "Emitted extraAnimationsFinished";
+            }
+            break;
         }
     }
 }
 
-
-
-
-void AnimationManager::AddAnimation(const std::shared_ptr<FrameAnimation>& animation)
+void AnimationManager::AddAnimation(const std::shared_ptr<FrameAnimation>& animation, AnimType type)
 {
-    if (animation)
-    {
-        animation_list_.push_back(animation);
+    if (!animation) {
+        qDebug() << "尝试添加一个空的动画。";
+        return;
     }
-    else
-    {
-        qDebug() << "Attempted to add a null animation.";
+
+    switch (type) {
+    case AnimType::Swap:
+        swap_animations_.push_back(animation);
+        break;
+    case AnimType::Clear:
+        clear_animations_.push_back(animation);
+        break;
+    case AnimType::Fall:
+        fall_animations_.push_back(animation);
+        break;
+    case AnimType::Extra:
+        extra_animations_.push_back(animation);
+        break;
     }
 }
 
-void AnimationManager::AddAnimationList(const std::vector<std::shared_ptr<FrameAnimation>>& animations)
+void AnimationManager::AddExtraAnimation(const std::shared_ptr<FrameAnimation>& animation)
 {
-    for (const auto& animation : animations)
-    {
-        if (animation)
-        {
-            animation_list_.push_back(animation);
-        }
-        else
-        {
-            qDebug() << "Attempted to add a null animation in the list." ;
-        }
-    }
+    AddAnimation(animation, AnimType::Extra);
 }
 
 void AnimationManager::RemoveAnimation(const std::shared_ptr<FrameAnimation>& animation)
 {
-    auto it = std::remove(animation_list_.begin(), animation_list_.end(), animation);
-    if (it != animation_list_.end())
-    {
-        animation_list_.erase(it, animation_list_.end());
-    }
-    else
-    {
-        qDebug() << "Animation not found in the manager.";
-    }
+    auto removeFromList = [&](std::vector<std::shared_ptr<FrameAnimation>>& animations) {
+        auto it = std::remove(animations.begin(), animations.end(), animation);
+        if (it != animations.end()) {
+            animations.erase(it, animations.end());
+        }
+    };
+
+    removeFromList(swap_animations_);
+    removeFromList(clear_animations_);
+    removeFromList(fall_animations_);
+    removeFromList(extra_animations_);
 }
 
 void AnimationManager::RemoveAll()
 {
-    animation_list_.clear();
+    swap_animations_.clear();
+    clear_animations_.clear();
+    fall_animations_.clear();
+    extra_animations_.clear();
 }
