@@ -2,6 +2,8 @@
 #include <QAudioOutput>
 #include <QDebug>
 
+AudioPlayer* AudioPlayer::instance = nullptr;
+
 AudioPlayer::AudioPlayer(){
 
 
@@ -18,6 +20,10 @@ AudioPlayer::AudioPlayer(){
 AudioPlayer::~AudioPlayer() {
     BackgroundMusicPlayer->stop();
     SoundEffectPlayer->stop();
+    delete BackgroundMusicPlayer;
+    delete SoundEffectPlayer;
+    delete BackgroundMusicOutput;
+    delete SoundEffectOutput;
 
 }
 
@@ -41,10 +47,10 @@ void AudioPlayer::PlaySoundEffect(const QString &audioFilePath) {
 
 }
 
-void AudioPlayer::SetBackgroundMusicVolume(int VolumeNumber){
+void AudioPlayer::SetBackgroundMusicVolume(const int VolumeNumber){
     BackgroundMusicOutput->setVolume((0.01*VolumeNumber));
 }
 
-void AudioPlayer::SetSoundEffectVolume(int VolumeNumber){
+void AudioPlayer::SetSoundEffectVolume(const int VolumeNumber){
     SoundEffectOutput->setVolume((0.01*VolumeNumber));
 }

@@ -10,8 +10,6 @@ class AudioPlayer : public QObject {
 
 public:
 
-    explicit AudioPlayer();
-
     ~AudioPlayer();
 
     // 播放全局背景音乐，循环播放
@@ -20,11 +18,24 @@ public:
     // 播放音效
     void PlaySoundEffect(const QString &AudioFilePath);
 
-    void SetBackgroundMusicVolume(int VolumeNumber);
+    void SetBackgroundMusicVolume(const int VolumeNumber);
 
-    void SetSoundEffectVolume(int VolumeNumber);
+    void SetSoundEffectVolume(const int VolumeNumber);
+
+    // 提供一个静态方法来获取单例对象
+    static AudioPlayer* getInstance() {
+        if (!instance) {
+            instance = new AudioPlayer();
+        }
+        return instance;
+    }
 
 private:
+
+     explicit AudioPlayer();
+
+    static AudioPlayer* instance; // 静态私有成员变量，存储单例对象
+
     QMediaPlayer *BackgroundMusicPlayer;
     QAudioOutput *BackgroundMusicOutput;
 
