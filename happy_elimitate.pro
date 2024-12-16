@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += multimedia
+QT += quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,6 +25,7 @@ SOURCES += \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
+    code/windows/rankwindow.cpp \
     code/windows/settingwindow.cpp \
     main.cpp
 
@@ -41,6 +43,7 @@ HEADERS += \
     code/windows/framelesswindow.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \
+    code/windows/rankwindow.h \
     code/windows/settingwindow.h
 
 FORMS += \
@@ -48,6 +51,7 @@ FORMS += \
     code/windows/framelesswindow.ui \
     code/windows/gamewidget.ui \
     code/windows/mainwindow.ui \
+    code/windows/rankwindow.ui \
     code/windows/settingwindow.ui
 
 # Default rules for deployment.
@@ -56,4 +60,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    qmlUI.qrc \
     resource/resource.qrc

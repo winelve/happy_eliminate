@@ -80,6 +80,16 @@
         <file>audios/SwapFun.mp3</file>
         <file>audios/worldscenebgm.mp3</file>
         <file>gui/settingWindow/5.png</file>
+        <file>gui/images/20240309233647978.jpg</file>
+        <file>gui/images/20240309233647978.png</file>
+        <file>gui/images/agirl.jpg</file>
+        <file>gui/images/girl.png</file>
+        <file>gui/images/p.png</file>
+        <file>gui/images/p1.png</file>
+        <file>gui/images/u.png</file>
+        <file>gui/images/u1.png</file>
+        <file>gui/images/bk.png</file>
+        <file>gui/images/bk2.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>
