@@ -17,6 +17,7 @@ SOURCES += \
     code/core/cube.cpp \
     code/core/vector2.cpp \
     code/windows/aboutwindow.cpp \
+    code/windows/cvolumesliderdialog.cpp \
     code/windows/framelesswindow.cpp \
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     code/core/cube.h \
     code/core/vector2.h \
     code/windows/aboutwindow.h \
+    code/windows/cvolumesliderdialog.h \
     code/windows/framelesswindow.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \

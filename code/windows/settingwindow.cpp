@@ -8,6 +8,8 @@
 SettingWindow::SettingWindow(QWidget *parent)
     : FrameLessWindow(parent)
     , ui(new Ui::SettingWindow)
+    , music_status(true)  // 默认为音量开启
+    , sound_status(true)  // 默认为音效开启
 {
     ui->setupUi(this);
     // 创建阴影效果
@@ -54,6 +56,13 @@ SettingWindow::SettingWindow(QWidget *parent)
             "}"
             );
     }
+    // //音量条设置相关
+    // qDebug() << "CVolumeSliderDialog created and moved to (310, 190)";
+    // m_volume = new CVolumeSliderDialog(ui->settingpic); // 创建新的音量控件对象
+    // m_volume->setGeometry(310, 190, 370, 41);
+    // m_volume->setValue(10);  // 设置音量条的默认值为 50%
+    // m_volume->show();
+    // connect(m_volume, &CVolumeSliderDialog::signalVolumeChanged, this, &SettingWindow::onVolumeChanged);
 }
 
 SettingWindow::~SettingWindow()
@@ -92,4 +101,18 @@ void SettingWindow::on_btnSound_clicked()
         ui->btnSound->setIcon(QIcon(":/gui/settingWindow/3.png"));
     }
 }
+
+// void SettingWindow::onVolumeChanged(int volume)
+// {
+//     // 如果音量为零，更新图标为关闭状态
+//     if (volume == 0) {
+//         music_status = false;
+//         ui->btnMusic->setIcon(QIcon(":/gui/settingWindow/1-.png"));
+//     } else {
+//         // 如果音量大于零，更新图标为开启状态
+//         music_status = true;
+//         ui->btnMusic->setIcon(QIcon(":/gui/settingWindow/1.png"));
+//     }
+// }
+
 
