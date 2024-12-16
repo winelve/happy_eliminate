@@ -35,6 +35,7 @@ AboutWindow::~AboutWindow(){delete ui;}
 
 void AboutWindow::on_btnReturn_clicked()
 {
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
     MainWindow *mw = new MainWindow();
     mw->move(this->pos().x(), this->pos().y());
     mw->show();

@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     // 去除自带的边框
     this->setWindowFlag(Qt::FramelessWindowHint);
 
+    audioPlayer->PlayBackgroundMusic("worldscenebgm.mp3");
+
     // 创建阴影效果
     QGraphicsDropShadowEffect *shadow1 = new QGraphicsDropShadowEffect;
     shadow1->setBlurRadius(15); // 阴影模糊半径
@@ -36,6 +38,7 @@ MainWindow::~MainWindow(){delete ui;}
 //关于
 void MainWindow::on_btnAbout_clicked()
 {
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
     AboutWindow *aw = new AboutWindow();
     aw->move(this->pos().x(), this->pos().y());
     aw->show();
@@ -45,6 +48,7 @@ void MainWindow::on_btnAbout_clicked()
 //设置
 void MainWindow::on_btnSetting_clicked()
 {
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
     SettingWindow *sw = new SettingWindow();
     sw->move(this->pos().x(), this->pos().y());
     sw->show();

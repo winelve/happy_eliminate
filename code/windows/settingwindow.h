@@ -2,7 +2,9 @@
 #define SETTINGWINDOW_H
 
 #include "framelesswindow.h"
-#include "cvolumesliderdialog.h"
+#include "code/audio/audioplayer.h"
+#include "audiocontrol.h"
+
 namespace Ui {
 class SettingWindow;
 }
@@ -19,13 +21,17 @@ private slots:
     void on_btnReturn_clicked();       // 返回按钮的点击槽
     void on_btnMusic_clicked();        // 音乐按钮的点击槽
     void on_btnSound_clicked();        // 音效按钮的点击槽
-    void onVolumeChanged(int volume);  // 音量变化时的槽函数
+
+    void on_music_slider_valueChanged(int value);
+    void on_sound_slider_valueChanged(int value);
 
 private:
     Ui::SettingWindow *ui;
+    AudioPlayer* audioPlayer=AudioPlayer::getInstance();
+    AudioControl* audioCtrl = AudioControl::instance();
+
     bool music_status;             // 音乐的状态，true为开启，false为关闭
     bool sound_status;             // 音效的状态，true为开启，false为关闭
-    CVolumeSliderDialog *m_volume;       // 音量滑块，用来调整音量
 };
 
 #endif // SETTINGWINDOW_H

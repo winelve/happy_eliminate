@@ -2,6 +2,7 @@
 #define ABOUTWINDOW_H
 
 #include "framelesswindow.h"
+#include "code/audio/audioplayer.h"
 
 namespace Ui {
 class AboutWindow;
@@ -20,6 +21,7 @@ private slots:
 
 private:
     Ui::AboutWindow *ui;
+    AudioPlayer* audioPlayer = AudioPlayer::getInstance();
 };
 
 #endif // ABOUTWINDOW_H

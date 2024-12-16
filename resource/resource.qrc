@@ -79,6 +79,7 @@
         <file>audios/swap_wrapwrap.mp3</file>
         <file>audios/SwapFun.mp3</file>
         <file>audios/worldscenebgm.mp3</file>
+        <file>gui/settingWindow/5.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

@@ -18,13 +18,10 @@ SOURCES += \
     code/core/constants.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
-<<<<<<< HEAD
     code/windows/aboutwindow.cpp \
-    code/windows/cvolumesliderdialog.cpp \
+    code/windows/audiocontrol.cpp \
     code/windows/framelesswindow.cpp \
-=======
     code/test/audio_test/testaudiomain.cpp \
->>>>>>> master
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
     code/windows/settingwindow.cpp \
@@ -39,16 +36,12 @@ HEADERS += \
     code/core/constants.h \
     code/core/cube.h \
     code/core/vector2.h \
-<<<<<<< HEAD
     code/windows/aboutwindow.h \
-    code/windows/cvolumesliderdialog.h \
+    code/windows/audiocontrol.h \
     code/windows/framelesswindow.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \
     code/windows/settingwindow.h
-=======
-    code/windows/gamewidget.h \
->>>>>>> master
 
 FORMS += \
     code/windows/aboutwindow.ui \
