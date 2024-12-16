@@ -132,6 +132,17 @@ private:
 
     // FSM相关
     void setupConnections();
+
+private:
+
+
+    std::vector<std::vector<Vector2>> find_row_line4(const std::vector<std::vector<Vector2>>& match);
+    std::vector<std::vector<Vector2>> find_col_line4(const std::vector<std::vector<Vector2>>& match);
+    std::vector<Vector2> falling_cubes_;
+    void RemoveFromMatch(const Vector2 &pos,std::vector<std::vector<Vector2>> &mathces);
+    void SetRow4(std::vector<std::vector<Vector2>> &mathces);
+    void SetCol4(std::vector<std::vector<Vector2>> &mathces);
+    std::vector<std::vector<Vector2>> ProcessSpecialMatches(const std::vector<std::vector<Vector2>> &matches);
 };
 
 #endif // BOARD_H

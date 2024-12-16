@@ -19,6 +19,13 @@ ResourceManager::ResourceManager(){
     destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_14.png"));
     destroy_texture_list_.push_back(LoadSingleImg(":/cubes/effect/kai_231_destroy_light_15.png"));
 
+    h_line = QPixmap(":/cubes/effect/kai_231_bomb_white_h.png");
+    v_line = QPixmap(":/cubes/effect/kai_231_bomb_white_v.png");
+
+    // 放大3倍/*
+    h_line = h_line.scaled(h_line.width() , h_line.height() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    v_line = v_line.scaled(v_line.width() , v_line.height() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
 
     LoadAllAniResources();
 }

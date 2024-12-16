@@ -180,15 +180,26 @@ void MoveAnimation::draw(QPainter &painter)
         // 这里假设目标尺寸为 80x80 像素
         QSize targetSize = QSize(Constants::k_cell_size - 10, Constants::k_cell_size - 10); // 留出一些内边距
 
-        // 计算 QPixmap 的缩放尺寸，保持比例并适应目标尺寸
-        QPixmap scaled_pixmap = current_pixmap.scaled(targetSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        if(auto_fit_){
+            // 计算 QPixmap 的缩放尺寸，保持比例并适应目标尺寸
+            QPixmap scaled_pixmap = current_pixmap.scaled(targetSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        int pix_x = start_pos_.x() + (Constants::k_cell_size - scaled_pixmap.width()) / 2;
-        int pix_y = start_pos_.y() + (Constants::k_cell_size - scaled_pixmap.height()) / 2;
-        // 计算绘制位置，使图片中心对齐到 start_pos_
-        QPointF draw_pos(pix_x, pix_y);
+            int pix_x = start_pos_.x() + (Constants::k_cell_size - scaled_pixmap.width()) / 2;
+            int pix_y = start_pos_.y() + (Constants::k_cell_size - scaled_pixmap.height()) / 2;
+            // 计算绘制位置，使图片中心对齐到 start_pos_
+            QPointF draw_pos(pix_x, pix_y);
 
-        // 绘制当前帧的 QPixmap
-        painter.drawPixmap(draw_pos, scaled_pixmap);
+            // 绘制当前帧的 QPixmap
+            painter.drawPixmap(draw_pos, scaled_pixmap);
+        }
+        else{
+            int pix_x = start_pos_.x() + (Constants::k_cell_size - current_pixmap.width()) / 2;
+            int pix_y = start_pos_.y() + (Constants::k_cell_size - current_pixmap.height()) / 2;
+            // 计算绘制位置，使图片中心对齐到 start_pos_
+            QPointF draw_pos(pix_x, pix_y);
+            // 绘制当前帧的 QPixmap
+            painter.drawPixmap(draw_pos, current_pixmap);
+        }
+
     }
 }

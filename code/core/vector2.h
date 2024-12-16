@@ -21,6 +21,9 @@ public:
     void MoveTo(Vector2 other);
     void Add(int row,int col);
     void Add(Vector2 other);
+    bool operator==(const Vector2 &other) const {
+        return row_ == other.row_ && column_ == other.column_;
+    }
 
 };
 

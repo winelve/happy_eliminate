@@ -3,6 +3,7 @@
 #define EFFECTANIMATION_H
 
 #include "frameanimation.h"
+#include "../constants.h"
 #include <QPainter>
 #include <memory>
 #include <vector>
@@ -18,7 +19,7 @@ public:
     EffectAnimation(std::shared_ptr<Cube> cube, QPointF pos, int total_duration_ms);
 
     // 构造函数，接受 Cube 对象、位置、帧列表和总时长
-    EffectAnimation(std::shared_ptr<Cube> cube, QPointF pos, const std::vector<QPixmap> &frame_list, int total_duration_ms);
+    EffectAnimation(std::shared_ptr<Cube> cube, QPointF pos, const std::vector<QPixmap> &frame_list, int total_duration_ms = 800);
 
     // 设置总时长（毫秒）
     void SetTotalDuration(int total_duration_ms);

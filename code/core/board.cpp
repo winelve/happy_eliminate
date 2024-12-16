@@ -1,6 +1,7 @@
 #include "board.h"
 #include <queue>
 #include <random>
+#include <algorithm>
 #include "constants.h"
 
 // 构造函数
@@ -379,6 +380,7 @@ void Board::Fall() {
 
                     board_[empty_row][col] = moving_cube;
                     board_[empty_row][col]->SetPos(Vector2(empty_row, col));
+                    // falling_cubes_.push_back(moving_cube->GetPos());
 
                     // 创建移动动画
                     QPointF start_1 = GetRenderPos(row, col);
@@ -412,6 +414,8 @@ void Board::Fill(){
                 ani_manager_->AddAnimation(
                     ani_factory_.MakeMoveAnimation(new_cube, start_1, end_1, new_cube->GetType(),true),
                     AnimType::Fall);
+                //添加到新增数组
+                // falling_cubes_.push_back(new_cube->GetPos());
 
                 empty_above++; // 增加空位数量
             }
@@ -624,6 +628,9 @@ void Board::enterSwapping() {
 
     Swap(first_pos_, second_pos_);
 
+    //添加这两个位置
+    falling_cubes_.push_back(first_pos_);
+    falling_cubes_.push_back(second_pos_);
     // 假设 Swap 是同步的，动画完成后会自动发射 swapAnimationsFinished 信号
 }
 
@@ -642,8 +649,15 @@ void Board::enterCheckingMatch() {
 void Board::enterClearing() {
     qDebug() << "进入状态：消除中";
     std::vector<std::vector<Vector2>> matches = CheckBoard();
+    SetRow4(matches);
+    SetCol4(matches);
+
+    matches = ProcessSpecialMatches(matches);
+
     int cleared = ClearCube(matches);
     qDebug() << "消除了" << cleared << "个方块";
+
+    //添加动画的逻辑
     for(auto &cube_list:matches){
         for(Vector2& cube_pos:cube_list ){
             std::shared_ptr<Cube> cube = GetCube(cube_pos);
@@ -659,6 +673,8 @@ void Board::enterClearing() {
 
 void Board::enterFalling() {
     qDebug() << "进入状态：下落中";
+    falling_cubes_.clear(); //进入之后先进行一次清理
+
     Fall();
     Fill();
     qDebug() << "下落并填充完成";
@@ -679,3 +695,232 @@ void Board::enterEndCheck() {
         emit noNewMatch();
     }
 }
+
+
+std::vector<std::vector<Vector2>> Board::find_row_line4(const std::vector<std::vector<Vector2>> &matches) {
+    std::vector<std::vector<Vector2>> row_line;
+
+    for (const auto &group : matches) {
+        if (group.size() >= 4) { // 至少包含 4 个方块
+            // 检查是否所有元素都在同一行
+            int row = group[0].GetRow();
+            bool sameRow = std::all_of(group.begin(), group.end(), [row](const Vector2 &pos) {
+                return pos.GetRow() == row;
+            });
+
+            if (!sameRow) continue; // 如果不在同一行，跳过
+
+            // 提取所有的列号并排序
+            std::vector<int> cols;
+            for (const auto &pos : group) {
+                cols.push_back(pos.GetColumn());
+            }
+            std::sort(cols.begin(), cols.end());
+
+            // 检查是否存在至少 4 个连续的列号
+            int consecutiveCount = 1;
+            for (size_t i = 1; i < cols.size(); ++i) {
+                if (cols[i] == cols[i - 1] + 1) {
+                    ++consecutiveCount;
+                    if (consecutiveCount >= 4) {
+                        row_line.push_back(group);
+                        break; // 找到符合条件的组合，跳出循环
+                    }
+                } else {
+                    consecutiveCount = 1; // 重置计数器
+                }
+            }
+        }
+    }
+
+    return row_line;
+}
+
+
+std::vector<std::vector<Vector2>> Board::find_col_line4(const std::vector<std::vector<Vector2>> &matches) {
+    std::vector<std::vector<Vector2>> col_line;
+
+    for (const auto &group : matches) {
+        if (group.size() >= 4) { // 至少包含 4 个方块
+            // 检查是否所有元素都在同一列
+            int col = group[0].GetColumn();
+            bool sameColumn = std::all_of(group.begin(), group.end(), [col](const Vector2 &pos) {
+                return pos.GetColumn() == col;
+            });
+
+            if (!sameColumn) continue; // 如果不在同一列，跳过
+
+            // 提取所有的行号并排序
+            std::vector<int> rows;
+            for (const auto &pos : group) {
+                rows.push_back(pos.GetRow());
+            }
+            std::sort(rows.begin(), rows.end());
+
+            // 检查是否存在至少 4 个连续的行号
+            int consecutiveCount = 1;
+            for (size_t i = 1; i < rows.size(); ++i) {
+                if (rows[i] == rows[i - 1] + 1) {
+                    ++consecutiveCount;
+                    if (consecutiveCount >= 4) {
+                        col_line.push_back(group);
+                        break; // 找到符合条件的组合，跳出循环
+                    }
+                } else {
+                    consecutiveCount = 1; // 重置计数器
+                }
+            }
+        }
+    }
+
+    return col_line;
+}
+
+void Board::RemoveFromMatch(const Vector2 &pos, std::vector<std::vector<Vector2>> &matches) {
+    for (auto it = matches.begin(); it != matches.end(); /* no increment here */) {
+        auto &cube_list = *it;
+
+        // 删除子向量中的 pos
+        auto pos_it = std::remove(cube_list.begin(), cube_list.end(), pos);
+        if (pos_it != cube_list.end()) {
+            cube_list.erase(pos_it, cube_list.end()); // 真正删除元素
+        }
+
+        // 如果子向量为空，删除该子向量
+        if (cube_list.empty()) {
+            it = matches.erase(it); // 删除子向量，返回下一个有效迭代器
+        } else {
+            ++it; // 否则，继续检查下一个子向量
+        }
+    }
+}
+
+
+void Board::SetRow4(std::vector<std::vector<Vector2>> &matches){
+    std::vector<std::vector<Vector2>> row4_list = find_row_line4(matches);
+    // for(auto &cube_list:row4_list){
+    //     for(Vector2& cube_pos:cube_list ){
+    //         auto it = std::find(falling_cubes_.begin(), falling_cubes_.end(), cube_pos);
+    //         if (it != falling_cubes_.end()) {
+    //             // 找到了
+    //             qDebug() << "row找到了";
+    //             GetCube(*it)->SetSpecialType(Constants::kspecial_cube_column);
+    //             RemoveFromMatch(*it,matches);
+    //             //播放升级动画
+    //         } else{
+    //             GetCube(cube_list[0])->SetSpecialType(Constants::kspecial_cube_column);
+    //             RemoveFromMatch(cube_list[0],matches);
+    //         }
+    //     }
+    // }
+    if(!row4_list.empty()){
+        std::shared_ptr<Cube> cube = GetCube(row4_list[0][0]);
+        cube->SetSpecialType(Constants::kspecial_cube_column);
+        // RemoveFromMatch(cube->GetPos(),matches);
+        // ani_manager_->AddAnimation(ani_factory_.MakeCubeAnimation(cube,GetRenderPos(cube->GetPos()),AnimationType::Col,true),AnimType::Extra);
+    }
+
+}
+
+void Board::SetCol4(std::vector<std::vector<Vector2>> &matches){
+    std::vector<std::vector<Vector2>> col4_list = find_col_line4(matches);
+    // for(auto &cube_list:col4_list){
+    //     for(Vector2& cube_pos:cube_list ){
+    //         auto it = std::find(falling_cubes_.begin(), falling_cubes_.end(), cube_pos);
+    //         if (it != falling_cubes_.end()) {
+    //             // 找到了
+    //             qDebug() << "col找到了";
+    //             GetCube(*it)->SetSpecialType(Constants::kspecial_cube_row);
+    //             RemoveFromMatch(*it,matches);
+    //             //播放升级动画
+    //         }
+    //         else{
+    //             GetCube(cube_list[0])->SetSpecialType(Constants::kspecial_cube_row);
+    //             RemoveFromMatch(cube_list[0],matches);
+    //         }
+    //     }
+    // }
+    if(!col4_list.empty()){
+        std::shared_ptr<Cube> cube = GetCube(col4_list[0][0]);
+        cube->SetSpecialType(Constants::kspecial_cube_row);
+        // RemoveFromMatch(cube->GetPos(),matches);
+        // ani_manager_->AddAnimation(ani_factory_.MakeCubeAnimation(cube,GetRenderPos(cube->GetPos()),AnimationType::Row,true),AnimType::Extra);
+    }
+
+}
+
+
+std::vector<std::vector<Vector2>> Board::ProcessSpecialMatches(const std::vector<std::vector<Vector2>> &matches) {
+    std::set<std::pair<int, int>> processed; // 记录已处理的方块，避免重复
+    std::vector<std::vector<Vector2>> result; // 最终的结果
+
+    // 辅助函数：将方块加入结果并递归检查
+    auto processCube = [&](const Vector2 &pos, auto &&processCubeRef) -> void {
+        int row = pos.GetRow();
+        int col = pos.GetColumn();
+
+        // 如果已经处理过，直接返回
+        if (!processed.insert({row, col}).second) return;
+
+        // 获取当前方块
+        if (!board_[row][col]) return;
+        std::shared_ptr<Cube> cube = board_[row][col];
+
+        // 添加当前方块到结果
+        if (result.empty() || std::find(result.back().begin(), result.back().end(), pos) == result.back().end()) {
+            result.back().push_back(pos);
+        }
+
+        // 根据特殊类型处理
+        int special_type = cube->GetSpecialType();
+        if (special_type == Constants::kspecial_cube_row) {
+            // 清除整行
+            for (int c = 0; c < GetWidth(); ++c) {
+                processCubeRef(Vector2(row, c), processCubeRef);
+            }
+            // std::shared_ptr<MoveAnimation> ani = ani_factory_.MakeMoveAnimation(
+            //     cube,
+            //     ResourceManager::Instance().GetHLine(),
+            //     GetRenderPos(cube->GetPos()),
+            //     GetRenderPos(Vector2(cube->GetPos().GetRow(),-10)),
+            //     cube->GetType(),
+            //     false,
+            //     1500,
+            //     false);
+            // ani_manager_->AddAnimation(ani,AnimType::Extra);
+
+        } else if (special_type == Constants::kspecial_cube_column) {
+            // 清除整列
+            for (int r = 0; r < GetHeight(); ++r) {
+                processCubeRef(Vector2(r, col), processCubeRef);
+            }
+        }
+    };
+
+    // 遍历初始 matches
+    for (const auto &group : matches) {
+        result.emplace_back(); // 开始一个新的组
+        for (const auto &pos : group) {
+            processCube(pos, processCube); // 处理当前方块
+        }
+    }
+
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

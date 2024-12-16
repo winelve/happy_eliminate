@@ -37,6 +37,7 @@ public:
     // 设置动画结束后的延迟帧数
     void SetEndDelay(int delay_frames);
     void SetUseDelay(bool delay) { use_delay_ = delay; }
+    void SetAutoFit(bool fit) { auto_fit_ = fit; }
 
 private:
     QPointF end_pos_;       // 终点位置
@@ -49,6 +50,7 @@ private:
     int current_delay_;     // 当前延迟帧数
     bool delay_active_;     // 是否处于延迟状态
     bool use_delay_ = false;
+    bool auto_fit_ = true;
 
 };
 

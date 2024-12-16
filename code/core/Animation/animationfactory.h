@@ -45,6 +45,49 @@ public:
         int ms = 250
     );
 
+    std::shared_ptr<EffectAnimation> MakeCubeAnimation(
+        std::shared_ptr<Cube> cube,
+        QPointF start,
+        AnimationType ani_type,
+        bool is_loop
+    );
+
+    AnimalType GetAniType(int type){
+        AnimalType animal;
+        switch (type) {
+        case 1: animal = AnimalType::Bear; break;
+        case 2: animal = AnimalType::Cat; break;
+        case 3: animal = AnimalType::Chicken; break;
+        case 4: animal = AnimalType::Fox; break;
+        case 5: animal = AnimalType::Frog; break;
+        case 6: animal = AnimalType::Horse; break;
+        default: animal = AnimalType::Bear; break;
+        }
+        return animal;
+    }
+
+    std::shared_ptr<MoveAnimation> MakeMoveAnimation(
+        std::shared_ptr<Cube> cube,
+        std::vector<QPixmap> frames,
+        QPointF start,
+        QPointF end,
+        bool is_loop,
+        bool use_delay,
+        float speed
+    );
+
+    std::shared_ptr<MoveAnimation> MakeMoveAnimation(
+        std::shared_ptr<Cube> cube,
+        QPixmap frame,
+        QPointF start,
+        QPointF end,
+        bool is_loop,
+        bool use_delay,
+        float speed,
+        bool auto_fit = true
+        );
+
+
 private:
     // 私有构造函数，防止外部实例化
     AnimationFactory() = default;

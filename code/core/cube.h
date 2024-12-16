@@ -15,6 +15,7 @@ private:
     bool is_choosed_;
     bool is_playing_animation_;
     QPixmap cube_texture;
+    int special_type_ = 0;
 
 public:
     Cube();
@@ -29,6 +30,9 @@ public:
     bool IsChoosed() { return is_choosed_; }
     void SetChoosed(bool status) { is_choosed_ = status; }
     void SetPlaying(bool play) { is_playing_animation_ = play; }
+
+    int GetSpecialType() { return special_type_; }
+    void SetSpecialType(int type) { special_type_ = type; }
 
     void paint(QPainter &painter);
 

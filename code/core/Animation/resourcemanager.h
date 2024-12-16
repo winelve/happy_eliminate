@@ -39,6 +39,12 @@ public:
     QPixmap GetCube(int type) { return cube_texture_list_[type]; }
 
     std::vector<QPixmap> GetDestroyEffect() { return destroy_texture_list_; }
+    QPixmap GetHLine() { return h_line; }
+    QPixmap GetVLine() { return v_line; }
+
+    // 放大3倍
+
+
 private:
     // 私有构造函数
     ResourceManager();
@@ -52,10 +58,11 @@ private:
 
 
 
-
     std::unordered_map<int, std::vector<QPixmap>> ani_resources_;
     std::vector<QPixmap> cube_texture_list_;
     std::vector<QPixmap> destroy_texture_list_;
+    QPixmap h_line;
+    QPixmap v_line;
 };
 
 #endif // RESOURCEMANAGER_H

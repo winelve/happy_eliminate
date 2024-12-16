@@ -19,16 +19,6 @@ std::shared_ptr<MoveAnimation> AnimationFactory::MakeMoveAnimation(
     float speed
     )
 {
-    AnimalType animal;
-    switch (animal_type) {
-    case 1: animal = AnimalType::Bear; break;
-    case 2: animal = AnimalType::Cat; break;
-    case 3: animal = AnimalType::Chicken; break;
-    case 4: animal = AnimalType::Fox; break;
-    case 5: animal = AnimalType::Frog; break;
-    case 6: animal = AnimalType::Horse; break;
-    default: animal = AnimalType::Bear; break;
-    }
 
     auto ani = std::make_shared<MoveAnimation>(cube);
     ani->SetLoopMove(false);
@@ -36,7 +26,7 @@ std::shared_ptr<MoveAnimation> AnimationFactory::MakeMoveAnimation(
     ani->SetLooping(is_loop);
     ani->SetPosition(start.x(), start.y());
     ani->SetEndPosition(end.x(), end.y());
-    ani->SetFrameList(ResourceManager::Instance().GetAniResource(animal, texture_type));
+    ani->SetFrameList(ResourceManager::Instance().GetAniResource(GetAniType(animal_type), texture_type));
     ani->SetPlaying(true);
     ani->SetUseDelay(use_delay);
     return ani;
@@ -77,9 +67,70 @@ std::shared_ptr<EffectAnimation> AnimationFactory::MakeDestroyEffect(
     return ani;
 }
 
+std::shared_ptr<EffectAnimation> AnimationFactory::MakeCubeAnimation(
+    std::shared_ptr<Cube> cube,
+    QPointF start,
+    AnimationType ani_type,
+    bool is_loop
+    )
+{
+    std::vector<QPixmap> frames = ResourceManager::Instance().GetAniResource(GetAniType(cube->GetType()),ani_type);
+    auto ani = std::make_shared<EffectAnimation>(cube,start,frames);
+    ani->SetLooping(is_loop);
+    ani->SetPlaying(true);
+    cube->SetPlaying(true);
+    return ani;
+}
 
 
 
+std::shared_ptr<MoveAnimation> AnimationFactory::MakeMoveAnimation(
+    std::shared_ptr<Cube> cube,
+    std::vector<QPixmap> frames,
+    QPointF start,
+    QPointF end,
+    bool is_loop,
+    bool use_delay,
+    float speed
+    )
+{
+
+    auto ani = std::make_shared<MoveAnimation>(cube);
+    ani->SetLoopMove(false);
+    ani->SetSpeed(speed);
+    ani->SetLooping(is_loop);
+    ani->SetPosition(start.x(), start.y());
+    ani->SetEndPosition(end.x(), end.y());
+    ani->SetFrameList(frames);
+    ani->SetPlaying(true);
+    ani->SetUseDelay(use_delay);
+    return ani;
+}
+
+std::shared_ptr<MoveAnimation> AnimationFactory::MakeMoveAnimation(
+    std::shared_ptr<Cube> cube,
+    QPixmap frame,
+    QPointF start,
+    QPointF end,
+    bool is_loop,
+    bool use_delay,
+    float speed,
+    bool auto_fit
+    )
+{
+
+    auto ani = std::make_shared<MoveAnimation>(cube);
+    ani->SetLoopMove(false);
+    ani->SetSpeed(speed);
+    ani->SetLooping(is_loop);
+    ani->SetPosition(start.x(), start.y());
+    ani->SetEndPosition(end.x(), end.y());
+    ani->AddFrame(frame);
+    ani->SetPlaying(true);
+    ani->SetUseDelay(use_delay);
+    ani->SetAutoFit(auto_fit);
+    return ani;
+}
 
 
 
