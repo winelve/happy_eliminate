@@ -18,6 +18,7 @@ SOURCES += \
     code/core/constants.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
+    code/database/database.cpp \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     main.cpp
@@ -31,6 +32,7 @@ HEADERS += \
     code/core/constants.h \
     code/core/cube.h \
     code/core/vector2.h \
+    code/database/database.h \
     code/windows/gamewidget.h \
 
 FORMS += \
@@ -43,3 +45,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource/resource.qrc
+    QT += sql
+    QT += core sql
+
