@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     code/core/Animation/animationfactory.cpp \
     code/core/Animation/animationmanager.cpp \
+    code/audio/audioplayer.cpp \
     code/core/Animation/atlas.cpp \
     code/core/Animation/effectanimation.cpp \
     code/core/Animation/frameanimation.cpp \
@@ -21,12 +23,15 @@ SOURCES += \
     code/core/constants.cpp \
     code/core/cube.cpp \
     code/core/vector2.cpp \
+    code/database/database.cpp \
+    code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     main.cpp
 
 HEADERS += \
     code/core/Animation/animationfactory.h \
     code/core/Animation/animationmanager.h \
+    code/audio/audioplayer.h \
     code/core/Animation/atlas.h \
     code/core/Animation/effectanimation.h \
     code/core/Animation/frameanimation.h \
@@ -37,7 +42,8 @@ HEADERS += \
     code/core/constants.h \
     code/core/cube.h \
     code/core/vector2.h \
-    code/windows/gamewidget.h
+    code/database/database.h \
+    code/windows/gamewidget.h \
 
 FORMS += \
     code/windows/gamewidget.ui
@@ -49,3 +55,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource/resource.qrc
+    QT += sql
+    QT += core sql
+

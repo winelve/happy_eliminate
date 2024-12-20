@@ -40,5 +40,30 @@
         <file>cubes/effect/kai_231_destroy_light_15.png</file>
         <file>cubes/effect/kai_231_bomb_white_h.png</file>
         <file>cubes/effect/kai_231_bomb_white_v.png</file>
+        <file>audios/click.bubble.mp3</file>
+        <file>audios/contnuousMatch3.mp3</file>
+        <file>audios/contnuousMatch5.mp3</file>
+        <file>audios/contnuousMatch7.mp3</file>
+        <file>audios/contnuousMatch9.mp3</file>
+        <file>audios/contnuousMatch11.mp3</file>
+        <file>audios/drop.mp3</file>
+        <file>audios/eliminate1.mp3</file>
+        <file>audios/eliminate2.mp3</file>
+        <file>audios/eliminate3.mp3</file>
+        <file>audios/eliminate4.mp3</file>
+        <file>audios/eliminate5.mp3</file>
+        <file>audios/eliminate6.mp3</file>
+        <file>audios/eliminate7.mp3</file>
+        <file>audios/eliminate8.mp3</file>
+        <file>audios/gamescenebgm.mp3</file>
+        <file>audios/swap.mp3</file>
+        <file>audios/swap_colorcolor_cleanAll.mp3</file>
+        <file>audios/swap_colorcolor_swap.mp3</file>
+        <file>audios/swap_colorline.mp3</file>
+        <file>audios/swap_lineline.mp3</file>
+        <file>audios/swap_wrapline.mp3</file>
+        <file>audios/swap_wrapwrap.mp3</file>
+        <file>audios/SwapFun.mp3</file>
+        <file>audios/worldscenebgm.mp3</file>
     </qresource>
 </RCC>
