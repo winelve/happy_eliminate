@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    code/core/Animation/animationcomponent.cpp \
     code/core/Animation/animationfactory.cpp \
     code/core/Animation/animationmanager.cpp \
     code/audio/audioplayer.cpp \
@@ -17,11 +18,14 @@ SOURCES += \
     code/core/Animation/effectanimation.cpp \
     code/core/Animation/frameanimation.cpp \
     code/core/Animation/moveanimation.cpp \
+    code/core/Animation/rendermanager.cpp \
     code/core/Animation/resourcemanager.cpp \
     code/core/board.cpp \
     code/core/boardwidget.cpp \
     code/core/constants.cpp \
     code/core/cube.cpp \
+    code/core/entity.cpp \
+    code/core/utils.cpp \
     code/core/vector2.cpp \
     code/database/database.cpp \
     code/test/audio_test/testaudiomain.cpp \
@@ -29,6 +33,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    code/core/Animation/animationcomponent.h \
     code/core/Animation/animationfactory.h \
     code/core/Animation/animationmanager.h \
     code/audio/audioplayer.h \
@@ -36,11 +41,14 @@ HEADERS += \
     code/core/Animation/effectanimation.h \
     code/core/Animation/frameanimation.h \
     code/core/Animation/moveanimation.h \
+    code/core/Animation/rendermanager.h \
     code/core/Animation/resourcemanager.h \
     code/core/board.h \
     code/core/boardwidget.h \
     code/core/constants.h \
     code/core/cube.h \
+    code/core/entity.h \
+    code/core/utils.h \
     code/core/vector2.h \
     code/database/database.h \
     code/windows/gamewidget.h \
