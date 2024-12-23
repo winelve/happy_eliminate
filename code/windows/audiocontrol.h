@@ -36,12 +36,11 @@ private:
 
     static AudioControl* m_instance;
 
+    QSettings m_settings;
     bool m_musicStatus;
     bool m_soundStatus;
     int m_musicVolume;
     int m_soundVolume;
-
-    QSettings m_settings;
 };
 
 #endif // AUDIOCONTROL_H
