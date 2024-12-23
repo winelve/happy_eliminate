@@ -1,6 +1,7 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 #include <QPixmap>
+#include <functional>
 
 class Vector2
 {
@@ -26,5 +27,15 @@ public:
     }
 
 };
+
+namespace std {
+template <>
+struct hash<Vector2> {
+    size_t operator()(const Vector2 &v) const {
+        return hash<int>()(v.GetRow()) ^ (hash<int>()(v.GetColumn()) << 1);
+    }
+};
+}
+
 
 #endif // VECTOR2_H

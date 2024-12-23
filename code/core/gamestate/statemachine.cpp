@@ -34,6 +34,7 @@ void StateMachine::SwitchTo(const QString &name)
     }
 
     currentState_ = statePool_.value(name);
+    current_state_name_ = name;
     if (currentState_) {
         currentState_->onEnter();
     }

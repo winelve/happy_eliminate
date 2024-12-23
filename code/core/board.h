@@ -36,28 +36,6 @@ private:
     bool CausesMatch(int row, int col, int type); // 辅助函数：检查是否形成消除组合
     void DelCube(int row, int col); // 删除一个单元
 
-
-
-public:
-
-    //<<<<<<<<<<<<<<需要分离 控制层
-    void RunGameLogic(const Vector2 &pos_1, const Vector2 &pos_2);//这个东西应该在控制层来实现
-    //>>>>>>>>>>>>>>需要分离
-
-
-
-
-
-
-    // //纯脑瘫设计>>>>>>>>>>>>>>>>>>>>>>
-    // std::vector<std::vector<Vector2>> find_row_line4(const std::vector<std::vector<Vector2>>& match);
-    // std::vector<std::vector<Vector2>> find_col_line4(const std::vector<std::vector<Vector2>>& match);
-    // std::vector<Vector2> falling_cubes_;
-    // void RemoveFromMatch(const Vector2 &pos,std::vector<std::vector<Vector2>> &mathces);
-    // void SetRow4(std::vector<std::vector<Vector2>> &mathces);
-    // void SetCol4(std::vector<std::vector<Vector2>> &mathces);
-    // std::vector<std::vector<Vector2>> ProcessSpecialMatches(const std::vector<std::vector<Vector2>> &matches);
-    // //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 };
 
 #endif // BOARD_H

@@ -38,4 +38,16 @@ QPointF GetRenderPos(Vector2 pos) {
     return GetRenderPos(pos.GetRow(), pos.GetColumn());
 }
 
+// Function to output the matches array
+void PrintMatches(const std::vector<std::vector<Vector2>> &matches) {
+    for (size_t i = 0; i < matches.size(); ++i) {
+        qDebug() << "Match" << i + 1 << ":";
+        for (const auto &vec : matches[i]) {
+            qDebug() << "(" << vec.GetRow() << "," << vec.GetColumn() << ")";
+        }
+    }
+}
+
+
+
 } // namespace Utils

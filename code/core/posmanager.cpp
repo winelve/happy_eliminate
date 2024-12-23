@@ -18,7 +18,10 @@ void PosManager::HandleClick(const Vector2 &pos){
     if (!choosed_) {
         pos1_ = pos;
         choosed_ = true;
-        BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->SetState("click");
+        if(BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->GetEliminate()==CubeState::Normal_Eliminate){
+            BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->SetState("click");
+        }
+
 
         //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>设置Cube的状态
         // GetCube(pos1_)->SetChoosed(true);
@@ -26,7 +29,9 @@ void PosManager::HandleClick(const Vector2 &pos){
                  << pos1_.GetRow() << ", " << pos1_.GetColumn() << ").";
     }
     else {
-        BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->SetState("normal");
+        if(BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->GetEliminate()==CubeState::Normal_Eliminate){
+            BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->SetState("normal");
+        }
         // Second cube selection
         pos2_ = pos;
         qDebug() << "HandleMouseClick: Second cube selected at ("
@@ -64,8 +69,9 @@ void PosManager::Reselect(){
     //清除选中状态
     std::shared_ptr<Cube> first_cube = BoardManager::instance().GetCurrentBoard()->GetCube(pos1_);
     if(first_cube){
-        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>状态切换
-        first_cube->SetState("normal");
+        if(BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->GetEliminate()==CubeState::Normal_Eliminate){
+            BoardManager::instance().GetCurrentBoard()->GetCube(pos1_)->SetState("normal");
+        }
     }
 }
 

@@ -8,6 +8,8 @@
 #include "../posmanager.h"
 #include "../utils/utils.h"
 #include "../entity/eliminateeffect.h"
+#include "../entity/coleffect.h"
+#include "../entity/roweffect.h"
 
 #include <QObject>
 #include <QDebug>
@@ -122,7 +124,8 @@ public:
         qDebug() << "进入状态：检查匹配";
 
         // 检查匹配逻辑
-        auto matches = GameLogic::instance().CheckBoard(BoardManager::instance().GetCurrentBoard());
+        std::vector<std::vector<Vector2>> matches = GameLogic::instance().CheckBoard(BoardManager::instance().GetCurrentBoard());
+
 
         if (!matches.empty()) {
             state_machine_->SwitchTo("Clearing");
@@ -161,9 +164,23 @@ public:
 
     void onEnter() override {
         qDebug() << "进入状态：消除中";
+        std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
         std::vector<std::vector<Vector2>> matches = GameLogic::instance().CheckBoard(BoardManager::instance().GetCurrentBoard());
 
+        //先标记特殊棋子
+        GameLogic::instance().Find4(board,&matches);
+        GameLogic::instance().Find5(board,&matches);
         //添加消除动画的逻辑
+
+        Utils::PrintMatches(matches);
+        qDebug() << "<<<<<<<<<<<<<<<<<<<<<In";
+        GameLogic::instance().CheckSpecial(&matches);
+        qDebug() << ">>>>>>>>>>>>>>>>>>>>>Out";
+        Utils::PrintMatches(matches);
+
+
+        // AddAnimation(matches);
+
 
         // 创建一个 QParallelAnimationGroup 来同时管理所有的透明度动画
         QParallelAnimationGroup* parallelGroup = new QParallelAnimationGroup(this);
@@ -175,11 +192,25 @@ public:
                 if (cube) {
                     // 创建透明度降低的动画
                     auto opacityAni = cube->CreatMotionAni("opacity", 1.0, 0.0, 200, QEasingCurve::OutQuad);
-                    // 将当前的透明度动画添加到 QParallelAnimationGroup 中
                     parallelGroup->addAnimation(opacityAni);
-
                     EliminateEffect *effect = new EliminateEffect(); effect->SetRenderPos(Utils::GetRenderPos(position));
-                    qDebug() << "add";
+
+                    if(cube->GetEliminate()==CubeState::Row_Eliminate){
+                        RowEffect *row_effect1 = new RowEffect();
+                        row_effect1->PlayMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(cube->GetPos().GetRow(),-10),500);
+                        RowEffect *row_effect2 = new RowEffect();
+                        row_effect2->PlayMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(cube->GetPos().GetRow(),board->GetWidth()+10),500);
+                    }
+                    if(cube->GetEliminate()==CubeState::Col_Eliminate){
+                        ColEffect *col_effect1 = new ColEffect();
+                        col_effect1->PlayMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(-10,cube->GetPos().GetColumn()),500);
+                        ColEffect *col_effect2 = new ColEffect();
+                        col_effect2->PlayMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(board->GetHeight()+10,cube->GetPos().GetColumn()),500);
+                    }
 
                 }
             }
@@ -187,12 +218,13 @@ public:
         // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
         connect(parallelGroup, &QParallelAnimationGroup::finished,this,&ClearingState::clear_ani_finished, Qt::UniqueConnection);
         parallelGroup->start();
-
-
         //逻辑消除
         int clear_size = GameLogic::instance().ClearCube(BoardManager::instance().GetCurrentBoard(),matches);
         qDebug() << "clear size: " << clear_size;
     }
+private:
+    bool is_magic_clear_ = false;
+    void AddAnimation(std::vector<std::vector<Vector2>> &matches);
 
 public slots:
     void transToFall(){

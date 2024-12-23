@@ -23,10 +23,7 @@ ResourceManager::ResourceManager(){
     h_line = QPixmap(":/cubes/effect/kai_231_bomb_white_h.png");
     v_line = QPixmap(":/cubes/effect/kai_231_bomb_white_v.png");
 
-    // 放大3倍/*
-    h_line = h_line.scaled(h_line.width() , h_line.height() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    v_line = v_line.scaled(v_line.width() , v_line.height() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
+    magic_texture_list_ = LoadAtlas(":/cubes/bird/bird_select_30",30);
 
     LoadAllAniResources();
 }
@@ -140,6 +137,8 @@ std::vector<QPixmap> ResourceManager::LoadAtlas(const QString& path, int num)
     qDebug() << "Successfully loaded" << atlas_list.size() << "frames from" << path;
     return atlas_list;
 }
+
+
 
 // 导入所有资源
 void ResourceManager::LoadAllAniResources()

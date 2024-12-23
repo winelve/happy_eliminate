@@ -2,7 +2,6 @@
 
 #include "../Animation/resourcemanager.h"
 #include "../utils/utils.h"
-// #include "../Animation/rendermanager.h"
 
 #include <QColor>
 #include <QPen>
@@ -44,6 +43,9 @@ void Cube::InitAniComponent(){
                  frame_duration,true);
     AddAnimation("col",
                  ResourceManager::Instance().GetAniResource(type_,AnimationType::Col),
+                 frame_duration,true);
+    AddAnimation("magic",
+                 ResourceManager::Instance().GetMagic(),
                  frame_duration,true);
 
     SetState("normal");

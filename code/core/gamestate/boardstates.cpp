@@ -25,3 +25,29 @@ void CheckingMatchState::creatAni(){
     //数据逻辑
     GameLogic::instance().Swap(board,pos1,pos2);
 }
+
+
+void ClearingState::AddAnimation(std::vector<std::vector<Vector2>> &matches){
+    // 创建一个 QParallelAnimationGroup 来同时管理所有的透明度动画
+    QParallelAnimationGroup* parallelGroup = new QParallelAnimationGroup(this);
+    for (const auto& row : matches) {
+        for (const auto& position : row) {
+            // 假设你有一个方法根据 position 获取 Cube 对象
+            Cube* cube = BoardManager::instance().GetCurrentBoard()->GetCube(position).get();
+            // cube->SetState("");
+            if (cube) {
+                // 创建透明度降低的动画
+                auto opacityAni = cube->CreatMotionAni("opacity", 1.0, 0.0, 200, QEasingCurve::OutQuad);
+                // 将当前的透明度动画添加到 QParallelAnimationGroup 中
+                parallelGroup->addAnimation(opacityAni);
+
+                EliminateEffect *effect = new EliminateEffect(); effect->SetRenderPos(Utils::GetRenderPos(position));
+                qDebug() << "add";
+
+            }
+        }
+    }
+    // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
+    connect(parallelGroup, &QParallelAnimationGroup::finished,this,&ClearingState::clear_ani_finished, Qt::UniqueConnection);
+    parallelGroup->start();
+}

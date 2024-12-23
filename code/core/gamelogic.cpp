@@ -1,7 +1,9 @@
 #include "gamelogic.h"
 #include "./utils/utils.h"
+#include "./boardmanager.h"
 #include <QDebug>
 #include <queue>
+#include <unordered_set>
 
 // 静态方法，返回单例实例
 GameLogic& GameLogic::instance()
@@ -187,6 +189,164 @@ void GameLogic::Fill(std::shared_ptr<Board> board) {
 
     }
 }
+
+
+// Find4 函数实现
+// Find4 函数实现
+void GameLogic::Find4(std::shared_ptr<Board> board, std::vector<std::vector<Vector2>> *match) {
+    for (std::vector<Vector2> &pos_list : *match) {
+        if (pos_list.size() == 4) {
+            // Check if the four positions form a horizontal or vertical line
+            bool isHorizontal = true;
+            bool isVertical = true;
+
+            // Assume the first element as reference
+            int baseRow = pos_list[0].GetRow();
+            int baseColumn = pos_list[0].GetColumn();
+
+            for (size_t i = 1; i < pos_list.size(); ++i) {
+                if (pos_list[i].GetRow() != baseRow) {
+                    isHorizontal = false;
+                }
+                if (pos_list[i].GetColumn() != baseColumn) {
+                    isVertical = false;
+                }
+            }
+            bool is_find = isHorizontal || isVertical;
+
+            if (isHorizontal) {
+                // Handle horizontal match logic
+                qDebug() << ">>>>>>>>>Found a horizontal match of 4 at row <<<<<<<<<<<" << baseRow ;
+                board->GetCube(pos_list[0])->SetEliminate(CubeState::Col_Eliminate);
+                board->GetCube(pos_list[0])->SetState("col");
+            }
+            if (isVertical) {
+                // Handle vertical match logic
+                qDebug() << ">>>>>>>>>>Found a vertical match of 4 at column <<<<<<<<<<," << baseColumn;
+                board->GetCube(pos_list[0])->SetEliminate(CubeState::Row_Eliminate);
+                board->GetCube(pos_list[0])->SetState("row");
+            }
+            if(is_find){
+                pos_list.erase(pos_list.begin());  // Erase the first element
+            }
+        }
+    }
+}
+
+
+// Find5 函数实现
+void GameLogic::Find5(std::shared_ptr<Board> board, std::vector<std::vector<Vector2>> *match) {
+    for (std::vector<Vector2> &pos_list : *match) {
+        if (pos_list.size() >= 5) {
+            // Check if the positions form a horizontal or vertical line
+            bool isHorizontal = true;
+            bool isVertical = true;
+
+            // Assume the first element as reference
+            int baseRow = pos_list[0].GetRow();
+            int baseColumn = pos_list[0].GetColumn();
+
+            for (size_t i = 1; i < pos_list.size(); ++i) {
+                if (pos_list[i].GetRow() != baseRow) {
+                    isHorizontal = false;
+                }
+                if (pos_list[i].GetColumn() != baseColumn) {
+                    isVertical = false;
+                }
+            }
+
+            bool is_find = isHorizontal || isVertical;
+            if(is_find){
+                qDebug() << "!!!!!!!!!!Magic!!!!!!!!!";
+                board->GetCube(pos_list[0])->SetEliminate(CubeState::Magic_Eliminate);
+                board->GetCube(pos_list[0])->SetState("magic");
+                board->GetCube(pos_list[0])->SetType(-1);
+                pos_list.erase(pos_list.begin());  // Erase the first element
+            }
+
+        }
+    }
+}
+
+
+void GameLogic::CheckSpecial(std::vector<std::vector<Vector2>> *match) {
+    std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+    std::unordered_set<Vector2> processed; // Use a set to track processed positions
+    std::unordered_set<Vector2> all_in_match; // To prevent duplicate additions
+
+    // Initialize all_in_match with existing elements in match
+    for (const auto &pos_list : *match) {
+        for (const Vector2 &pos : pos_list) {
+            all_in_match.insert(pos);
+        }
+    }
+
+    for (size_t i = 0; i < match->size(); ++i) {
+        auto &pos_list = (*match)[i];
+        for (const Vector2 &pos : pos_list) {
+            // Check if the position has already been processed
+            if (processed.count(pos)) {
+                continue; // Skip if already processed
+            }
+            processed.insert(pos); // Mark the position as processed
+
+            // Get the cube at the current position
+            auto cube = board->GetCube(pos);
+            if (!cube) {
+                continue; // Skip if no cube exists at this position
+            }
+
+            if (cube->GetEliminate() == CubeState::Col_Eliminate) {
+                // Add all elements in the same column to match
+                std::vector<Vector2> col_elements;
+                int column = pos.GetColumn();
+                for (int row = 0; row < board->GetWidth(); ++row) {
+                    Vector2 new_pos(row, column);
+                    if (!all_in_match.count(new_pos)) { // Only add if not already in match
+                        col_elements.emplace_back(new_pos);
+                        all_in_match.insert(new_pos); // Mark as added globally
+                    }
+                }
+                if (!col_elements.empty()) {
+                    match->push_back(col_elements);
+                }
+            } else if (cube->GetEliminate() == CubeState::Row_Eliminate) {
+                // Add all elements in the same row to match
+                std::vector<Vector2> row_elements;
+                int row = pos.GetRow();
+                for (int column = 0; column < board->GetWidth(); ++column) {
+                    Vector2 new_pos(row, column);
+                    if (!all_in_match.count(new_pos)) { // Only add if not already in match
+                        row_elements.emplace_back(new_pos);
+                        all_in_match.insert(new_pos); // Mark as added globally
+                    }
+                }
+                if (!row_elements.empty()) {
+                    match->push_back(row_elements);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

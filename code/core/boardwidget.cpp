@@ -116,6 +116,7 @@ void BoardWidget::Update(int deltatime){
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev)
 {
+    if(state_machine_.GetCurrentState() != "WaitingForInput") return ;
     // 处理左键点击事件
     if (ev->button() == Qt::LeftButton) {
         // 获取鼠标点击的像素坐标

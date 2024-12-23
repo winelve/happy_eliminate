@@ -17,7 +17,9 @@ SOURCES += \
     code/core/board.cpp \
     code/core/boardmanager.cpp \
     code/core/boardwidget.cpp \
+    code/core/entity/coleffect.cpp \
     code/core/entity/eliminateeffect.cpp \
+    code/core/entity/roweffect.cpp \
     code/core/posmanager.cpp \
     code/core/utils/constants.cpp \
     code/core/entity/cube.cpp \
@@ -41,7 +43,9 @@ HEADERS += \
     code/core/board.h \
     code/core/boardmanager.h \
     code/core/boardwidget.h \
+    code/core/entity/coleffect.h \
     code/core/entity/eliminateeffect.h \
+    code/core/entity/roweffect.h \
     code/core/posmanager.h \
     code/core/utils/constants.h \
     code/core/entity/cube.h \
