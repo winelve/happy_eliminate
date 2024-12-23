@@ -22,6 +22,7 @@ SOURCES += \
     code/windows/aboutwindow.cpp \
     code/windows/audiocontrol.cpp \
     code/windows/framelesswindow.cpp \
+    code/database/database.cpp \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
@@ -41,10 +42,11 @@ HEADERS += \
     code/windows/aboutwindow.h \
     code/windows/audiocontrol.h \
     code/windows/framelesswindow.h \
+    code/database/database.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \
     code/windows/rankwindow.h \
-    code/windows/settingwindow.h
+    code/windows/settingwindow.h \
 
 FORMS += \
     code/windows/aboutwindow.ui \
@@ -61,3 +63,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resource/resource.qrc
+    QT += sql
+    QT += core sql
+
