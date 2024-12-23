@@ -37,8 +37,9 @@ void GameWidget::onUpdate() {
 void GameWidget::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
     QPainter painter(this);
+
     board_widget_.render(painter);
-    RenderManager::instance().RenderAll(painter);
+
 }
 
 

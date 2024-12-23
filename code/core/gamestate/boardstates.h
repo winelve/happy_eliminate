@@ -10,11 +10,13 @@
 #include "../entity/eliminateeffect.h"
 #include "../entity/coleffect.h"
 #include "../entity/roweffect.h"
+#include "../entity/magiceffect.h"
 
 #include <QObject>
 #include <QDebug>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <QTimer>
 
 
 //
@@ -97,14 +99,148 @@ public:
 public slots:
     //处理动画播放结束
     void transToChecking(){
-        if(state_machine_){
+        std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+        Vector2 pos1 = PosManager::instance()->GetPos1();
+        Vector2 pos2 = PosManager::instance()->GetPos2();
+        //如果有魔法猫咪
+        if(board->GetCube(pos1)->GetEliminate()==CubeState::Magic_Eliminate
+            || board->GetCube(pos2)->GetEliminate()==CubeState::Magic_Eliminate)
+        {
+            qDebug() << ">>>>>>>>>>>>出现了  野生魔法猫咪 <<<<<<<<<<<<";
+            state_machine_->SwitchTo("MagicClear");
+        }
+        else{
             state_machine_->SwitchTo("CheckingMatch");
         }
+
     }
 
 signals:
     void swap_ani_finished();
 };
+
+
+class MagicClearState : public StateNode
+{
+    Q_OBJECT
+public:
+    explicit MagicClearState(QObject *parent = nullptr)
+        : StateNode(parent)
+    {
+        connect(this, &MagicClearState::magic_ani_finished, this, &MagicClearState::transToFall);
+    }
+
+    void onEnter() override {
+        std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+        std::vector<std::vector<Vector2>> matches;
+        Vector2 pos1 = PosManager::instance()->GetPos1();
+        Vector2 pos2 = PosManager::instance()->GetPos2();
+
+        int magic_num = 0;
+        if(board->GetCube(pos1)->GetEliminate()==CubeState::Magic_Eliminate) magic_num++;
+        if(board->GetCube(pos2)->GetEliminate()==CubeState::Magic_Eliminate) magic_num++;
+
+        if(magic_num == 1){
+
+            GameLogic::instance().CheckMagic(GetElimiateType(),matches,board);
+            GameLogic::instance().CheckSpecial(&matches);
+            matches[0].push_back(GetMagicPos());
+            MagicEffect* magic_effect = new MagicEffect();
+            magic_effect->SetRenderPos(Utils::GetRenderPos(GetMagicPos()));
+            // 使用 QTimer 延迟 0.5 秒后执行后续代码
+
+
+        }
+
+        else if(magic_num >= 2){
+
+        }
+
+
+        // 创建一个 QParallelAnimationGroup 来同时管理所有的透明度动画
+        QParallelAnimationGroup* parallelGroup = new QParallelAnimationGroup(this);
+        QParallelAnimationGroup* parallel_effect = new QParallelAnimationGroup(this);
+        for (const auto& row : matches) {
+            for (const auto& position : row) {
+                // 假设你有一个方法根据 position 获取 Cube 对象
+                Cube* cube = BoardManager::instance().GetCurrentBoard()->GetCube(position).get();
+                // cube->SetState("");
+                if (cube) {
+                    // 创建透明度降低的动画
+                    auto opacityAni = cube->CreatMotionAni("opacity", 1.0, 0.0, 200, QEasingCurve::OutQuad);
+                    parallelGroup->addAnimation(opacityAni);
+                    QTimer::singleShot(500, this, [=]() {
+                      EliminateEffect *effect = new EliminateEffect(); effect->SetRenderPos(Utils::GetRenderPos(position));
+                    });
+                    if(cube->GetEliminate()==CubeState::Row_Eliminate){
+                        RowEffect *row_effect1 = new RowEffect();
+                        parallel_effect->addAnimation(row_effect1->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(cube->GetPos().GetRow(),-10),500));
+                        RowEffect *row_effect2 = new RowEffect();
+                        parallel_effect->addAnimation(row_effect2->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(cube->GetPos().GetRow(),board->GetWidth()+10),500));
+                    }
+                    if(cube->GetEliminate()==CubeState::Col_Eliminate){
+                        ColEffect *col_effect1 = new ColEffect();
+                        parallel_effect->addAnimation(col_effect1->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(-10,cube->GetPos().GetColumn()),500));
+                        ColEffect *col_effect2 = new ColEffect();
+                        parallel_effect->addAnimation(col_effect2->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
+                                                   Utils::GetRenderPos(board->GetHeight()+10,cube->GetPos().GetColumn()),500));
+                    }
+
+                }
+            }
+        }
+        // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
+        connect(parallelGroup, &QParallelAnimationGroup::finished,this,&MagicClearState::magic_ani_finished, Qt::UniqueConnection);
+
+        QTimer::singleShot(600, this, [=]() {
+            parallelGroup->start();
+            parallel_effect->start();
+        });
+
+
+
+        GameLogic::instance().ClearCube(board,matches);
+    }
+
+private:
+    int GetElimiateType(){
+        std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+        Vector2 pos1 = PosManager::instance()->GetPos1();
+        Vector2 pos2 = PosManager::instance()->GetPos2();
+        int type = 0;
+        if(board->GetCube(pos1)->GetEliminate()==CubeState::Magic_Eliminate){
+            type = board->GetCube(pos2)->GetType();
+        } else{
+            type = board->GetCube(pos1)->GetType();
+        }
+        return type;
+    }
+
+    Vector2 GetMagicPos(){
+        std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+        Vector2 pos1 = PosManager::instance()->GetPos1();
+        Vector2 pos2 = PosManager::instance()->GetPos2();
+        if(board->GetCube(pos1)->GetEliminate()==CubeState::Magic_Eliminate){
+            return pos1;
+        }else{
+            return pos2;
+        }
+    }
+
+public slots:
+    void transToFall(){
+        state_machine_->SwitchTo("Falling");
+    }
+signals:
+    void magic_ani_finished();
+
+
+};
+
+
 
 //
 // 检查匹配状态
@@ -223,7 +359,6 @@ public:
         qDebug() << "clear size: " << clear_size;
     }
 private:
-    bool is_magic_clear_ = false;
     void AddAnimation(std::vector<std::vector<Vector2>> &matches);
 
 public slots:

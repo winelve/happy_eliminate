@@ -23,7 +23,8 @@ ResourceManager::ResourceManager(){
     h_line = QPixmap(":/cubes/effect/kai_231_bomb_white_h.png");
     v_line = QPixmap(":/cubes/effect/kai_231_bomb_white_v.png");
 
-    magic_texture_list_ = LoadAtlas(":/cubes/bird/bird_select_30",30);
+    magic_texture_list_ = LoadAtlas(":/cubes/bird/bird_select_30.png",30);
+    magic_effect_texture_list_ = LoadAtlas(":/cubes/bird/bird_effect_20.png",20);
 
     LoadAllAniResources();
 }

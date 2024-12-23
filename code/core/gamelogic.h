@@ -40,6 +40,8 @@ public:
 
     // 检查并添加由于特殊棋子产生的棋子
     void CheckSpecial(std::vector<std::vector<Vector2>> *match);
+    //添加为type的棋子
+    void CheckMagic(int type,std::vector<std::vector<Vector2>> &match,std::shared_ptr<Board> board);
 
 signals:
     void fallEvent(int fromRow, int fromCol, int toRow, int toCol,std::shared_ptr<Cube> cube); // 信号传递下落事件

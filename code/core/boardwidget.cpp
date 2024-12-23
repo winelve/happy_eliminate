@@ -59,6 +59,7 @@ void BoardWidget::DrawSelect(QPainter &painter){
 void BoardWidget::render(QPainter &painter)
 {
     std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+    QPen orign_pen = painter.pen();
     // 获取棋盘的尺寸
     int rows = board->GetHeight();
     int cols = board->GetWidth();
@@ -90,11 +91,14 @@ void BoardWidget::render(QPainter &painter)
     int w = board->GetWidth();
     int h = board->GetHeight();
 
+    RenderManager::instance().RenderAll(painter);
     for(int i=0;i<w;i++){
         for(int j = 0;j<h;j++){
             board->GetCube(i,j)->render(painter);
+
         }
     }
+
 }
 
 void BoardWidget::Update(int deltatime){
@@ -171,6 +175,7 @@ void BoardWidget::InitStateMachine(){
     state_machine_.RegisterState("WaitingForInput",std::make_shared<WaitingForInputState>(this));
     state_machine_.RegisterState("Swapping",std::make_shared<SwappingState>(this));
     state_machine_.RegisterState("CheckingMatch",std::make_shared<CheckingMatchState>(this));
+    state_machine_.RegisterState("MagicClear",std::make_shared<MagicClearState>(this));
     state_machine_.RegisterState("Clearing",std::make_shared<ClearingState>(this));
     state_machine_.RegisterState("Falling",std::make_shared<FallingState>(this));
     state_machine_.RegisterState("EndCheck",std::make_shared<EndCheckState>(this));

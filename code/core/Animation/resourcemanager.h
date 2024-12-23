@@ -38,6 +38,7 @@ public:
 
     std::vector<QPixmap> GetAniResource(int animal, int animType) const;
     std::vector<QPixmap> GetMagic() const { return magic_texture_list_; }
+    std::vector<QPixmap> GetMagicEffect() const { return magic_effect_texture_list_; }
     QPixmap GetCube(int type) { return cube_texture_list_[type]; }
 
     std::vector<QPixmap> GetDestroyEffect() { return destroy_texture_list_; }
@@ -64,6 +65,7 @@ private:
     std::vector<QPixmap> cube_texture_list_;
     std::vector<QPixmap> magic_texture_list_;
     std::vector<QPixmap> destroy_texture_list_;
+    std::vector<QPixmap> magic_effect_texture_list_;
     QPixmap h_line;
     QPixmap v_line;
 };

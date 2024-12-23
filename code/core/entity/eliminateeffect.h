@@ -10,13 +10,13 @@ class EliminateEffect:public Entity
 public:
     EliminateEffect(){
         AddAnimation("destroy",ResourceManager::Instance().GetDestroyEffect(),
-        Constants::k_frame_duration,false);
+        Constants::k_frame_duration+10,false);
 
         RenderManager::instance().AddEntityToGroup("destroyEffect",this);
 
         SetState("destroy");
     }
-    QSize GetRenderSize() override { return QSize(Constants::k_cell_size+15,Constants::k_cell_size+15); }
+    QSize GetRenderSize() override { return QSize(Constants::k_cell_size+25,Constants::k_cell_size+25); }
 };
 
 #endif // ELIMINATEEFFECT_H

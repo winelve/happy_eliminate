@@ -329,7 +329,32 @@ void GameLogic::CheckSpecial(std::vector<std::vector<Vector2>> *match) {
     }
 }
 
+void GameLogic::CheckMagic(int type,std::vector<std::vector<Vector2>> &match,std::shared_ptr<Board> board){
+    if (!board) return; // 检查board是否为空，避免空指针问题
 
+    int width = board->GetWidth();
+    int height = board->GetHeight();
+
+    // 一个存储所有符合条件的棋子的容器
+    std::vector<Vector2> matchingPositions;
+
+    // 遍历board的每个位置
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
+            // 获取当前位置的棋子
+            auto cube = board->GetCube(row, col);
+            if (cube && cube->GetType() == type) {
+                // 如果棋子的类型与目标类型匹配，则将其位置添加到matchingPositions中
+                matchingPositions.emplace_back(row, col);
+            }
+        }
+    }
+
+    // 如果找到了匹配的棋子，将它们作为一个匹配组添加到match
+    if (!matchingPositions.empty()) {
+        match.push_back(matchingPositions);
+    }
+}
 
 
 

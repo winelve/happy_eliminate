@@ -19,6 +19,7 @@ SOURCES += \
     code/core/boardwidget.cpp \
     code/core/entity/coleffect.cpp \
     code/core/entity/eliminateeffect.cpp \
+    code/core/entity/magiceffect.cpp \
     code/core/entity/roweffect.cpp \
     code/core/posmanager.cpp \
     code/core/utils/constants.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     code/core/boardwidget.h \
     code/core/entity/coleffect.h \
     code/core/entity/eliminateeffect.h \
+    code/core/entity/magiceffect.h \
     code/core/entity/roweffect.h \
     code/core/posmanager.h \
     code/core/utils/constants.h \
