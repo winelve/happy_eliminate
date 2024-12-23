@@ -1,5 +1,7 @@
 #include "animationComponent.h"
 
+#include <QDebug>
+
 AnimationComponent::AnimationComponent(QObject* parent)
     : QObject(parent), currentState(""), elapsedTime(0), currentFrameIndex(0), playing(false) {}
 
@@ -45,18 +47,32 @@ void AnimationComponent::update(int deltaTime) {
 }
 
 // 渲染当前动画帧
-void AnimationComponent::render(QPainter& painter, const QPointF& position) {
+void AnimationComponent::render(QPainter& painter, const QPointF& position,const qreal opacity,const QSize &target_size) {
+
     if (currentState.isEmpty() || !animations.contains(currentState)) {
         return;
     }
 
     AnimationData& anim = animations[currentState];
+
     if (currentFrameIndex < anim.frames.size()) {
-        painter.drawPixmap(position, anim.frames[currentFrameIndex]);
+        // 设置目标尺寸，保留一些边
+
+        // 缩放当前帧
+        QPixmap scaledFrame = anim.frames[currentFrameIndex].scaled(
+            target_size,
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+            );
+
+        // 计算居中位置
+        float x = position.x() + (Constants::k_cell_size - scaledFrame.width()) / 2;
+        float y = position.y() + (Constants::k_cell_size - scaledFrame.height()) / 2;
+        painter.setOpacity(opacity);
+        painter.drawPixmap(QPointF(x, y), scaledFrame);
+        painter.setOpacity(1);
     }
 }
-
-
 
 
 

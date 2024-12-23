@@ -1,40 +1,67 @@
 #include "boardwidget.h"
-#include "vector2.h"
-#include "constants.h"
+
+#include "./utils/constants.h"
+#include "./utils/vector2.h"
+#include "boardmanager.h"
+#include "posmanager.h"
+#include "board.h"
+
 #include <QPainter>
-#include <vector>
 #include <QMouseEvent>
 #include <QDebug>
 
 BoardWidget::BoardWidget(QWidget *parent)
-    : QWidget(parent), click_time(0)
+    : QWidget(parent)
 {
+    //给参数赋值
     cell_size_ = Constants::k_cell_size;
     padding_ = Constants::k_board_padding;
     width_ = 8;
     height_ = 8;
-
-    qDebug() << "Before::";
-    board_ = std::make_shared<Board>(width_,height_);
-
-    // 设置窗口大小
     setFixedSize(GetBoardSize() + QSize(2 * padding_, 2 * padding_));
+
+    //重要
+    BoardManager::instance().AddBoard("default",std::make_shared<Board>(width_,height_,this));
+    InitStateMachine();
 }
 
-void BoardWidget::DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter) const
+void BoardWidget::DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter)
 {
     painter.setRenderHint(QPainter::Antialiasing);
 
     // 绘制背景（可选）
     painter.setBrush(QBrush(Qt::lightGray));
     painter.drawRect(start_x, start_y, board_width, board_height);
+    DrawSelect(painter);
 }
 
-void BoardWidget::Draw(QPainter &painter) const
+void BoardWidget::DrawSelect(QPainter &painter){
+    if(!PosManager::instance()->IsChoosed()){
+        return ;
+    }
+
+    QPointF select_pos = Utils::GetRenderPos(PosManager::instance()->GetPos1());
+    // 设置高亮样式
+    QColor highlightColor = QColor(255, 255, 0, 128); // 半透明黄色
+    painter.setBrush(QBrush(highlightColor));
+    painter.setPen(Qt::NoPen);
+
+    // 绘制选中格子的高亮背景
+    painter.drawRect( select_pos.x(),select_pos.y() ,Constants::k_cell_size , Constants::k_cell_size);
+
+    // 如果需要绘制边框
+    painter.setPen(QPen(Qt::red, 3)); // 红色边框，宽度为 3
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect( select_pos.x(),select_pos.y() ,Constants::k_cell_size , Constants::k_cell_size);
+}
+
+
+void BoardWidget::render(QPainter &painter)
 {
+    std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
     // 获取棋盘的尺寸
-    int rows = board_->GetHeight();
-    int cols = board_->GetWidth();
+    int rows = board->GetHeight();
+    int cols = board->GetWidth();
 
     // 计算棋盘的总宽度和高度
     int board_width = cols * cell_size_;
@@ -59,19 +86,29 @@ void BoardWidget::Draw(QPainter &painter) const
         painter.drawLine(start_x, y, start_x + board_width, y);
     }
 
-    // 绘制每个 Cube 的类型
-    for(int row = 0; row < rows; ++row){
-        for(int col = 0; col < cols; ++col){
-            std::shared_ptr<Cube> cube = board_->GetCube(row, col);
-            if(cube && !cube->Empty()){
-                cube->paint(painter); // 确保 Cube 类的 paint 方法是 const
-            }
+
+    int w = board->GetWidth();
+    int h = board->GetHeight();
+
+    for(int i=0;i<w;i++){
+        for(int j = 0;j<h;j++){
+            board->GetCube(i,j)->render(painter);
         }
     }
 }
 
-void BoardWidget::onUpdate(int delta_time)
-{
+void BoardWidget::Update(int deltatime){
+    std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
+
+    int w = board->GetWidth();
+    int h = board->GetHeight();
+
+    for(int i=0;i<w;i++){
+        for(int j = 0;j<h;j++){
+            board->GetCube(i,j)->update(deltatime);
+        }
+    }
+
 
 }
 
@@ -79,37 +116,30 @@ void BoardWidget::onUpdate(int delta_time)
 
 void BoardWidget::mousePressEvent(QMouseEvent *ev)
 {
-    if(ev->button() == Qt::LeftButton){
+    // 处理左键点击事件
+    if (ev->button() == Qt::LeftButton) {
         // 获取鼠标点击的像素坐标
         int x = ev->pos().x();
         int y = ev->pos().y();
-
         Vector2 board_pos;
-        bool valid = PixelToBoard(x, y, board_pos);
-
-        if(valid){
-            qDebug() << "Clicked on board position: Row =" << board_pos.GetRow()
-            << ", Column =" << board_pos.GetColumn();
-
-            // 将点击事件传递给Board处理
-            board_->HandleMouseClick(board_pos);
-        }
-        else{
+        if (!PixelToBoard(x, y, board_pos)) {
             qDebug() << "Clicked outside the board.";
+            return;
         }
 
+        PosManager::instance()->HandleClick(board_pos);
     }
-    else if(ev->button() == Qt::RightButton){
-        // 右键点击，重置选择状态
-        board_->ResetSelection();
-        qDebug() << "Right button clicked. Resetting selection.";
+    // 处理右键点击事件
+    else if (ev->button() == Qt::RightButton) {
+        PosManager::instance()->Reselect();
+        qDebug() << "重置选择";
     }
 
     // 调用基类的事件处理
     QWidget::mousePressEvent(ev);
 }
 
-bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos) const
+bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
 {
     // 调整坐标，去除边距
     x -= padding_;
@@ -132,12 +162,32 @@ bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos) const
     return true;
 }
 
-// 辅助函数：检查两个位置是否相邻
-bool BoardWidget::areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const
-{
-    int rowDiff = abs(pos1.GetRow() - pos2.GetRow());
-    int colDiff = abs(pos1.GetColumn() - pos2.GetColumn());
 
-    // 检查是否在上下左右相邻
-    return ( (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) );
+
+
+
+void BoardWidget::InitStateMachine(){
+    state_machine_.RegisterState("WaitingForInput",std::make_shared<WaitingForInputState>(this));
+    state_machine_.RegisterState("Swapping",std::make_shared<SwappingState>(this));
+    state_machine_.RegisterState("CheckingMatch",std::make_shared<CheckingMatchState>(this));
+    state_machine_.RegisterState("Clearing",std::make_shared<ClearingState>(this));
+    state_machine_.RegisterState("Falling",std::make_shared<FallingState>(this));
+    state_machine_.RegisterState("EndCheck",std::make_shared<EndCheckState>(this));
+    state_machine_.SwitchTo("WaitingForInput"); //设置初始状态
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

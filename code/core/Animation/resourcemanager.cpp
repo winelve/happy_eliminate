@@ -1,5 +1,6 @@
 // ResourceManager.cpp
-#include "ResourceManager.h"
+#include "resourcemanager.h"
+
 ResourceManager::ResourceManager(){
 
     // 加载立方体纹理列表
@@ -46,7 +47,7 @@ QPixmap ResourceManager::LoadSingleImg(const QString &path){
     return pixmap;
 }
 
-bool ResourceManager::ImportResource(AnimalType animal, AnimationType animType, const QString& path, int num)
+bool ResourceManager::ImportResource(int animal, int animType, const QString& path, int num)
 {
     int resourceID = CalculateResourceID(animal, animType);
 
@@ -69,8 +70,9 @@ bool ResourceManager::ImportResource(AnimalType animal, AnimationType animType, 
     return true;
 }
 
-std::vector<QPixmap> ResourceManager::GetAniResource(AnimalType animal, AnimationType animType) const
+std::vector<QPixmap> ResourceManager::GetAniResource(int animal, int animType) const
 {
+
     int resourceID = CalculateResourceID(animal, animType);
     auto it = ani_resources_.find(resourceID);
     if (it != ani_resources_.end()) {
@@ -81,7 +83,7 @@ std::vector<QPixmap> ResourceManager::GetAniResource(AnimalType animal, Animatio
     }
 }
 
-int ResourceManager::CalculateResourceID(AnimalType animal, AnimationType animType) const
+int ResourceManager::CalculateResourceID(int animal, int animType) const
 {
     return (static_cast<int>(animal) * 10) + static_cast<int>(animType);
 }

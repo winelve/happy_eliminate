@@ -11,22 +11,23 @@ CONFIG += c++17
 
 SOURCES += \
     code/core/Animation/animationcomponent.cpp \
-    code/core/Animation/animationfactory.cpp \
-    code/core/Animation/animationmanager.cpp \
     code/audio/audioplayer.cpp \
-    code/core/Animation/atlas.cpp \
-    code/core/Animation/effectanimation.cpp \
-    code/core/Animation/frameanimation.cpp \
-    code/core/Animation/moveanimation.cpp \
     code/core/Animation/rendermanager.cpp \
     code/core/Animation/resourcemanager.cpp \
     code/core/board.cpp \
+    code/core/boardmanager.cpp \
     code/core/boardwidget.cpp \
-    code/core/constants.cpp \
-    code/core/cube.cpp \
-    code/core/entity.cpp \
-    code/core/utils.cpp \
-    code/core/vector2.cpp \
+    code/core/entity/eliminateeffect.cpp \
+    code/core/posmanager.cpp \
+    code/core/utils/constants.cpp \
+    code/core/entity/cube.cpp \
+    code/core/entity/entity.cpp \
+    code/core/gamelogic.cpp \
+    code/core/gamestate/boardstates.cpp \
+    code/core/gamestate/statemachine.cpp \
+    code/core/gamestate/statenode.cpp \
+    code/core/utils/utils.cpp \
+    code/core/utils/vector2.cpp \
     code/database/database.cpp \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
@@ -34,22 +35,23 @@ SOURCES += \
 
 HEADERS += \
     code/core/Animation/animationcomponent.h \
-    code/core/Animation/animationfactory.h \
-    code/core/Animation/animationmanager.h \
     code/audio/audioplayer.h \
-    code/core/Animation/atlas.h \
-    code/core/Animation/effectanimation.h \
-    code/core/Animation/frameanimation.h \
-    code/core/Animation/moveanimation.h \
     code/core/Animation/rendermanager.h \
     code/core/Animation/resourcemanager.h \
     code/core/board.h \
+    code/core/boardmanager.h \
     code/core/boardwidget.h \
-    code/core/constants.h \
-    code/core/cube.h \
-    code/core/entity.h \
-    code/core/utils.h \
-    code/core/vector2.h \
+    code/core/entity/eliminateeffect.h \
+    code/core/posmanager.h \
+    code/core/utils/constants.h \
+    code/core/entity/cube.h \
+    code/core/entity/entity.h \
+    code/core/gamelogic.h \
+    code/core/gamestate/boardstates.h \
+    code/core/gamestate/statemachine.h \
+    code/core/gamestate/statenode.h \
+    code/core/utils/utils.h \
+    code/core/utils/vector2.h \
     code/database/database.h \
     code/windows/gamewidget.h \
 

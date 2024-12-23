@@ -10,20 +10,21 @@
 #include <QDebug>
 
 
-enum class AnimalType {
-    Bear = 1,
-    Cat = 2,
-    Chicken = 3,
-    Fox = 4,
-    Frog = 5,
-    Horse = 6
+namespace AnimalType {
+const int Bear = 1;
+const int Cat = 2;
+const int Chicken = 3;
+const int Fox = 4;
+const int Frog = 5;
+const int Horse = 6;
 };
 
-enum class AnimationType {
-    Click = 1,
-    Col = 2,
-    Row = 3,
-    Wrap = 4
+namespace AnimationType {
+const int Click = 1;
+const int Col = 2;
+const int Row = 3;
+const int Wrap = 4;
+const int Magic = 5;
 };
 
 
@@ -35,7 +36,7 @@ public:
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    std::vector<QPixmap> GetAniResource(AnimalType animal, AnimationType animType) const;
+    std::vector<QPixmap> GetAniResource(int animal, int animType) const;
     QPixmap GetCube(int type) { return cube_texture_list_[type]; }
 
     std::vector<QPixmap> GetDestroyEffect() { return destroy_texture_list_; }
@@ -49,9 +50,9 @@ private:
     // 私有构造函数
     ResourceManager();
     // 资源存储结构，使用资源ID作为键
-    bool ImportResource(AnimalType animal, AnimationType animType, const QString& path, int num);
+    bool ImportResource(int animal, int animType, const QString& path, int num);
 
-    int CalculateResourceID(AnimalType animal, AnimationType animType) const;
+    int CalculateResourceID(int animal, int animType) const;
     static std::vector<QPixmap> LoadAtlas(const QString& path, int num);
     QPixmap LoadSingleImg(const QString &path);
     void LoadAllAniResources(); //导入所有的动画资源

@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QString>
 #include <vector>
+#include "../utils/constants.h"
 
 class AnimationComponent : public QObject {
     Q_OBJECT
@@ -24,9 +25,9 @@ public:
     void update(int deltaTime);
 
     // 渲染当前动画帧
-    void render(QPainter& painter, const QPointF& position);
+    void render(QPainter& painter, const QPointF& position,const qreal opacity = 1,const QSize &target_size=Constants::k_cube_size);
     //是否完成
-    bool finished() { return playing; }
+    bool finished() { return !playing; }
 
 private:
     struct AnimationData {

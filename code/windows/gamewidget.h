@@ -2,7 +2,6 @@
 #define GAMEWIDGET_H
 
 #include "code/core/boardwidget.h"
-#include "code/core/Animation/animationmanager.h"
 
 #include <QWidget>
 #include <QTimer>
@@ -26,11 +25,8 @@ private:
 
     QTimer game_timer_;
     QElapsedTimer elapsed_timer_;
-    AnimationManager *animation_manager_ = AnimationManager::GetInstance();
 
     void paintEvent(QPaintEvent *event) override;
-
-
 
 private slots:
     void onUpdate(); //更新整体的数据

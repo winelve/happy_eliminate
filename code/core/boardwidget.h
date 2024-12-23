@@ -3,10 +3,11 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <memory> // 引入智能指针
+#include "./utils/vector2.h"
+#include "./gamestate/statemachine.h"
+#include "./gamestate/boardstates.h"
 
-#include "board.h"
-#include "Animation/animationmanager.h"
+
 
 class BoardWidget : public QWidget
 {
@@ -14,31 +15,34 @@ class BoardWidget : public QWidget
 public:
     explicit BoardWidget(QWidget *parent = nullptr);
 
+
     QSize GetBoardSize() const { return QSize(width_ * cell_size_, height_ * cell_size_); }
-    void onUpdate(int delta_time);
-    void Draw(QPainter &painter) const; // 用于渲染
-
+    // void update(int delta_time);
+    void render(QPainter &painter); // 用于渲染
+    void Update(int deltatime);
 protected:
-    void mousePressEvent(QMouseEvent *ev) override;
-
+    void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
 private:
-    std::shared_ptr<Board> board_; // 使用智能指针管理 Board 对象
+    //背景
     QPixmap board_background_;
+    //状态管理
+    StateMachine state_machine_;
+    void InitStateMachine();
+
+    //属性
     int width_;
     int height_;
     int cell_size_;
-    int padding_;   // 边距
-    int click_time; // 测试点击
+    int padding_;
 
-    Vector2 first_pos_;
-    Vector2 second_pos_;
+    // 维护鼠标事件
 
-    void DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter) const; // 绘制背景
 
+    //渲染
+    void DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter); // 绘制背景
+    void DrawSelect(QPainter &painter);
     // 辅助函数：将像素坐标转换为棋盘坐标
-    bool PixelToBoard(int x, int y, Vector2 &pos) const;
-    // 辅助函数：检查两个位置是否相邻
-    bool areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const;
+    bool PixelToBoard(int x, int y, Vector2 &pos);
 };
 
 #endif // BOARDWIDGET_H

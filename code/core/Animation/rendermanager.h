@@ -8,12 +8,12 @@
 #include <vector>
 #include <map>
 
-#include "../entity.h"
+#include "../entity/entity.h"
 
 class RenderManager {
 public:
     // 获取 RenderManager 单例
-    static RenderManager& GetInstance();
+    static RenderManager& instance();
 
     // 禁止拷贝构造和赋值
     RenderManager(const RenderManager&) = delete;
@@ -21,24 +21,19 @@ public:
 
     // 添加 Entity 到指定分组
     void AddEntityToGroup(const QString &groupName, Entity *entity);
-
     // 添加多个 Entity 到指定分组
     void AddEntityToGroup(const QString &groupName, const std::vector<Entity*> &entities);
-
     // 从指定分组移除 Entity
     void RemoveEntityFromGroup(const QString &groupName, Entity *entity);
-
     // 清空指定分组
     void ClearGroup(const QString &groupName);
-
-    // 渲染所有分组的实体（根据层级排序）
-    void RenderAll(QPainter &painter);
-
-    // 更新所有实体
-    void UpdateAll(int deltaTime);
-
     // 检查特定分组的动画是否已经播放完毕
     bool IsGroupAnimationFinished(const QString &groupName);
+
+    void ClearNullEntity();
+    void RenderAll(QPainter &painter);    // 渲染所有分组的实体（根据层级排序）
+    void UpdateAll(int deltaTime);       // 更新所有实体
+
 
 private:
     // 私有构造函数
