@@ -1,5 +1,7 @@
 QT       += core gui
 QT       += multimedia
+QT       += sql
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +21,10 @@ SOURCES += \
     code/core/cube.cpp \
     code/core/vector2.cpp \
     code/database/database.cpp \
+    code/net/server.cpp \
+    code/net/socketer.cpp \
     code/test/audio_test/testaudiomain.cpp \
+    code/test/net_test/net_test.cpp \
     code/windows/gamewidget.cpp \
     main.cpp
 
@@ -33,6 +38,8 @@ HEADERS += \
     code/core/cube.h \
     code/core/vector2.h \
     code/database/database.h \
+    code/net/server.h \
+    code/net/socketer.h \
     code/windows/gamewidget.h \
 
 FORMS += \
