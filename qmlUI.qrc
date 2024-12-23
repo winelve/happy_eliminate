@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>lodginwindow.qml</file>
-    </qresource>
-</RCC>

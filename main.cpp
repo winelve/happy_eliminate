@@ -3,29 +3,26 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickView>
+
 
 #include "./code/windows/mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    // qDebug() << "Hello happy_elimitate" ;
-    // // return 0;
-    // QApplication a(argc, argv);
-    // MainWindow m;
-    // m.show();
-    // return a.exec();
-    QGuiApplication app(argc, argv);
+    QApplication a(argc, argv);
 
-    // 创建 QML 引擎
+    // 连接QML
+    MainWindow mainWindow;
     QQmlApplicationEngine engine;
-
-    // 加载 QML 文件
-    engine.load(QUrl(QStringLiteral("qrc:/lodginwindow.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qml/lodginwindow.qml")));
 
     // 检查是否加载成功
     if (engine.rootObjects().isEmpty()) {
-        return -1;  // 如果没有加载根对象，返回错误
+        return -1;
     }
-
-    return app.exec();
+    // 在 QML 中设置信号槽连接
+    engine.rootContext()->setContextProperty("mainWindow", &mainWindow);
+    // 启动应用
+    return a.exec();
 }

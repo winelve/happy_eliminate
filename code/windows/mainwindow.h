@@ -23,6 +23,13 @@ private slots:
 
     void on_btnSetting_clicked();
 
+    void on_btnRank_clicked();
+
+    //void on_btnGame_clicked();
+
+public slots:
+    void showMainWindow();
+
 private:
     Ui::MainWindow *ui;
     AudioPlayer* audioPlayer = AudioPlayer::getInstance();  //音乐播放器

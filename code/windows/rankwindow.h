@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "framelesswindow.h"
+#include "code/audio/audioplayer.h"
 
 namespace Ui {
 class RankWindow;
@@ -16,8 +17,12 @@ public:
     explicit RankWindow(QWidget *parent = nullptr);
     ~RankWindow();
 
+private slots:
+    void on_btnReturn_clicked();
+
 private:
     Ui::RankWindow *ui;
+    AudioPlayer* audioPlayer = AudioPlayer::getInstance();
 };
 
 #endif // RANKWINDOW_H

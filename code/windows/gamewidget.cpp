@@ -1,6 +1,7 @@
 #include "gamewidget.h"
 #include "ui_gamewidget.h"
 #include <QVBoxLayout>
+#include "mainwindow.h"
 
 GameWidget::GameWidget(QWidget *parent)
     :QWidget(parent)
@@ -28,4 +29,14 @@ GameWidget::~GameWidget()
     delete ui;
 }
 
+
+
+void GameWidget::on_btnReturn_clicked()
+{
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
+    MainWindow *mw = new MainWindow();
+    mw->move(this->pos().x(), this->pos().y());
+    mw->show();
+    this->close();
+}
 

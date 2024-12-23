@@ -4,6 +4,8 @@
 
 #include "aboutwindow.h"
 #include "settingwindow.h"
+#include "rankwindow.h"
+#include "gamewidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : FrameLessWindow(parent)
@@ -35,6 +37,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){delete ui;}
 
+void MainWindow::showMainWindow()
+{
+    this->show();  // 显示 MainWindow
+}
+
 //关于
 void MainWindow::on_btnAbout_clicked()
 {
@@ -55,11 +62,20 @@ void MainWindow::on_btnSetting_clicked()
     this->close();
 }
 
+//排行榜
+void MainWindow::on_btnRank_clicked()
+{
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
+    RankWindow *rw = new RankWindow();
+    rw->move(this->pos().x(), this->pos().y());
+    rw->show();
+    this->close();
+}
+
 
 //退出
 void MainWindow::on_btnQuit_clicked()
 {
     this->close();
 }
-
 

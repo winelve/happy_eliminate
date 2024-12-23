@@ -2,6 +2,7 @@
 #define GAMEWIDGET_H
 
 #include "code/core/boardwidget.h"
+#include "code/audio/audioplayer.h"
 #include <QWidget>
 #include <QTimer>
 
@@ -20,13 +21,12 @@ public:
 private:
     Ui::GameWidget *ui;
     BoardWidget board_widget_;
-
+    AudioPlayer* audioPlayer = AudioPlayer::getInstance();
     QTimer game_timer_;
 
 private slots:
     void onUpdate(); //更新整体的数据
-
-
+    void on_btnReturn_clicked();
 };
 
 #endif // GAMEWIDGET_H
