@@ -2,25 +2,26 @@
 #define CONSTANTS_H
 
 #include <QSize>
+#include <QPoint>
 
 namespace Constants {
 
-const int k_board_padding = 20;
-const int k_cell_size = 64;
-const int k_duration_time = 16;
-const int ktype_size = 3;
-const float move_speed = 400;
-const int k_frame_duration = 50;
+// 使用 extern 声明常量
+extern QPoint k_board_padding;
+extern const int k_cell_size;
+extern const int k_duration_time;
+extern const int ktype_size;
+extern const float move_speed;
+extern const int k_frame_duration;
 
-const int kspecial_cube_row = 1;
-const int kspecial_cube_column = 2;
-const int kspecial_cube_bomb = 3;
-const int kspecial_cube_magic = 4;
+extern const int kspecial_cube_row;
+extern const int kspecial_cube_column;
+extern const int kspecial_cube_bomb;
+extern const int kspecial_cube_magic;
 
-const int k_swap_duration = 200;
-const QSize k_cube_size = QSize(Constants::k_cell_size - 5,Constants::k_cell_size - 5);
+extern const int k_swap_duration;
+extern const QSize k_cube_size;
 
-}
-
+} // namespace Constants
 
 #endif // CONSTANTS_H

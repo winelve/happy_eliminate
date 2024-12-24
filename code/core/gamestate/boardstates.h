@@ -141,10 +141,11 @@ public:
         if(board->GetCube(pos2)->GetEliminate()==CubeState::Magic_Eliminate) magic_num++;
 
         if(magic_num == 1){
+            matches.resize(1);
+            matches[0].push_back(GetMagicPos());
 
             GameLogic::instance().CheckMagic(GetElimiateType(),matches,board);
             GameLogic::instance().CheckSpecial(&matches);
-            matches[0].push_back(GetMagicPos());
             MagicEffect* magic_effect = new MagicEffect();
             magic_effect->SetRenderPos(Utils::GetRenderPos(GetMagicPos()));
             // 使用 QTimer 延迟 0.5 秒后执行后续代码
@@ -173,18 +174,18 @@ public:
                       EliminateEffect *effect = new EliminateEffect(); effect->SetRenderPos(Utils::GetRenderPos(position));
                     });
                     if(cube->GetEliminate()==CubeState::Row_Eliminate){
-                        RowEffect *row_effect1 = new RowEffect();
+                        RowEffect *row_effect1 = new RowEffect(); row_effect1->SetRenderPos(Utils::GetRenderPos(-10,10));
                         parallel_effect->addAnimation(row_effect1->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
                                                    Utils::GetRenderPos(cube->GetPos().GetRow(),-10),500));
-                        RowEffect *row_effect2 = new RowEffect();
+                        RowEffect *row_effect2 = new RowEffect(); row_effect2->SetRenderPos(Utils::GetRenderPos(-10,10));
                         parallel_effect->addAnimation(row_effect2->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
                                                    Utils::GetRenderPos(cube->GetPos().GetRow(),board->GetWidth()+10),500));
                     }
                     if(cube->GetEliminate()==CubeState::Col_Eliminate){
-                        ColEffect *col_effect1 = new ColEffect();
+                        ColEffect *col_effect1 = new ColEffect(); col_effect1->SetRenderPos(Utils::GetRenderPos(-10,10));
                         parallel_effect->addAnimation(col_effect1->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
                                                    Utils::GetRenderPos(-10,cube->GetPos().GetColumn()),500));
-                        ColEffect *col_effect2 = new ColEffect();
+                        ColEffect *col_effect2 = new ColEffect(); col_effect2->SetRenderPos(Utils::GetRenderPos(-10,10));
                         parallel_effect->addAnimation(col_effect2->CreatMotionAni("pos",Utils::GetRenderPos(cube->GetPos()),
                                                    Utils::GetRenderPos(board->GetHeight()+10,cube->GetPos().GetColumn()),500));
                     }
@@ -197,6 +198,8 @@ public:
 
         QTimer::singleShot(600, this, [=]() {
             parallelGroup->start();
+        });
+        QTimer::singleShot(500, this, [=]() {
             parallel_effect->start();
         });
 

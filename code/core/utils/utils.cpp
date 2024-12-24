@@ -26,10 +26,10 @@ std::shared_ptr<Cube> GenerateCube() {
 // 获取对应的位置的渲染坐标
 QPointF GetRenderPos(int row, int col) {
     qreal cell_size = static_cast<qreal>(Constants::k_cell_size);
-    qreal padding = static_cast<qreal>(Constants::k_board_padding);
+    QPoint padding = static_cast<QPoint>(Constants::k_board_padding);
 
-    qreal x = padding + col * cell_size;
-    qreal y = padding + row * cell_size;
+    qreal x = padding.x() + col * cell_size;
+    qreal y = padding.y() + row * cell_size;
 
     return QPointF(x, y);
 }

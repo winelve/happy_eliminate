@@ -13,12 +13,15 @@
 BoardWidget::BoardWidget(QWidget *parent)
     : QWidget(parent)
 {
+
+    // Constants::k_board_padding = QPoint(20, 20);
+    qDebug() << "---------------------------------Pos:" << this->mapToParent(QPoint(0,0));
     //给参数赋值
     cell_size_ = Constants::k_cell_size;
     padding_ = Constants::k_board_padding;
     width_ = 8;
     height_ = 8;
-    setFixedSize(GetBoardSize() + QSize(2 * padding_, 2 * padding_));
+    setFixedSize(GetBoardSize() + QSize(2 * padding_.x(), 2 * padding_.y()));
 
     //重要
     BoardManager::instance().AddBoard("default",std::make_shared<Board>(width_,height_,this));
@@ -69,8 +72,8 @@ void BoardWidget::render(QPainter &painter)
     int board_height = rows * cell_size_;
 
     // 设置棋盘的起始位置（根据需要调整）
-    int start_x = padding_;
-    int start_y = padding_;
+    int start_x = Constants::k_board_padding.x();
+    int start_y = Constants::k_board_padding.y();
 
     DrawBK(start_x, start_y, board_width, board_height, painter);
 
@@ -123,11 +126,21 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev)
     if(state_machine_.GetCurrentState() != "WaitingForInput") return ;
     // 处理左键点击事件
     if (ev->button() == Qt::LeftButton) {
-        // 获取鼠标点击的像素坐标
-        int x = ev->pos().x();
-        int y = ev->pos().y();
+        // // 获取鼠标点击的像素坐标
+        // int x = ev->pos().x();
+        // int y = ev->pos().y();
+
+        // 获取鼠标的全局坐标
+        QPointF globalPos = ev->globalPosition();
+        // 将全局坐标转换为 BoardWidget 的局部坐标
+        QPointF localPos = this->mapFromGlobal(globalPos);
+
+        qDebug() << "Global Position:" << globalPos;
+        qDebug() << "Local Position:" << localPos;
+
+
         Vector2 board_pos;
-        if (!PixelToBoard(x, y, board_pos)) {
+        if (!PixelToBoard(localPos.x(), localPos.y(), board_pos)) {
             qDebug() << "Clicked outside the board.";
             return;
         }
@@ -146,9 +159,11 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev)
 
 bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
 {
+    qDebug() << "Mouse_x:" << x << "\t" << "Mouse_y:" << y;
     // 调整坐标，去除边距
-    x -= padding_;
-    y -= padding_;
+    x -= padding_.x();
+    y -= padding_.y();
+    qDebug() << "Draw_x:" << x << "\t" << "Draw_y:" << y;
 
     // 检查点击是否在棋盘区域内
     if (x < 0 || y < 0) return false;

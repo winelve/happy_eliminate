@@ -33,7 +33,7 @@ private:
     int width_;
     int height_;
     int cell_size_;
-    int padding_;
+    QPoint padding_;
 
     // 维护鼠标事件
 

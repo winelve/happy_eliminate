@@ -346,6 +346,7 @@ void GameLogic::CheckMagic(int type,std::vector<std::vector<Vector2>> &match,std
             if (cube && cube->GetType() == type) {
                 // 如果棋子的类型与目标类型匹配，则将其位置添加到matchingPositions中
                 matchingPositions.emplace_back(row, col);
+                cube->SetEliminate(col%2+1);
             }
         }
     }
