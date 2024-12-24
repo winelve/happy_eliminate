@@ -13,19 +13,24 @@
 BoardWidget::BoardWidget(QWidget *parent)
     : QWidget(parent)
 {
+    InitData();
+    connect(&game_timer_, &QTimer::timeout, this, &BoardWidget::Update);
+    game_timer_.start(16); // 大约60FPS
+    elapsed_timer_.start();
 
-    // Constants::k_board_padding = QPoint(20, 20);
+    Constants::k_board_padding = QPoint(30, 30);
     qDebug() << "---------------------------------Pos:" << this->mapToParent(QPoint(0,0));
     //给参数赋值
     cell_size_ = Constants::k_cell_size;
     padding_ = Constants::k_board_padding;
-    width_ = 8;
-    height_ = 8;
+    width_ = Constants::board_width;
+    height_ = Constants::board_height;
     setFixedSize(GetBoardSize() + QSize(2 * padding_.x(), 2 * padding_.y()));
 
     //重要
     BoardManager::instance().AddBoard("default",std::make_shared<Board>(width_,height_,this));
     InitStateMachine();
+    StartCounter(); // 启用计时器
 }
 
 void BoardWidget::DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter)
@@ -62,7 +67,6 @@ void BoardWidget::DrawSelect(QPainter &painter){
 void BoardWidget::render(QPainter &painter)
 {
     std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
-    QPen orign_pen = painter.pen();
     // 获取棋盘的尺寸
     int rows = board->GetHeight();
     int cols = board->GetWidth();
@@ -104,7 +108,8 @@ void BoardWidget::render(QPainter &painter)
 
 }
 
-void BoardWidget::Update(int deltatime){
+void BoardWidget::Update(){
+    int deltatime = elapsed_timer_.restart();
     std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
 
     int w = board->GetWidth();
@@ -115,7 +120,13 @@ void BoardWidget::Update(int deltatime){
             board->GetCube(i,j)->update(deltatime);
         }
     }
+    RenderManager::instance().UpdateAll(deltatime);
+    // state_machine_.update();
+    if(state_machine_.GetCurrentState()=="WaitingForInput"){
+        state_machine_.GetCurrentNode()->onUpdate();
+    }
 
+    update();
 
 }
 
@@ -194,12 +205,26 @@ void BoardWidget::InitStateMachine(){
     state_machine_.RegisterState("Clearing",std::make_shared<ClearingState>(this));
     state_machine_.RegisterState("Falling",std::make_shared<FallingState>(this));
     state_machine_.RegisterState("EndCheck",std::make_shared<EndCheckState>(this));
+    state_machine_.RegisterState("StepEnd",std::make_shared<StepEndState>(this));
+    state_machine_.RegisterState("GameOver",std::make_shared<GameOverState>(this));
     state_machine_.SwitchTo("WaitingForInput"); //设置初始状态
 }
 
 
 
-
+void BoardWidget::InitData(int choice){
+    if(choice==1){
+        int time = 200;
+        int steps = 10000000;
+        DataResource::instance()->set_level(1);
+        DataResource::instance()->set_rest_steps(steps);
+        DataResource::instance()->set_total_steps(steps);
+        DataResource::instance()->set_score(0);
+        DataResource::instance()->set_target_score(300);
+        DataResource::instance()->set_rest_time(time);
+        DataResource::instance()->set_total_time(time);
+    }
+}
 
 
 

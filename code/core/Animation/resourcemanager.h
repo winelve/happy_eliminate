@@ -47,7 +47,6 @@ public:
 
     // 放大3倍
 
-
 private:
     // 私有构造函数
     ResourceManager();

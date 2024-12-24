@@ -65,5 +65,13 @@
         <file>audios/swap_wrapwrap.mp3</file>
         <file>audios/SwapFun.mp3</file>
         <file>audios/worldscenebgm.mp3</file>
+        <file>cubes/bk/bk1.jpg</file>
+        <file>cubes/bk/bk2.png</file>
+        <file>cubes/bk/bk3.jpg</file>
+        <file>font/Mengshen.ttf</file>
+        <file>cubes/skin/steps.png</file>
+        <file>cubes/skin/user_name.png</file>
+        <file>cubes/skin/shaojiu.png</file>
+        <file>cubes/skin/Button_Hover_9Slides.png</file>
     </qresource>
 </RCC>

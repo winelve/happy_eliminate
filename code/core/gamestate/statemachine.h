@@ -24,6 +24,7 @@ public:
     void SwitchTo(const QString &name);
     void update();
     QString GetCurrentState() { return current_state_name_; }
+    std::shared_ptr<StateNode> GetCurrentNode() { return currentState_; }
 
 };
 

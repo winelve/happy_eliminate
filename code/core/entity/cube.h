@@ -38,7 +38,12 @@ public:
     Vector2 GetPos() { return pos_; }
     void SetPos(const Vector2 &new_pos) { pos_ = new_pos; }
 
-    void SetEliminate(int state) { eliminate_status_ = state; }
+    void SetEliminate(int state) {
+        if(state==1) SetState("col");
+        else if(state==2) SetState("row");
+        else if(state==3) SetState("magic");
+        eliminate_status_ = state;
+    }
     int GetEliminate() { return eliminate_status_; }
 
     bool Empty() { return type_==0 ? true:false; }

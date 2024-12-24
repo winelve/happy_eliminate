@@ -11,6 +11,7 @@
 #include "../entity/coleffect.h"
 #include "../entity/roweffect.h"
 #include "../entity/magiceffect.h"
+#include "../dataresource.h"
 
 #include <QObject>
 #include <QDebug>
@@ -31,13 +32,25 @@ public:
         : StateNode(parent)
     {
         connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
+        connect(DataResource::instance(), &DataResource::time_out_signal,this, &WaitingForInputState::HandleTimerOver);
     }
 
     void onEnter() override {
         qDebug() << "进入状态：等待用户输入";
         // 等待用户操作逻辑
-    }
+        if(DataResource::instance()->rest_steps()==0){
+            qDebug() << ">>>>>>StepEnd<<<<<<<";
+            state_machine_->SwitchTo("StepEnd");
+        }
 
+    }
+    void onUpdate() override {
+        if(is_gameover_) {
+            state_machine_->SwitchTo("GameOver");
+            qDebug() << ">>>>>>GameOver<<<<<<<";
+            is_gameover_  = false;
+        }
+    }
 
 //这里写一个槽,用来接受信号-->已经完成点击事件的信号
 public slots:
@@ -47,6 +60,12 @@ public slots:
             state_machine_->SwitchTo("Swapping");
         }
     }
+    void HandleTimerOver(){
+        is_gameover_ = true;
+    }
+private:
+    bool is_gameover_ = false;
+
 };
 
 //
@@ -61,7 +80,7 @@ public:
         : StateNode(parent)
     {
         //关联信号
-        connect(this, &SwappingState::swap_ani_finished, this, &SwappingState::transToChecking);
+        connect(this, &SwappingState::swap_ani_finished, this, &SwappingState::transToChecking,Qt::UniqueConnection);
     }
 
     void onEnter() override {
@@ -70,6 +89,8 @@ public:
             qDebug() << "坐标未进行初始化";
             return ;
         }
+        //设置步数-1
+        DataResource::instance()->set_rest_steps(DataResource::instance()->rest_steps()-1);
         std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
         Vector2 pos1 = PosManager::instance()->GetPos1();
         Vector2 pos2 = PosManager::instance()->GetPos2();
@@ -110,6 +131,7 @@ public slots:
             state_machine_->SwitchTo("MagicClear");
         }
         else{
+            qDebug() << "动画播放完了";
             state_machine_->SwitchTo("CheckingMatch");
         }
 
@@ -205,7 +227,9 @@ public:
 
 
 
-        GameLogic::instance().ClearCube(board,matches);
+        int clear_size = GameLogic::instance().ClearCube(board,matches);
+        DataResource::instance()->add_score(clear_size);
+        DataResource::instance()->set_pace(Constants::k_cube_pace);
     }
 
 private:
@@ -359,6 +383,8 @@ public:
         parallelGroup->start();
         //逻辑消除
         int clear_size = GameLogic::instance().ClearCube(BoardManager::instance().GetCurrentBoard(),matches);
+        DataResource::instance()->add_score(clear_size);
+        DataResource::instance()->set_pace(Constants::k_cube_pace);
         qDebug() << "clear size: " << clear_size;
     }
 private:
@@ -456,5 +482,59 @@ public:
     }
 
 };
+
+
+//游戏步数结束状态 ---> 进入下一局
+class StepEndState : public StateNode
+{
+    Q_OBJECT
+
+public:
+    explicit StepEndState(QObject *parent = nullptr)
+        : StateNode(parent){}
+
+    void onEnter() override {
+        DataResource *data = DataResource::instance();
+        if(data->score()>=data->target_score()){
+            InitNew();
+        }else {
+            state_machine_->SwitchTo("GameOver");
+        }
+
+    }
+
+private:
+    void InitNew(){
+        qDebug() << "进入下一关";
+        DataResource::instance()->set_level(DataResource::instance()->level()+1);
+        DataResource::instance()->set_target_score(DataResource::instance()->target_score() * DataResource::instance()->level());
+        DataResource::instance()->set_rest_steps(DataResource::instance()->total_steps() * DataResource::instance()->level());
+        //初始化棋子
+        state_machine_->SwitchTo("WaitingForInput");
+    }
+
+};
+
+//游戏结束状态
+class GameOverState : public StateNode
+{
+    Q_OBJECT
+
+public:
+    explicit GameOverState(QObject *parent = nullptr)
+        : StateNode(parent){}
+
+    void onEnter() override {
+        qDebug() << "游戏结束,你的最终得分:" << DataResource::instance()->score();
+    }
+    void onUpdate() override { }
+
+};
+
+
+
+
+
+
 
 #endif // BOARDSTATES_H

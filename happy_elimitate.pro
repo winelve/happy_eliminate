@@ -17,6 +17,7 @@ SOURCES += \
     code/core/board.cpp \
     code/core/boardmanager.cpp \
     code/core/boardwidget.cpp \
+    code/core/dataresource.cpp \
     code/core/entity/coleffect.cpp \
     code/core/entity/eliminateeffect.cpp \
     code/core/entity/magiceffect.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     code/core/board.h \
     code/core/boardmanager.h \
     code/core/boardwidget.h \
+    code/core/dataresource.h \
     code/core/entity/coleffect.h \
     code/core/entity/eliminateeffect.h \
     code/core/entity/magiceffect.h \

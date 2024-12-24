@@ -3,9 +3,11 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QElapsedTimer>
 #include "./utils/vector2.h"
 #include "./gamestate/statemachine.h"
 #include "./gamestate/boardstates.h"
+#include "./dataresource.h"
 
 
 
@@ -19,10 +21,26 @@ public:
     QSize GetBoardSize() const { return QSize(width_ * cell_size_, height_ * cell_size_); }
     // void update(int delta_time);
     void render(QPainter &painter); // 用于渲染
-    void Update(int deltatime);
+    void Update();
+
+    QTimer count_down_timer_;
 protected:
     void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
+
+
+    void paintEvent(QPaintEvent *event) override{
+        Q_UNUSED(event);
+        QPainter painter(this);
+
+        render(painter);
+    }
+
+
 private:
+    QTimer game_timer_;
+
+    QElapsedTimer elapsed_timer_;
+
     //背景
     QPixmap board_background_;
     //状态管理
@@ -43,6 +61,25 @@ private:
     void DrawSelect(QPainter &painter);
     // 辅助函数：将像素坐标转换为棋盘坐标
     bool PixelToBoard(int x, int y, Vector2 &pos);
+    void StartCounter() {
+        connect(&count_down_timer_, &QTimer::timeout, this, [this]() {  // 使用 [this] 而不是 [&]
+            DataResource* resource = DataResource::instance();
+            // 获取剩余时间
+            int rest_time = resource->rest_time();
+
+            if (rest_time <= 0) {
+                // 如果时间已经到了，停止定时器
+                count_down_timer_.stop();
+                resource->timeout();  // 发出 timeout 信号
+                return;
+            }
+            // 更新剩余时间
+            resource->set_rest_time(rest_time - 1);
+        });
+        count_down_timer_.start(1000);
+    }
+public slots:
+    void InitData(int choice = 1);
 };
 
 #endif // BOARDWIDGET_H

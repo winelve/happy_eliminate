@@ -19,18 +19,28 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
 
+private slots:
+    void onLevelChanged(int level);
+    void onTimeChanged(int rest_time);
+    void onScoreChanged(int score);
+    void onTargetScoreChanged(int target_score);
+    void onStepChanged(int rest_steps);
+
+    void on_score_button_clicked();
+
+    void on_time_button_clicked();
+
+    void on_magic_button_clicked();
+
+signals:
+    void finished(int game_type);
+
 private:
     Ui::GameWidget *ui;
-    BoardWidget board_widget_;
 
-    QTimer game_timer_;
-    QElapsedTimer elapsed_timer_;
+    int game_type_ = 1;
 
-    void paintEvent(QPaintEvent *event) override;
-
-private slots:
-    void onUpdate(); //更新整体的数据
-
+    void RandomMagic();
 
 };
 
