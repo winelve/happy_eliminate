@@ -1,7 +1,8 @@
+#include <QGraphicsDropShadowEffect>
+#include <QTime>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QGraphicsDropShadowEffect>
-
 #include "aboutwindow.h"
 #include "settingwindow.h"
 #include "rankwindow.h"
@@ -37,6 +38,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){delete ui;}
 
+void delay(int x) {
+    QTime dieTime = QTime::currentTime().addMSecs(x);
+    while (QTime::currentTime() < dieTime) QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+
 void MainWindow::showMainWindow()
 {
     this->show();  // 显示 MainWindow
@@ -49,6 +56,7 @@ void MainWindow::on_btnAbout_clicked()
     AboutWindow *aw = new AboutWindow();
     aw->move(this->pos().x(), this->pos().y());
     aw->show();
+    delay(150);
     this->close();
 }
 
@@ -59,6 +67,7 @@ void MainWindow::on_btnSetting_clicked()
     SettingWindow *sw = new SettingWindow();
     sw->move(this->pos().x(), this->pos().y());
     sw->show();
+    delay(150);
     this->close();
 }
 
@@ -69,6 +78,7 @@ void MainWindow::on_btnRank_clicked()
     RankWindow *rw = new RankWindow();
     rw->move(this->pos().x(), this->pos().y());
     rw->show();
+    delay(150);
     this->close();
 }
 

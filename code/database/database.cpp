@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QMap>
 
-DataBase::DataBase(const QString &dbPath) {
+DataBase::DataBase(const QString &dbPath, QObject *parent) : QObject(parent) {
     // Initialize database connection
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath.isEmpty() ? "users.db" : dbPath);
@@ -81,6 +81,7 @@ void DataBase::BuildDatabase() {
 
     db.close(); // 操作完成后确保关闭数据库
 }
+
 void DataBase::updateUserScore(const QString &name, int score, int key) {
     if (!db.open()) {
         qCritical() << "数据库打开失败:" << db.lastError().text();

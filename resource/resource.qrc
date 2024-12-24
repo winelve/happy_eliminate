@@ -87,7 +87,10 @@
         <file>gui/gameWindow/2-.png</file>
         <file>gui/gameWindow/2.png</file>
         <file>gui/gameWindow/bk.jpg</file>
-        <file>qml/lodginwindow.qml</file>
+        <file>qml/loginwidget.qml</file>
+        <file>gui/aboutWindow/aboutBK.jpg</file>
+        <file>gui/aboutWindow/aboutBK.2jpg.jpg</file>
+        <file>gui/modeselectionWindow/1.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

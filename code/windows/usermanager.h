@@ -2,23 +2,38 @@
 #define USERMANAGER_H
 
 #include <QObject>
+#include <QDebug>
 
-class UserManager {
+class UserManager : public QObject
+{
+    Q_OBJECT
 public:
-    static QString currentUsername;
+    explicit UserManager(QObject *parent = nullptr);
 
-    // 设置当前登录的用户名
-    static void setUsername(const QString &username) {
+    static QString currentUsername;
+    static int currentUserkey;
+
+    //1.设置当前登录的用户名
+    Q_INVOKABLE static void setUsername(const QString &username) {
         currentUsername = username;
+        qDebug() << "玩家名：" << currentUsername;
     }
 
-    // 获取当前用户名
-    static QString getUsername() {
+    //2.获取当前用户名
+    Q_INVOKABLE static QString getUsername() {
         return currentUsername;
     }
+
+    //3.设置当前登录的用户密码
+    Q_INVOKABLE static void setUserkey(const int &userkey) {
+        currentUserkey = userkey;
+        qDebug() << "玩家密码：" << currentUserkey;
+    }
+
+    //4.获取当前用户密码
+    Q_INVOKABLE static int getUserkey() {
+        return currentUserkey;
+    }
+
 };
-
-QString UserManager::currentUsername = "";
-
-
 #endif // USERMANAGER_H

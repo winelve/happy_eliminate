@@ -38,6 +38,7 @@ void RankWindow::on_btnReturn_clicked()
     MainWindow *mw = new MainWindow();
     mw->move(this->pos().x(), this->pos().y());
     mw->show();
+    delay(150);
     this->close();
 }
 

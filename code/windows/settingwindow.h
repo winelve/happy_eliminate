@@ -30,8 +30,6 @@ private:
     AudioPlayer* audioPlayer=AudioPlayer::getInstance();
     AudioControl* audioCtrl = AudioControl::instance();
 
-    bool music_status;             // 音乐的状态，true为开启，false为关闭
-    bool sound_status;             // 音效的状态，true为开启，false为关闭
 };
 
 #endif // SETTINGWINDOW_H

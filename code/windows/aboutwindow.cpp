@@ -29,6 +29,9 @@ AboutWindow::AboutWindow(QWidget *parent)
             "}"
             );
     }
+    //设置帮助显示区域 scrollArea
+    ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 禁用水平滚动条
+
 }
 
 AboutWindow::~AboutWindow(){delete ui;}
@@ -39,6 +42,7 @@ void AboutWindow::on_btnReturn_clicked()
     MainWindow *mw = new MainWindow();
     mw->move(this->pos().x(), this->pos().y());
     mw->show();
+    delay(150);
     this->close();
 }
 

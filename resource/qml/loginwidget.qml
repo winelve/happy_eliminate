@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 2.15
 import QtQuick.Controls
 import QtQuick.Controls.Material
 
@@ -18,10 +18,38 @@ Window {
 
     signal loginClicked()  // 定义信号
 
+
     onLoginClicked: {
-        mainWindow.showMainWindow()
-        root.close()
+        // 将 tf2.text 转换为整数
+        var userKey = parseInt(tf2.text); // 使用 parseInt 将字符串转换为整数
+
+        // 如果转换结果是 NaN（不是有效的整数），则清除输入框并返回
+        if (isNaN(userKey)) {
+            tf1.clear();
+            tf2.clear();
+            return;
+        }
+
+        // 获取密码验证结果
+        var password = db.findPasswordByUserName(tf1.text);
+
+        if (password !== 0 && password == userKey) {
+            um.setUsername(tf1.text);
+            um.setUserkey(userKey); // 直接使用整数值
+            mainWindow.showMainWindow();
+            root.close();
+        } else if (password == 0) {
+            db.updateUserScore(tf1.text, 0, userKey);
+            um.setUsername(tf1.text);
+            um.setUserkey(userKey);
+            mainWindow.showMainWindow();
+            root.close();
+        } else {
+            tf1.clear();
+            tf2.clear();
+        }
     }
+
 
 
     // 外矩形

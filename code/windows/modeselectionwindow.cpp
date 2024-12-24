@@ -1,14 +1,13 @@
-#include "settingwindow.h"
-#include "ui_settingwindow.h"
-#include "mainwindow.h"
+#include "modeselectionwindow.h"
+#include "ui_modeselectionwindow.h"
 
 #include <QGraphicsDropShadowEffect>
 #include <QFontDatabase>
 #include "audiocontrol.h"
 
-SettingWindow::SettingWindow(QWidget *parent)
+ModeSelectionWindow::ModeSelectionWindow(QWidget *parent)
     : FrameLessWindow(parent)
-    , ui(new Ui::SettingWindow)
+    , ui(new Ui::ModeSelectionWindow)
 {
     ui->setupUi(this);
 
@@ -75,23 +74,16 @@ SettingWindow::SettingWindow(QWidget *parent)
     }
 }
 
-SettingWindow::~SettingWindow()
-{
-    delete ui;
-}
+ModeSelectionWindow::~ModeSelectionWindow(){    delete ui;}
 
-void SettingWindow::on_btnReturn_clicked()
+void ModeSelectionWindow::on_btnReturn_clicked()
 {
     audioPlayer->PlaySoundEffect("click.bubble.mp3");
-    MainWindow *mw = new MainWindow();
-    mw->move(this->pos().x(), this->pos().y());
-    mw->show();
-    delay(150);
     this->close();
 }
 
 
-void SettingWindow::on_btnMusic_clicked()
+void ModeSelectionWindow::on_btnMusic_clicked()
 {
     audioPlayer->PlaySoundEffect("click.bubble.mp3");
     if (audioCtrl->musicStatus()) {
@@ -110,7 +102,7 @@ void SettingWindow::on_btnMusic_clicked()
 }
 
 
-void SettingWindow::on_btnSound_clicked()
+void ModeSelectionWindow::on_btnSound_clicked()
 {
     audioPlayer->PlaySoundEffect("click.bubble.mp3");
     if (audioCtrl->soundStatus()) {
@@ -128,9 +120,10 @@ void SettingWindow::on_btnSound_clicked()
     }
 }
 
-void SettingWindow::on_music_slider_valueChanged(int value)
+
+void ModeSelectionWindow::on_music_slider_valueChanged(int value)
 {
-        // 如果音量为零，更新图标为关闭状态
+    // 如果音量为零，更新图标为关闭状态
     if (value == 0) {
         audioCtrl->setMusicStatus(false);
         ui->btnMusic->setIcon(QIcon(":/gui/settingWindow/1-.png"));
@@ -144,7 +137,7 @@ void SettingWindow::on_music_slider_valueChanged(int value)
 }
 
 
-void SettingWindow::on_sound_slider_valueChanged(int value)
+void ModeSelectionWindow::on_sound_slider_valueChanged(int value)
 {
     // 如果音量为零，更新图标为关闭状态
     if (value == 0) {

@@ -35,4 +35,7 @@ private:
     AudioPlayer* audioPlayer = AudioPlayer::getInstance();  //音乐播放器
 };
 
+// 延迟时间，为优化切换窗口体验
+void delay(int x);
+
 #endif // MAINWINDOW_H

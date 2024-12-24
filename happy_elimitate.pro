@@ -26,8 +26,10 @@ SOURCES += \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
+    code/windows/modeselectionwindow.cpp \
     code/windows/rankwindow.cpp \
     code/windows/settingwindow.cpp \
+    code/windows/usermanager.cpp \
     main.cpp
 
 HEADERS += \
@@ -45,6 +47,7 @@ HEADERS += \
     code/database/database.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \
+    code/windows/modeselectionwindow.h \
     code/windows/rankwindow.h \
     code/windows/settingwindow.h \
     code/windows/usermanager.h
@@ -54,6 +57,7 @@ FORMS += \
     code/windows/framelesswindow.ui \
     code/windows/gamewidget.ui \
     code/windows/mainwindow.ui \
+    code/windows/modeselectionwindow.ui \
     code/windows/rankwindow.ui \
     code/windows/settingwindow.ui
 
