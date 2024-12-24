@@ -47,6 +47,7 @@ HEADERS += \
     code/windows/mainwindow.h \
     code/windows/rankwindow.h \
     code/windows/settingwindow.h \
+    code/windows/usermanager.h
 
 FORMS += \
     code/windows/aboutwindow.ui \
