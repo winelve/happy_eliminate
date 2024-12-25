@@ -6,6 +6,14 @@
 #include "./code/database/database.h"
 #include "./code/windows/usermanager.h"
 
+#include "code/core/board.h"
+#include "code/windows/gamewidget.h"
+#include "code/core/Animation/resourcemanager.h"
+#include "code/audio/audioplayer.h"
+
+
+using namespace std;
+
 //#include "code/windows/smallmenuwindow.h"
 
 int main(int argc, char *argv[])
@@ -30,6 +38,9 @@ int main(int argc, char *argv[])
     DataBase *db = new DataBase();
     db->BuildDatabase();
     engine.rootContext()->setContextProperty("db", db);
+
+    ResourceManager::Instance();
+    AudioPlayer::getInstance();
 
     // SmallMenuWindow mw;
     // mw.show();

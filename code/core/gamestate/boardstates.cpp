@@ -15,13 +15,14 @@ void CheckingMatchState::creatAni(){
     QParallelAnimationGroup* ani_group = new QParallelAnimationGroup(this); // 设置父对象为 this
     //ani_1
     ani_group->addAnimation(board->GetCube(pos1)->CreatMotionAni(
-        "pos",startPos1,endPos1));
+        "pos",startPos1,endPos1,Constants::k_swap_duration+300,QEasingCurve::OutElastic));
     //ani_2
     ani_group->addAnimation(board->GetCube(pos2)->CreatMotionAni(
-        "pos",startPos2,endPos2));
+        "pos",startPos2,endPos2,Constants::k_swap_duration+300,QEasingCurve::OutElastic));
     connect(ani_group, &QParallelAnimationGroup::finished, this, &CheckingMatchState::swap_back_ani_finished);
     ani_group->start(QAbstractAnimation::DeleteWhenStopped); // 使用 QAbstractAnimation
 
+    AudioPlayer::getInstance()->PlaySoundEffect("drop.mp3");
     //数据逻辑
     GameLogic::instance().Swap(board,pos1,pos2);
 }

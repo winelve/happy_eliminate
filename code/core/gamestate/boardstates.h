@@ -11,7 +11,10 @@
 #include "../entity/coleffect.h"
 #include "../entity/roweffect.h"
 #include "../entity/magiceffect.h"
+#include "../entity/wordeffect.h"
+#include "../entity/wordeffect2.h"
 #include "../dataresource.h"
+#include "code/audio/audioplayer.h"
 
 #include <QObject>
 #include <QDebug>
@@ -168,6 +171,7 @@ public:
 
             GameLogic::instance().CheckMagic(GetElimiateType(),matches,board);
             GameLogic::instance().CheckSpecial(&matches);
+            Utils::RemoveDuplicates(matches);
             MagicEffect* magic_effect = new MagicEffect();
             magic_effect->SetRenderPos(Utils::GetRenderPos(GetMagicPos()));
             // 使用 QTimer 延迟 0.5 秒后执行后续代码
@@ -176,6 +180,7 @@ public:
         }
 
         else if(magic_num >= 2){
+            qDebug() << "--------------------------Exit3<<<<<<<<<<<<<<<<<<<<<";
 
         }
 
@@ -216,20 +221,26 @@ public:
             }
         }
         // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
-        connect(parallelGroup, &QParallelAnimationGroup::finished,this,&MagicClearState::magic_ani_finished, Qt::UniqueConnection);
+        connect(parallelGroup, &QParallelAnimationGroup::finished,this,&MagicClearState::magic_ani_finished);
 
         QTimer::singleShot(600, this, [=]() {
             parallelGroup->start();
         });
         QTimer::singleShot(500, this, [=]() {
             parallel_effect->start();
+            AudioPlayer::getInstance()->PlaySoundEffect("swap_wrapwrap.mp3");
         });
 
 
+        qDebug() << "--------------------------Exit1<<<<<<<<<<<<<<<<<<<<<";
 
         int clear_size = GameLogic::instance().ClearCube(board,matches);
         DataResource::instance()->add_score(clear_size);
         DataResource::instance()->set_pace(Constants::k_cube_pace);
+    }
+
+    void onExit() override {
+        qDebug() << "Magic Exit";
     }
 
 private:
@@ -259,12 +270,12 @@ private:
 
 public slots:
     void transToFall(){
+        qDebug() << "--------------------------Exit2<<<<<<<<<<<<<<<<<<<<<";
         state_machine_->SwitchTo("Falling");
+        qDebug() << "--------------------------Exit2<<<<<<<<<<<<<<<<<<<<<";
     }
 signals:
     void magic_ani_finished();
-
-
 };
 
 
@@ -341,10 +352,6 @@ public:
         qDebug() << ">>>>>>>>>>>>>>>>>>>>>Out";
         Utils::PrintMatches(matches);
 
-
-        // AddAnimation(matches);
-
-
         // 创建一个 QParallelAnimationGroup 来同时管理所有的透明度动画
         QParallelAnimationGroup* parallelGroup = new QParallelAnimationGroup(this);
         for (const auto& row : matches) {
@@ -381,6 +388,9 @@ public:
         // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
         connect(parallelGroup, &QParallelAnimationGroup::finished,this,&ClearingState::clear_ani_finished, Qt::UniqueConnection);
         parallelGroup->start();
+        Utils::PlayEliminateMusic(DataResource::instance()->elimination_times());
+        qDebug() << "DataResource::instance()->elimination_times()::::::::::::::::::::"<<DataResource::instance()->elimination_times();
+
         //逻辑消除
         int clear_size = GameLogic::instance().ClearCube(BoardManager::instance().GetCurrentBoard(),matches);
         DataResource::instance()->add_score(clear_size);
@@ -464,22 +474,40 @@ class EndCheckState : public StateNode
     Q_OBJECT
 
 public:
-    explicit EndCheckState(QObject *parent = nullptr)
+    explicit EndCheckState(QWidget *parent = nullptr)
         : StateNode(parent){}
 
     void onEnter() override {
         qDebug() << "进入---结束检查状态---";
         // 检查是否还有新的匹配
         auto newMatches = GameLogic::instance().CheckBoard(BoardManager::instance().GetCurrentBoard());
-
+        //发现新的可消除序列
         if (!newMatches.empty()) {
-            //发现新的可消除序列
+            DataResource::instance()->elimination_times_add_one();
             state_machine_->SwitchTo("CheckingMatch");
         } else {
-            //未发现新的消除序列
-            state_machine_->SwitchTo("WaitingForInput");
+            //无可消除的序列
+            if(DataResource::instance()->elimination_times()>=2){
+                WordEffect *effect = new WordEffect(DataResource::instance()->elimination_times());
+                effect->SetRenderPos(Utils::GetRenderPos(3,4));
+                QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
+                connect(ani, &QPropertyAnimation::finished, this, [this]() { transTo(); });
+                ani->start();
+                Utils::PlayLevelMusic(DataResource::instance()->elimination_times());
+            }
+            else {
+                state_machine_->SwitchTo("WaitingForInput");
+            }
+
+            DataResource::instance()->reset_elimination_times();
         }
+        qDebug() << ">>>>>>>>>>>>>>>>>>Times:" << DataResource::instance()->elimination_times();
     }
+public slots:
+    void transTo() {
+        state_machine_->SwitchTo("WaitingForInput");
+    }
+
 
 };
 
@@ -496,20 +524,28 @@ public:
     void onEnter() override {
         DataResource *data = DataResource::instance();
         if(data->score()>=data->target_score()){
-            InitNew();
+            WordEffect2 *effect = new WordEffect2(1);
+            effect->SetRenderPos(Utils::GetRenderPos(3,4));
+            QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
+            connect(ani, &QPropertyAnimation::finished, this, [this]() { InitNew(); });
+            ani->start();
         }else {
             state_machine_->SwitchTo("GameOver");
         }
 
     }
 
-private:
+public slots:
     void InitNew(){
         qDebug() << "进入下一关";
         DataResource::instance()->set_level(DataResource::instance()->level()+1);
         DataResource::instance()->set_target_score(DataResource::instance()->target_score() * DataResource::instance()->level());
+        DataResource::instance()->set_score(0);
         DataResource::instance()->set_rest_steps(DataResource::instance()->total_steps() * DataResource::instance()->level());
         //初始化棋子
+        // initBoard();
+        std::shared_ptr<Board> board =  BoardManager::instance().GetCurrentBoard();
+        board->InitRandomBoard(board->GetWidth(),board->GetHeight());
         state_machine_->SwitchTo("WaitingForInput");
     }
 
@@ -519,19 +555,20 @@ private:
 class GameOverState : public StateNode
 {
     Q_OBJECT
-
 public:
     explicit GameOverState(QObject *parent = nullptr)
         : StateNode(parent){}
 
     void onEnter() override {
+        WordEffect2 *effect = new WordEffect2(0);
+        effect->SetRenderPos(Utils::GetRenderPos(3,4));
+        QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
+        ani->start();
         qDebug() << "游戏结束,你的最终得分:" << DataResource::instance()->score();
+        //执行结束逻辑
     }
     void onUpdate() override { }
-
 };
-
-
 
 
 

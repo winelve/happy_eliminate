@@ -31,7 +31,7 @@ public:
     bool IsGroupAnimationFinished(const QString &groupName);
 
     void ClearNullEntity();
-    void RenderAll(QPainter &painter);    // 渲染所有分组的实体（根据层级排序）
+    void RenderAll(QPainter &painter,int layer=0);    // 渲染所有分组的实体（根据层级排序）
     void UpdateAll(int deltaTime);       // 更新所有实体
 
 

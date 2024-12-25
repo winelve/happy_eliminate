@@ -26,6 +26,8 @@ SOURCES += \
     code/core/entity/eliminateeffect.cpp \
     code/core/entity/magiceffect.cpp \
     code/core/entity/roweffect.cpp \
+    code/core/entity/wordeffect.cpp \
+    code/core/entity/wordeffect2.cpp \
     code/core/posmanager.cpp \
     code/core/utils/constants.cpp \
     code/core/entity/cube.cpp \
@@ -34,6 +36,7 @@ SOURCES += \
     code/core/gamestate/boardstates.cpp \
     code/core/gamestate/statemachine.cpp \
     code/core/gamestate/statenode.cpp \
+    code/core/utils/messagetips.cpp \
     code/core/utils/utils.cpp \
     code/core/utils/vector2.cpp \
     code/database/database.cpp \
@@ -64,6 +67,8 @@ HEADERS += \
     code/core/entity/eliminateeffect.h \
     code/core/entity/magiceffect.h \
     code/core/entity/roweffect.h \
+    code/core/entity/wordeffect.h \
+    code/core/entity/wordeffect2.h \
     code/core/posmanager.h \
     code/core/utils/constants.h \
     code/core/entity/cube.h \
@@ -72,6 +77,7 @@ HEADERS += \
     code/core/gamestate/boardstates.h \
     code/core/gamestate/statemachine.h \
     code/core/gamestate/statenode.h \
+    code/core/utils/messagetips.h \
     code/core/utils/utils.h \
     code/core/utils/vector2.h \
     code/database/database.h \

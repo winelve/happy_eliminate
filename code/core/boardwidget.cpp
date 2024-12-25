@@ -105,6 +105,7 @@ void BoardWidget::render(QPainter &painter)
 
         }
     }
+    RenderManager::instance().RenderAll(painter,1);
 
 }
 
@@ -214,8 +215,8 @@ void BoardWidget::InitStateMachine(){
 
 void BoardWidget::InitData(int choice){
     if(choice==1){
-        int time = 200;
-        int steps = 10000000;
+        int time = 1000;
+        int steps = 10;
         DataResource::instance()->set_level(1);
         DataResource::instance()->set_rest_steps(steps);
         DataResource::instance()->set_total_steps(steps);

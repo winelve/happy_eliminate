@@ -26,6 +26,16 @@ ResourceManager::ResourceManager(){
     magic_texture_list_ = LoadAtlas(":/cubes/bird/bird_select_30.png",30);
     magic_effect_texture_list_ = LoadAtlas(":/cubes/bird/bird_effect_20.png",20);
 
+    word_effect_list_.push_back(LoadSingleImg(":/cubes/effect/good.png"));
+    word_effect_list_.push_back(LoadSingleImg(":/cubes/effect/great.png"));
+    word_effect_list_.push_back(LoadSingleImg(":/cubes/effect/execellent.png"));
+    word_effect_list_.push_back(LoadSingleImg(":/cubes/effect/amazing.png"));
+    word_effect_list_.push_back(LoadSingleImg(":/cubes/effect/unbelievable.png"));
+
+    win_img_.push_back(LoadSingleImg(":/cubes/effect/win.png"));
+    win_img_.push_back(LoadSingleImg(":/cubes/effect/next_level.png"));
+    game_over_img_.push_back(LoadSingleImg(":/cubes/effect/gameover.png"));
+
     LoadAllAniResources();
 }
 
@@ -181,4 +191,14 @@ void ResourceManager::LoadAllAniResources()
     ImportResource(AnimalType::Horse, AnimationType::Wrap, ":/cubes/horse/horse_wrap_49.png", 49);
 
     // 您可以根据需要继续添加更多资源
+}
+
+
+QPixmap ResourceManager::GetWordEffect(int times){
+    if(times > 7 || times < 2){
+        qDebug() << "不存在该资源";
+        return QPixmap();
+    }
+    int id = times - 2;
+    return word_effect_list_[id];
 }
