@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ModeSelectionWindow</class>
+ <widget class="QMainWindow" name="ModeSelectionWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>675</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="picwidget">
+   <property name="styleSheet">
+    <string notr="true">#picwidget{
+	border-image:url(:/gui/settingWindow/bk.jpg)
+}
+</string>
+   </property>
+   <widget class="QPushButton" name="btnReturn">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>70</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btnReturn {
+    border: none;
+    }
+
+QPushButton#btnReturn:hover {
+	icon: url(:/gui/aboutWindow/2-.png);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/aboutWindow/2.png</normaloff>:/gui/aboutWindow/2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>40</width>
+      <height>40</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>60</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 15pt &quot;楷体&quot;;
+font-weight: bold; 
+color:rgb(46, 99, 45)</string>
+    </property>
+    <property name="text">
+     <string>模式选择</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>190</y>
+      <width>591</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <property name="styleSheet">
+      <string notr="true">#page{
+	border-image:url(:/gui/modeselectionWindow/bk.png)
+}
+</string>
+     </property>
+     <widget class="QPushButton" name="btnExtreme">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>120</y>
+        <width>191</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnExtreme {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/6.png</normaloff>:/gui/modeselectionWindow/6.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>170</width>
+        <height>75</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnDifficult">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>120</y>
+        <width>181</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnDifficult {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/5.png</normaloff>:/gui/modeselectionWindow/5.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>170</width>
+        <height>75</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnEasy">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>191</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnEasy {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/4.png</normaloff>:/gui/modeselectionWindow/4.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>170</width>
+        <height>75</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <property name="styleSheet">
+      <string notr="true">#page_2{
+	border-image:url(:/gui/modeselectionWindow/bk.png)
+}
+</string>
+     </property>
+     <widget class="QPushButton" name="btnHeart">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>170</y>
+        <width>241</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnHeart {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/8.png</normaloff>:/gui/modeselectionWindow/8.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>190</width>
+        <height>75</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnBreak">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>40</y>
+        <width>251</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnBreak {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/7.png</normaloff>:/gui/modeselectionWindow/7.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>190</width>
+        <height>75</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <property name="styleSheet">
+      <string notr="true">#page_3{
+	border-image:url(:/gui/modeselectionWindow/bk.png)
+}
+</string>
+     </property>
+     <widget class="QPushButton" name="btn1414">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>30</y>
+        <width>201</width>
+        <height>201</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn1414 {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/11.png</normaloff>:/gui/modeselectionWindow/11.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>190</width>
+        <height>190</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn1010">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>60</y>
+        <width>171</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn1010 {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/10.png</normaloff>:/gui/modeselectionWindow/10.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>160</width>
+        <height>160</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn66">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>151</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn66 {
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/9.png</normaloff>:/gui/modeselectionWindow/9.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>110</width>
+        <height>110</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn6">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>230</y>
+        <width>51</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn6 {
+    border: none;
+}
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/0.png</normaloff>:/gui/modeselectionWindow/0.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>45</width>
+        <height>45</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn10">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>230</y>
+        <width>51</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn10{
+    border: none;
+    }
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/0.png</normaloff>:/gui/modeselectionWindow/0.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>45</width>
+        <height>45</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn14">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>230</y>
+        <width>51</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btn14 {
+    border: none;
+    }
+
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="../../resource/resource.qrc">
+        <normaloff>:/gui/modeselectionWindow/0.png</normaloff>:/gui/modeselectionWindow/0.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>45</width>
+        <height>45</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="btnPlay">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>130</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btnPlay {
+    border: none;
+    }
+QPushButton#btnPlay:hover {
+	icon: url(:/gui/modeselectionWindow/3-.png);
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/modeselectionWindow/3.png</normaloff>:/gui/modeselectionWindow/3.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>170</width>
+      <height>75</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnSize">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>130</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btnSize {
+    border: none;
+    }
+QPushButton#btnSize:hover {
+	icon: url(:/gui/modeselectionWindow/2-.png);
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/modeselectionWindow/2.png</normaloff>:/gui/modeselectionWindow/2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>170</width>
+      <height>75</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDifficulty">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>130</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btnDifficulty {
+    border: none;
+    }
+QPushButton#btnDifficulty:hover {
+		icon: url(:/gui/modeselectionWindow/1-.png);
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/modeselectionWindow/1.png</normaloff>:/gui/modeselectionWindow/1.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>170</width>
+      <height>75</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../resource/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
