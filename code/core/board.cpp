@@ -1,41 +1,43 @@
 #include "board.h"
-#include <queue>
+#include "./utils/constants.h"
 #include <random>
 
-const int Board::ktype_size = 6;
-Board::Board(const std::vector<std::vector<int>> &board,QObject *parent)
-    : QObject{parent}
+// 构造函数
+Board::Board(const std::vector<std::vector<int>> &board, QWidget *parent)
+    : QWidget{parent}
 {
     InitBoard(board);
 }
 
-Board::Board(const std::vector<std::vector<Cube>> &board,QObject *parent)
-    : QObject{parent}
+// Board::Board(const std::vector<std::vector<Cube>> &board, QObject *parent)
+//     : QObject{parent}
+// {
+//     InitBoard(board);
+// }
+
+Board::Board(int width, int height, QWidget *parent)
+    : QWidget{parent}
 {
-    InitBoard(board);
+    qDebug() << "Init::before";
+    InitRandomBoard(width, height);
+    qDebug() << "Init::after";
+
 }
 
-Board::Board(int width,int height,QObject *parent)
-    : QObject{parent}
+Board::Board(QWidget *parent)
+    : QWidget{parent}
 {
-    InitRandomBoard(width,height);
-}
-
-Board::Board(QObject *parent)
-    : QObject{parent}
-{
-    InitRandomBoard(5,5);
+    InitRandomBoard(5, 5);
 }
 
 // 初始化随机棋盘，确保没有初始消除组合
 void Board::InitRandomBoard(int width, int height){
-    // 调整 board_ 的大小并初始化为空
-    board_.resize(height, std::vector<Cube>(width, Cube()));
+    board_.resize(height, std::vector<std::shared_ptr<Cube>>());
 
     // 使用现代随机数生成器
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, Board::ktype_size); // 假设类型从1开始
+    std::uniform_int_distribution<> dis(1, Constants::ktype_size); // 假设类型从1开始
 
     for(int row = 0; row < height; ++row){
         for(int col = 0; col < width; ++col){
@@ -46,7 +48,7 @@ void Board::InitRandomBoard(int width, int height){
             while(!valid && attempts < MAX_ATTEMPTS){
                 int type = dis(gen);
                 if(!CausesMatch(row, col, type)){
-                    SetCube(Vector2(row, col), Cube(type));
+                    board_[row].emplace_back(std::make_shared<Cube>(type, Vector2(row, col),this));
                     valid = true;
                 }
                 attempts++;
@@ -54,89 +56,33 @@ void Board::InitRandomBoard(int width, int height){
 
             if(!valid){
                 // 如果经过多次尝试仍未找到合适的类型，强制设置（可能导致匹配）
-                int forced_type = (rand() % Board::ktype_size) + 1; // 确保类型范围一致
-                SetCube(Vector2(row, col), Cube(forced_type));
+                int forced_type = (rand() % Constants::ktype_size) + 1; // 确保类型范围一致
+                board_[row].emplace_back(std::make_shared<Cube>(forced_type, Vector2(row, col)));
                 qDebug() << "Warning: Could not find non-matching type for (" << row << "," << col << ")";
             }
         }
     }
 }
 
-// 检查当前赋值是否会导致消除组合
-bool Board::CausesMatch(int row, int col, int type){
-    if(type == 0) return false; // 假设类型0表示空
+// // 从 Cube 对象初始化棋盘
+// void Board::InitBoard(const std::vector<std::vector<Cube>> &board)
+// {
+//     int height = board.size();
+//     if(height == 0) return;
+//     // int width = board[0].size();
 
-    int rows = GetHeight();
-    int cols = GetWidth();
+//     board_.resize(height, std::vector<std::shared_ptr<Cube>>());
 
-    // 检查水平
-    int match_count = 1;
-    // 向左检查
-    for(int i = 1; i <= 2; ++i){
-        if(col - i < 0) break;
-        if(board_[row][col - i].GetType() == type){
-            match_count++;
-        } else {
-            break;
-        }
-    }
-    // 向右检查
-    for(int i = 1; i <= 2; ++i){
-        if(col + i >= cols) break;
-        if(board_[row][col + i].GetType() == type){
-            match_count++;
-        } else {
-            break;
-        }
-    }
-    if(match_count >= 3) return true;
+//     for(int row = 0; row < height; ++row){
+//         for(int col = 0; col < board[row].size(); col++){
+//             std::shared_ptr<Cube> cube = std::make_shared<Cube>(board[row][col]);
+//             cube->SetPos(Vector2(row, col));
+//             board_[row].emplace_back(cube);
+//         }
+//     }
+// }
 
-    // 检查垂直
-    match_count = 1;
-    // 向上检查
-    for(int i = 1; i <= 2; ++i){
-        if(row - i < 0) break;
-        if(board_[row - i][col].GetType() == type){
-            match_count++;
-        } else {
-            break;
-        }
-    }
-    // 向下检查
-    for(int i = 1; i <= 2; ++i){
-        if(row + i >= rows) break;
-        if(board_[row + i][col].GetType() == type){
-            match_count++;
-        } else {
-            break;
-        }
-    }
-    if(match_count >= 3) return true;
-
-    return false;
-}
-
-
-
-
-
-void Board::InitBoard(const std::vector<std::vector<Cube>> &board)
-{
-    int height = board.size();
-    if(height == 0) return;
-    int width = board[0].size();
-
-    board_.resize(height, std::vector<Cube>(width, Cube()));
-
-    for(int row = 0; row < height; ++row){
-        for(int col = 0; col < width; ++col){
-            if(col >= board[row].size()) continue; // 防止不规则输入
-            SetCube(Vector2(row, col), board[row][col]);
-        }
-    }
-}
-
-
+// 从整数类型初始化棋盘
 void Board::InitBoard(const std::vector<std::vector<int>> &board)
 {
     int row_total = board.size();
@@ -148,264 +94,382 @@ void Board::InitBoard(const std::vector<std::vector<int>> &board)
         }
     }
 
-    board_.resize(row_total, std::vector<Cube>(col_total, Cube()));
+    board_.resize(row_total, std::vector<std::shared_ptr<Cube>>());
+
+    // 使用现代随机数生成器
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, Constants::ktype_size);
 
     for(int row = 0; row < row_total; row++){
-        for(int col = 0; col < board[row].size(); col++){
+        for(int col = 0; col < col_total; col++){
+            if(col >= board[row].size()){
+                // 如果输入棋盘不规则，填充随机方块
+                int type = dis(gen);
+                board_[row].emplace_back(std::make_shared<Cube>(type, Vector2(row, col)));
+                continue;
+            }
             int type = board[row][col];
-            if(type < 0 || type > Board::ktype_size){
+            if(type < 0 || type > Constants::ktype_size){
                 qDebug() << "Board_Warning: Invalid type " << type << " at (" << row << "," << col << ")";
                 type = 0; // 默认设置为空或其他处理方式
             }
-            SetCube(Vector2(row, col), Cube(type));
+            board_[row].emplace_back(std::make_shared<Cube>(type, Vector2(row, col)));
         }
     }
 }
 
+bool Board::CausesMatch(int row, int col, int type){
+    if(type == 0) return false; // 假设类型0表示空
+    // 检查水平 - 仅向左检查
+    int match_count = 1;
+    for(int i = 1; i <= 2; ++i){
+        if(col - i < 0) break;
+        if(board_[row].size() <= static_cast<size_t>(col - i)) break; // 确保列存在
+        std::shared_ptr<Cube> left_cube = board_[row][col - i];
+        if(left_cube && left_cube->GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    if(match_count >= 3) return true;
 
+    // 检查垂直 - 仅向上检查
+    match_count = 1;
+    for(int i = 1; i <= 2; ++i){
+        if(row - i < 0) break;
+        if(board_.size() <= static_cast<size_t>(row - i)) break; // 确保行存在
+        if(board_[row - i].size() <= static_cast<size_t>(col)) break; // 确保列存在
+        std::shared_ptr<Cube> up_cube = board_[row - i][col];
+        if(up_cube && up_cube->GetType() == type){
+            match_count++;
+        } else {
+            break;
+        }
+    }
+    if(match_count >= 3) return true;
+
+    return false;
+}
+
+// 打印棋盘到调试输出
 void Board::PrintBoard(){
-    for(auto &list:board_){
+    for(const auto &row : board_){
         QString tmp;
         int len = 5;
-        for(Cube &c:list){
-            QString num_str =  QString::number(c.GetType());
-            num_str.append(QString(" ").repeated(len-num_str.size()));
+        for(const auto &c : row){
+            QString num_str = QString::number(c->GetType());
+            num_str.append(QString(" ").repeated(len - num_str.size()));
             tmp.append(num_str);
+
+
         }
         qDebug() << tmp;
     }
 }
 
-void Board::DelCube(int row,int col){
-    //判断是否有效访问
-    if (row < 0 || row >= board_.size() || col < 0 || col >= board_[row].size()) {
-        qDebug() << "Out of bounding::In SetBoard.";
+// 删除指定位置的方块
+void Board::DelCube(int row, int col){
+    if (row < 0 || row >= GetHeight() || col < 0 || col >= GetWidth()) {
+        qDebug() << "Out of bounds::In DelCube.";
+        return;
     }
 
-    board_[row][col].SetType(0);
-    //或许下面还应该执行一些消除后的逻辑
+    if(board_[row][col]){
+        board_[row][col]->SetType(0);
+        // 可能还需要执行一些消除后的逻辑
+    }
 }
 
-void Board::SetCube(Vector2 pos,const Cube &cube){
+// 设置指定位置的方块
+void Board::SetCube(Vector2 pos, std::shared_ptr<Cube> cube){
     int row = pos.GetRow(), col = pos.GetColumn();
-    if (row < 0 || row >= board_.size() || col < 0 || col >= board_[row].size()) {
-        qDebug() << "Out of bounding::In SetBoard.";
-        return ;
+    if (row < 0 || row >= GetHeight() || col < 0 || col >= GetWidth()) {
+        qDebug() << "Out of bounds::In SetCube.";
+        return;
     }
-    board_[pos.GetRow()][pos.GetColumn()] = cube;
-    GetCube(pos).SetPos(pos);
+    board_[row][col] = cube;
+    if(board_[row][col]){
+        board_[row][col]->SetPos(pos);
+    }
 }
 
-
-// CheckBoard 函数实现
-std::vector<std::vector<Vector2>> Board::CheckBoard() {
-    std::vector<std::vector<Vector2>> groups; // 存储所有需要被消除的方块分组
-    int rows = board_.size();
-    if (rows == 0) return groups;
-    int cols = board_[0].size();
-
-    // 用于标记需要被消除的方块
-    std::vector<std::vector<bool>> to_remove(rows, std::vector<bool>(cols, false));
-
-    // 检测水平匹配
-    for (int x = 0; x < rows; ++x) {
-        int count = 1;
-        for (int y = 1; y < cols; ++y) {
-            if (board_[x][y].GetType() != 0 && board_[x][y] == board_[x][y - 1]) {
-                count++;
-            } else {
-                if (count >= 3) {
-                    for (int k = y - count; k < y; ++k) {
-                        to_remove[x][k] = true;
-                    }
-                }
-                count = 1;
-            }
-        }
-        // 检查行尾
-        if (count >= 3) {
-            for (int k = cols - count; k < cols; ++k) {
-                to_remove[x][k] = true;
-            }
-        }
+// 设置指定位置的方块
+void Board::SetCube(int row,int col,std::shared_ptr<Cube> cube){
+    if (row < 0 || row >= GetHeight() || col < 0 || col >= GetWidth()) {
+        qDebug() << "Out of bounds::In SetCube.";
+        return;
     }
-
-    // 检测垂直匹配
-    for (int y = 0; y < cols; ++y) {
-        int count = 1;
-        for (int x = 1; x < rows; ++x) {
-            if (board_[x][y].GetType() != 0 && board_[x][y] == board_[x - 1][y]) {
-                count++;
-            } else {
-                if (count >= 3) {
-                    for (int k = x - count; k < x; ++k) {
-                        to_remove[k][y] = true;
-                    }
-                }
-                count = 1;
-            }
-        }
-        // 检查列尾
-        if (count >= 3) {
-            for (int k = rows - count; k < rows; ++k) {
-                to_remove[k][y] = true;
-            }
-        }
-    }
-
-    // 使用 BFS 分组需要被消除的方块
-    std::vector<std::vector<Vector2>> all_coords; // 所有需要消除的坐标分组
-    std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
-    const std::vector<std::pair<int, int>> directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
-
-    for (int x = 0; x < rows; ++x) {
-        for (int y = 0; y < cols; ++y) {
-            if (to_remove[x][y] && !visited[x][y]) {
-                std::vector<Vector2> group;
-                std::queue<std::pair<int, int>> q;
-                q.push({x, y});
-                visited[x][y] = true;
-
-                while (!q.empty()) {
-                    auto [current_x, current_y] = q.front();
-                    q.pop();
-                    group.emplace_back(current_x, current_y); // Vector2(row, column)
-
-                    for (const auto& dir : directions) {
-                        int new_x = current_x + dir.first;
-                        int new_y = current_y + dir.second;
-                        if (new_x >= 0 && new_x < rows && new_y >= 0 && new_y < cols &&
-                            to_remove[new_x][new_y] && !visited[new_x][new_y]) {
-                            q.push({new_x, new_y});
-                            visited[new_x][new_y] = true;
-                        }
-                    }
-                }
-
-                if (!group.empty()) {
-                    all_coords.push_back(group);
-                }
-            }
-        }
-    }
-
-    return all_coords;
-}
-
-
-int Board::ClearCube(const std::vector<std::vector<Vector2>> &cubes_remove) {
-    int total_size = 0;
-
-    // 清除
-    for(const auto &cube_list : cubes_remove){
-        for(const Vector2 &pos : cube_list){
-            SetCube(pos, Cube()); // 使用空的 Cube
-            total_size++;
-        }
-    }
-
-    return total_size;
-}
-
-
-void Board::Swap(const Vector2 &pos_1,const Vector2 &pos_2){
-    Cube cube = GetCube(pos_1);
-    SetCube(pos_1,GetCube(pos_2));
-    SetCube(pos_2,cube);
-}
-
-
-
-void Board::Fall() {
-    for(int col = 0; col < GetWidth(); ++col){
-        int empty_row = GetHeight() - 1; // 从该列的底部开始
-
-        // 从底部向上遍历每一行
-        for(int row = GetHeight() - 1; row >= 0; --row){
-            if(!GetCube(Vector2(row, col)).Empty()){ // 使用 GetCube
-                if(row != empty_row){
-                    // 将当前方块下移到空位
-                    Cube moving_cube = GetCube(Vector2(row, col));
-                    SetCube(Vector2(empty_row, col), moving_cube);
-                    // 将原位置设置为空
-                    SetCube(Vector2(row, col), Cube()); // 使用空的 Cube
-                }
-                empty_row--; // 更新下一个空位的位置
-            }
-        }
+    board_[row][col] = cube;
+    if(board_[row][col]){
+        board_[row][col]->SetPos(Vector2(row,col));
     }
 }
 
 
-void Board::Fill(){
-    for(int col = 0; col < GetWidth(); ++col){
-        // 从底部开始向上遍历每一行
-        for(int row = GetHeight() - 1; row >= 0; --row){
-            if(GetCube(Vector2(row, col)).Empty()){ // 使用 GetCube
-                // 如果当前单元为空，则生成一个新的方块填充
-                Cube new_cube = GenerateCube();
-                SetCube(Vector2(row, col), new_cube);
-            }
-        }
+// 获取 Cube（通过行和列）
+std::shared_ptr<Cube> Board::GetCube(int row, int col) {
+    if (row < 0 || row >= GetHeight() || col < 0 || col >= GetWidth()) {
+        qDebug() << "GetCube: Position out of bounds (" << row << "," << col << ")";
+        return nullptr;
     }
+    return board_[row][col];
+}
+
+// 获取 Cube（通过 Vector2）
+std::shared_ptr<Cube> Board::GetCube(Vector2 pos) {
+    return GetCube(pos.GetRow(), pos.GetColumn());
 }
 
 
 
 
-Cube Board::GenerateCube(){
-    int new_type = rand() % Board::ktype_size + 1;
-    return Cube(new_type);
-}
 
-// 运行游戏逻辑：交换两个方块并处理消除
-void Board::RunGameLogic(const Vector2 &pos_1, const Vector2 &pos_2) {
-    // 交换 pos_1 和 pos_2 的方块
-    Swap(pos_1, pos_2);
-    qDebug() << "Swapped (" << pos_1.GetRow() << "," << pos_1.GetColumn()
-             << ") with (" << pos_2.GetRow() << "," << pos_2.GetColumn() << ")";
 
-    // 检查是否有可消除的组合
-    std::vector<std::vector<Vector2>> matches = CheckBoard();
 
-    if (!matches.empty()) {
-        qDebug() << "Matches found:";
 
-        // 打印匹配的坐标（可选，用于调试）
-        for (const auto &group : matches) {
-            QString groupStr;
-            for (const auto &pos : group) {
-                groupStr += QString("(%1,%2) ").arg(pos.GetRow()).arg(pos.GetColumn());
-            }
-            qDebug() << groupStr;
-        }
 
-        // 清除匹配的方块
-        int cleared = ClearCube(matches);
-        qDebug() << "Cleared cubes:" << cleared;
 
-        // 执行下落
-        Fall();
-        qDebug() << "Cubes have fallen.";
 
-        // 填充新的方块
-        Fill();
-        qDebug() << "New cubes have been filled.";
 
-        // 可选：检查是否有新的匹配（级联消除）
-        while (true) {
-            matches = CheckBoard();
-            if (matches.empty()) break;
-            ClearCube(matches);
-            Fall();
-            Fill();
-        }
-    } else {
-        qDebug() << "No matches found. Swapping back.";
-        // 没有消除，交换回去
-        Swap(pos_1, pos_2);
-    }
-}
+
+
+// // 运行游戏逻辑：交换两个方块并处理消除
+// void Board::RunGameLogic(const Vector2 &pos_1, const Vector2 &pos_2) {
+
+//     if(currentState_==State::WaitingForInput){
+//         qDebug() << "运行游戏逻辑，交换位置：("
+//                  << pos_1.GetRow() << "," << pos_1.GetColumn()
+//                  << ") 与 (" << pos_2.GetRow() << "," << pos_2.GetColumn() << ")";
+//         //
+//         emit userSelectedTwoPieces(pos_1, pos_2);
+//     }
+
+// }
+
+
+
+// std::vector<std::vector<Vector2>> Board::find_row_line4(const std::vector<std::vector<Vector2>> &matches) {
+//     std::vector<std::vector<Vector2>> row_line;
+
+//     for (const auto &group : matches) {
+//         if (group.size() >= 4) { // 至少包含 4 个方块
+//             // 检查是否所有元素都在同一行
+//             int row = group[0].GetRow();
+//             bool sameRow = std::all_of(group.begin(), group.end(), [row](const Vector2 &pos) {
+//                 return pos.GetRow() == row;
+//             });
+
+//             if (!sameRow) continue; // 如果不在同一行，跳过
+
+//             // 提取所有的列号并排序
+//             std::vector<int> cols;
+//             for (const auto &pos : group) {
+//                 cols.push_back(pos.GetColumn());
+//             }
+//             std::sort(cols.begin(), cols.end());
+
+//             // 检查是否存在至少 4 个连续的列号
+//             int consecutiveCount = 1;
+//             for (size_t i = 1; i < cols.size(); ++i) {
+//                 if (cols[i] == cols[i - 1] + 1) {
+//                     ++consecutiveCount;
+//                     if (consecutiveCount >= 4) {
+//                         row_line.push_back(group);
+//                         break; // 找到符合条件的组合，跳出循环
+//                     }
+//                 } else {
+//                     consecutiveCount = 1; // 重置计数器
+//                 }
+//             }
+//         }
+//     }
+
+//     return row_line;
+// }
+
+
+// std::vector<std::vector<Vector2>> Board::find_col_line4(const std::vector<std::vector<Vector2>> &matches) {
+//     std::vector<std::vector<Vector2>> col_line;
+
+//     for (const auto &group : matches) {
+//         if (group.size() >= 4) { // 至少包含 4 个方块
+//             // 检查是否所有元素都在同一列
+//             int col = group[0].GetColumn();
+//             bool sameColumn = std::all_of(group.begin(), group.end(), [col](const Vector2 &pos) {
+//                 return pos.GetColumn() == col;
+//             });
+
+//             if (!sameColumn) continue; // 如果不在同一列，跳过
+
+//             // 提取所有的行号并排序
+//             std::vector<int> rows;
+//             for (const auto &pos : group) {
+//                 rows.push_back(pos.GetRow());
+//             }
+//             std::sort(rows.begin(), rows.end());
+
+//             // 检查是否存在至少 4 个连续的行号
+//             int consecutiveCount = 1;
+//             for (size_t i = 1; i < rows.size(); ++i) {
+//                 if (rows[i] == rows[i - 1] + 1) {
+//                     ++consecutiveCount;
+//                     if (consecutiveCount >= 4) {
+//                         col_line.push_back(group);
+//                         break; // 找到符合条件的组合，跳出循环
+//                     }
+//                 } else {
+//                     consecutiveCount = 1; // 重置计数器
+//                 }
+//             }
+//         }
+//     }
+
+//     return col_line;
+// }
+
+// void Board::RemoveFromMatch(const Vector2 &pos, std::vector<std::vector<Vector2>> &matches) {
+//     for (auto it = matches.begin(); it != matches.end(); /* no increment here */) {
+//         auto &cube_list = *it;
+
+//         // 删除子向量中的 pos
+//         auto pos_it = std::remove(cube_list.begin(), cube_list.end(), pos);
+//         if (pos_it != cube_list.end()) {
+//             cube_list.erase(pos_it, cube_list.end()); // 真正删除元素
+//         }
+
+//         // 如果子向量为空，删除该子向量
+//         if (cube_list.empty()) {
+//             it = matches.erase(it); // 删除子向量，返回下一个有效迭代器
+//         } else {
+//             ++it; // 否则，继续检查下一个子向量
+//         }
+//     }
+// }
+
+
+// void Board::SetRow4(std::vector<std::vector<Vector2>> &matches){
+//     std::vector<std::vector<Vector2>> row4_list = find_row_line4(matches);
+//     // for(auto &cube_list:row4_list){
+//     //     for(Vector2& cube_pos:cube_list ){
+//     //         auto it = std::find(falling_cubes_.begin(), falling_cubes_.end(), cube_pos);
+//     //         if (it != falling_cubes_.end()) {
+//     //             // 找到了
+//     //             qDebug() << "row找到了";
+//     //             GetCube(*it)->SetSpecialType(Constants::kspecial_cube_column);
+//     //             RemoveFromMatch(*it,matches);
+//     //             //播放升级动画
+//     //         } else{
+//     //             GetCube(cube_list[0])->SetSpecialType(Constants::kspecial_cube_column);
+//     //             RemoveFromMatch(cube_list[0],matches);
+//     //         }
+//     //     }
+//     // }
+//     if(!row4_list.empty()){
+//         std::shared_ptr<Cube> cube = GetCube(row4_list[0][0]);
+//         cube->SetSpecialType(Constants::kspecial_cube_column);
+//         // RemoveFromMatch(cube->GetPos(),matches);
+//         // ani_manager_->AddAnimation(ani_factory_.MakeCubeAnimation(cube,GetRenderPos(cube->GetPos()),AnimationType::Col,true),AnimType::Extra);
+//     }
+
+// }
+
+// void Board::SetCol4(std::vector<std::vector<Vector2>> &matches){
+//     std::vector<std::vector<Vector2>> col4_list = find_col_line4(matches);
+//     // for(auto &cube_list:col4_list){
+//     //     for(Vector2& cube_pos:cube_list ){
+//     //         auto it = std::find(falling_cubes_.begin(), falling_cubes_.end(), cube_pos);
+//     //         if (it != falling_cubes_.end()) {
+//     //             // 找到了
+//     //             qDebug() << "col找到了";
+//     //             GetCube(*it)->SetSpecialType(Constants::kspecial_cube_row);
+//     //             RemoveFromMatch(*it,matches);
+//     //             //播放升级动画
+//     //         }
+//     //         else{
+//     //             GetCube(cube_list[0])->SetSpecialType(Constants::kspecial_cube_row);
+//     //             RemoveFromMatch(cube_list[0],matches);
+//     //         }
+//     //     }
+//     // }
+//     if(!col4_list.empty()){
+//         std::shared_ptr<Cube> cube = GetCube(col4_list[0][0]);
+//         cube->SetSpecialType(Constants::kspecial_cube_row);
+//         // RemoveFromMatch(cube->GetPos(),matches);
+//         // ani_manager_->AddAnimation(ani_factory_.MakeCubeAnimation(cube,GetRenderPos(cube->GetPos()),AnimationType::Row,true),AnimType::Extra);
+//     }
+
+// }
+
+
+// std::vector<std::vector<Vector2>> Board::ProcessSpecialMatches(const std::vector<std::vector<Vector2>> &matches) {
+//     std::set<std::pair<int, int>> processed; // 记录已处理的方块，避免重复
+//     std::vector<std::vector<Vector2>> result; // 最终的结果
+
+//     // 辅助函数：将方块加入结果并递归检查
+//     auto processCube = [&](const Vector2 &pos, auto &&processCubeRef) -> void {
+//         int row = pos.GetRow();
+//         int col = pos.GetColumn();
+
+//         // 如果已经处理过，直接返回
+//         if (!processed.insert({row, col}).second) return;
+
+//         // 获取当前方块
+//         if (!board_[row][col]) return;
+//         std::shared_ptr<Cube> cube = board_[row][col];
+
+//         // 添加当前方块到结果
+//         if (result.empty() || std::find(result.back().begin(), result.back().end(), pos) == result.back().end()) {
+//             result.back().push_back(pos);
+//         }
+
+//         // 根据特殊类型处理
+//         int special_type = cube->GetSpecialType();
+//         if (special_type == Constants::kspecial_cube_row) {
+//             // 清除整行
+//             for (int c = 0; c < GetWidth(); ++c) {
+//                 processCubeRef(Vector2(row, c), processCubeRef);
+//             }
+//             // std::shared_ptr<MoveAnimation> ani = ani_factory_.MakeMoveAnimation(
+//             //     cube,
+//             //     ResourceManager::Instance().GetHLine(),
+//             //     GetRenderPos(cube->GetPos()),
+//             //     GetRenderPos(Vector2(cube->GetPos().GetRow(),-10)),
+//             //     cube->GetType(),
+//             //     false,
+//             //     1500,
+//             //     false);
+//             // ani_manager_->AddAnimation(ani,AnimType::Extra);
+
+//         } else if (special_type == Constants::kspecial_cube_column) {
+//             // 清除整列
+//             for (int r = 0; r < GetHeight(); ++r) {
+//                 processCubeRef(Vector2(r, col), processCubeRef);
+//             }
+//         }
+//     };
+
+//     // 遍历初始 matches
+//     for (const auto &group : matches) {
+//         result.emplace_back(); // 开始一个新的组
+//         for (const auto &pos : group) {
+//             processCube(pos, processCube); // 处理当前方块
+//         }
+//     }
+
+//     return result;
+// }
+
+
+
+
+
+
+
+
+
+
 
 
 

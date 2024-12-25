@@ -54,6 +54,20 @@
         <file>gui/settingWindow/2-.png</file>
         <file>gui/settingWindow/3-.png</file>
         <file>gui/settingWindow/4.png</file>
+        <file>cubes/bear/bear_cube.png</file>
+        <file>cubes/cat/cat_cube.png</file>
+        <file>cubes/chicken/chicken_cube.png</file>
+        <file>cubes/fox/fox_cube.png</file>
+        <file>cubes/frog/frog_cube.png</file>
+        <file>cubes/horse/horse_cube.png</file>
+        <file>cubes/effect/kai_231_destroy_light_10.png</file>
+        <file>cubes/effect/kai_231_destroy_light_11.png</file>
+        <file>cubes/effect/kai_231_destroy_light_12.png</file>
+        <file>cubes/effect/kai_231_destroy_light_13.png</file>
+        <file>cubes/effect/kai_231_destroy_light_14.png</file>
+        <file>cubes/effect/kai_231_destroy_light_15.png</file>
+        <file>cubes/effect/kai_231_bomb_white_h.png</file>
+        <file>cubes/effect/kai_231_bomb_white_v.png</file>
         <file>audios/click.bubble.mp3</file>
         <file>audios/contnuousMatch3.mp3</file>
         <file>audios/contnuousMatch5.mp3</file>
@@ -121,6 +135,14 @@
         <file>gui/modeselectionWindow/9.png</file>
         <file>gui/modeselectionWindow/10.png</file>
         <file>gui/modeselectionWindow/11.png</file>
+        <file>cubes/bk/bk1.jpg</file>
+        <file>cubes/bk/bk2.png</file>
+        <file>cubes/bk/bk3.jpg</file>
+        <file>font/Mengshen.ttf</file>
+        <file>cubes/skin/steps.png</file>
+        <file>cubes/skin/user_name.png</file>
+        <file>cubes/skin/shaojiu.png</file>
+        <file>cubes/skin/Button_Hover_9Slides.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

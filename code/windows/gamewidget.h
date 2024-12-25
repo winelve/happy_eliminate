@@ -2,9 +2,10 @@
 #define GAMEWIDGET_H
 
 #include "code/core/boardwidget.h"
-#include "code/audio/audioplayer.h"
+
 #include <QWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 namespace Ui {
 class GameWidget;
@@ -18,15 +19,29 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
 
+private slots:
+    void onLevelChanged(int level);
+    void onTimeChanged(int rest_time);
+    void onScoreChanged(int score);
+    void onTargetScoreChanged(int target_score);
+    void onStepChanged(int rest_steps);
+
+    void on_score_button_clicked();
+
+    void on_time_button_clicked();
+
+    void on_magic_button_clicked();
+
+signals:
+    void finished(int game_type);
+
 private:
     Ui::GameWidget *ui;
-    BoardWidget board_widget_;
-    AudioPlayer* audioPlayer = AudioPlayer::getInstance();
-    QTimer game_timer_;
 
-private slots:
-    void onUpdate(); //更新整体的数据
-    void on_btnReturn_clicked();
+    int game_type_ = 1;
+
+    void RandomMagic();
+
 };
 
 #endif // GAMEWIDGET_H
