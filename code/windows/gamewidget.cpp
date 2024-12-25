@@ -143,12 +143,14 @@ void GameWidget::on_magic_button_clicked()
 void GameWidget::on_reset_button_clicked()
 {
     int price = Constants::k_price_switch;
+    AudioPlayer::getInstance()->PlaySoundEffect("drop.mp3");
     if(DataResource::instance()->score()<price){
         CreateMessageBox("分数不足以兑换,该道具需要"+QString::number(price)+"积分  (ノ—_—)ノ");
         return ;
     }
     DataResource::instance()->set_score(DataResource::instance()->score()-price);
     ResetBoard();
+
     CreateMessageBox("棋盘已被随机打乱 ");
 }
 
