@@ -97,6 +97,16 @@ void MainWindow::on_btnMode_clicked()
     ModeSelectionWindow *mw = new ModeSelectionWindow();
     mw->move(this->pos().x(), this->pos().y());
     mw->show();
+    this->close();
+}
+
+
+void MainWindow::on_btnGame_clicked()
+{
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
+    GameWidget*gw = new GameWidget();
+    gw->move(this->pos().x(), this->pos().y());
+    gw->show();
     delay(20);
     this->close();
 }
