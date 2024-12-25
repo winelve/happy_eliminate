@@ -3,8 +3,13 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include <QElapsedTimer>
+#include "./utils/vector2.h"
+#include "./gamestate/statemachine.h"
+#include "./gamestate/boardstates.h"
+#include "./dataresource.h"
 
-#include "board.h"
+
 
 class BoardWidget : public QWidget
 {
@@ -12,60 +17,69 @@ class BoardWidget : public QWidget
 public:
     explicit BoardWidget(QWidget *parent = nullptr);
 
-    void paintEvent(QPaintEvent *event) override;
-    QSize GetBoardSize() { return QSize(width_*cell_size_,height_*cell_size_); }
-    void onUpdate();
 
+    QSize GetBoardSize() const { return QSize(width_ * cell_size_, height_ * cell_size_); }
+    // void update(int delta_time);
+    void render(QPainter &painter); // 用于渲染
+    void Update();
+
+    QTimer count_down_timer_;
 protected:
-    void mousePressEvent(QMouseEvent *ev) override;
+    void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
+
+
+    void paintEvent(QPaintEvent *event) override{
+        Q_UNUSED(event);
+        QPainter painter(this);
+
+        render(painter);
+    }
+
 
 private:
-    Board *board_;
+    QTimer game_timer_;
+
+    QElapsedTimer elapsed_timer_;
+
+    //背景
     QPixmap board_background_;
-    int width_; int height_;
+    //状态管理
+    StateMachine state_machine_;
+    void InitStateMachine();
+
+    //属性
+    int width_;
+    int height_;
     int cell_size_;
-    int padding_;   // 边距
-    int click_time; //测试点击
+    QPoint padding_;
 
-    Vector2 first_pos_;
-    Vector2 second_pos_;
+    // 维护鼠标事件
 
-    void Draw(QPainter &painter); //用于渲染
-    void DrawBK(int start_x,int start_y,int board_width,int board_height,QPainter &painter); //绘制背景
 
+    //渲染
+    void DrawBK(int start_x, int start_y, int board_width, int board_height, QPainter &painter); // 绘制背景
+    void DrawSelect(QPainter &painter);
     // 辅助函数：将像素坐标转换为棋盘坐标
-    bool PixelToBoard(int x, int y,Vector2 &pos) const;
-    // 辅助函数：检查两个位置是否相邻
-    bool areAdjacent(const Vector2 &pos1, const Vector2 &pos2) const;
+    bool PixelToBoard(int x, int y, Vector2 &pos);
+    void StartCounter() {
+        connect(&count_down_timer_, &QTimer::timeout, this, [this]() {  // 使用 [this] 而不是 [&]
+            DataResource* resource = DataResource::instance();
+            // 获取剩余时间
+            int rest_time = resource->rest_time();
 
+            if (rest_time <= 0) {
+                // 如果时间已经到了，停止定时器
+                count_down_timer_.stop();
+                resource->timeout();  // 发出 timeout 信号
+                return;
+            }
+            // 更新剩余时间
+            resource->set_rest_time(rest_time - 1);
+        });
+        count_down_timer_.start(1000);
+    }
+public slots:
+    void InitData(int choice = 1);
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif // BOARDWIDGET_H
-
-
-
-
-
-
-
-
-
-
-
-
