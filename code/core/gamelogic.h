@@ -33,7 +33,6 @@ public:
     // 填充空位
     void Fill(std::shared_ptr<Board> board);
 
-
     // 修改棋盘和match的数据
     void Find4(std::shared_ptr<Board> board,std::vector<std::vector<Vector2>> *match); //找到并修改四个连在一起的
     void Find5(std::shared_ptr<Board> board,std::vector<std::vector<Vector2>> *match); //寻找5个连在一起的
@@ -42,6 +41,7 @@ public:
     void CheckSpecial(std::vector<std::vector<Vector2>> *match);
     //添加为type的棋子
     void CheckMagic(int type,std::vector<std::vector<Vector2>> &match,std::shared_ptr<Board> board);
+    void InitRadomBoard(std::shared_ptr<Board> board);
 
 signals:
     void fallEvent(int fromRow, int fromCol, int toRow, int toCol,std::shared_ptr<Cube> cube); // 信号传递下落事件

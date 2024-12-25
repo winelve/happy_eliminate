@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "../entity/cube.h"
 
+
 namespace Utils {
 
 // 辅助函数：检查两个位置是否相邻
@@ -17,6 +18,11 @@ std::shared_ptr<Cube> GenerateCube();
 QPointF GetRenderPos(int row, int col);
 QPointF GetRenderPos(Vector2 pos);
 void PrintMatches(const std::vector<std::vector<Vector2>> &matches);
+void RemoveDuplicates(std::vector<std::vector<Vector2>> &matches);
+
+void PlayLevelMusic(int times);
+void PlayEliminateMusic(int times);
+
 }
 
 

@@ -26,14 +26,15 @@ public:
     int GetWidth() const { return board_.empty() ? 0 : board_[0].size(); }
     int GetHeight() const { return board_.size(); }
 
+    bool CausesMatch(int row, int col, int type); // 辅助函数：检查是否形成消除组合
     void PrintBoard();
+    void InitRandomBoard(int width, int height); // 生成一个随机的游戏初始地图
 private:
     std::vector<std::vector<std::shared_ptr<Cube>>> board_; // 棋盘数据
 
     void InitBoard(const std::vector<std::vector<int>> &board);
     void InitBoard(const std::vector<std::vector<Cube>> &board);
-    void InitRandomBoard(int width, int height); // 生成一个随机的游戏初始地图
-    bool CausesMatch(int row, int col, int type); // 辅助函数：检查是否形成消除组合
+
     void DelCube(int row, int col); // 删除一个单元
 
 };
