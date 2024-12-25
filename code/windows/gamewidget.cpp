@@ -46,8 +46,6 @@ GameWidget::~GameWidget()
     delete ui;
 }
 
-
-
 void GameWidget::onLevelChanged(int level) {
     // 更新关卡显示
     // 假设有一个显示关卡的 label

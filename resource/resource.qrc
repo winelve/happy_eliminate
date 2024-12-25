@@ -26,6 +26,34 @@
         <file>cubes/frog/frog_column_28.png</file>
         <file>cubes/frog/frog_line_28.png</file>
         <file>cubes/frog/frog_wrap_49.png</file>
+        <file>gui/mainWindow/2.png</file>
+        <file>gui/mainWindow/3.png</file>
+        <file>gui/mainWindow/4.png</file>
+        <file>gui/mainWindow/5.png</file>
+        <file>gui/mainWindow/6.png</file>
+        <file>gui/mainWindow/tittle.png</file>
+        <file>gui/mainWindow/background.jpg</file>
+        <file>gui/mainWindow/1.png</file>
+        <file>gui/mainWindow/6-.png</file>
+        <file>gui/mainWindow/1--.png</file>
+        <file>gui/mainWindow/2--.png</file>
+        <file>gui/mainWindow/3--.png</file>
+        <file>gui/mainWindow/4--.png</file>
+        <file>gui/mainWindow/5-.png</file>
+        <file>gui/aboutWindow/2-.png</file>
+        <file>gui/aboutWindow/2.png</file>
+        <file>gui/aboutWindow/1.png</file>
+        <file>gui/aboutWindow/bk.jpg</file>
+        <file>gui/mainWindow/bk.jpg</file>
+        <file>gui/settingWindow/1.png</file>
+        <file>gui/settingWindow/2.png</file>
+        <file>gui/settingWindow/3.png</file>
+        <file>gui/settingWindow/bk.jpg</file>
+        <file>font/font.ttf</file>
+        <file>gui/settingWindow/1-.png</file>
+        <file>gui/settingWindow/2-.png</file>
+        <file>gui/settingWindow/3-.png</file>
+        <file>gui/settingWindow/4.png</file>
         <file>cubes/bear/bear_cube.png</file>
         <file>cubes/cat/cat_cube.png</file>
         <file>cubes/chicken/chicken_cube.png</file>
@@ -65,6 +93,48 @@
         <file>audios/swap_wrapwrap.mp3</file>
         <file>audios/SwapFun.mp3</file>
         <file>audios/worldscenebgm.mp3</file>
+        <file>gui/settingWindow/5.png</file>
+        <file>gui/images/bk2.png</file>
+        <file>gui/rankwindow/2-.png</file>
+        <file>gui/rankwindow/2.png</file>
+        <file>gui/rankwindow/bk.jpg</file>
+        <file>gui/gameWindow/2-.png</file>
+        <file>gui/gameWindow/2.png</file>
+        <file>gui/gameWindow/bk.jpg</file>
+        <file>qml/loginwidget.qml</file>
+        <file>gui/aboutWindow/aboutBK.jpg</file>
+        <file>gui/aboutWindow/aboutBK.2jpg.jpg</file>
+        <file>gui/smallmenuWindow/2-.png</file>
+        <file>gui/smallmenuWindow/2.png</file>
+        <file>gui/smallmenuWindow/3-.png</file>
+        <file>gui/smallmenuWindow/3.png</file>
+        <file>gui/smallmenuWindow/4-.png</file>
+        <file>gui/smallmenuWindow/4.png</file>
+        <file>gui/smallmenuWindow/bk.png</file>
+        <file>gui/smallmenuWindow/bk2.png</file>
+        <file>gui/modeselectionWindow/1-.png</file>
+        <file>gui/modeselectionWindow/1.png</file>
+        <file>gui/modeselectionWindow/2-.png</file>
+        <file>gui/modeselectionWindow/2.png</file>
+        <file>gui/modeselectionWindow/3-.png</file>
+        <file>gui/modeselectionWindow/3.png</file>
+        <file>gui/modeselectionWindow/bk.png</file>
+        <file>gui/modeselectionWindow/4.png</file>
+        <file>gui/modeselectionWindow/4-.png</file>
+        <file>gui/modeselectionWindow/5.png</file>
+        <file>gui/modeselectionWindow/5-.png</file>
+        <file>gui/modeselectionWindow/6.png</file>
+        <file>gui/modeselectionWindow/6-.png</file>
+        <file>gui/modeselectionWindow/7.png</file>
+        <file>gui/modeselectionWindow/7-.png</file>
+        <file>gui/modeselectionWindow/8.png</file>
+        <file>gui/modeselectionWindow/8-.png</file>
+        <file>gui/modeselectionWindow/0.png</file>
+        <file>gui/modeselectionWindow/0-.png</file>
+        <file>gui/modeselectionWindow/cute.png</file>
+        <file>gui/modeselectionWindow/9.png</file>
+        <file>gui/modeselectionWindow/10.png</file>
+        <file>gui/modeselectionWindow/11.png</file>
         <file>cubes/bk/bk1.jpg</file>
         <file>cubes/bk/bk2.png</file>
         <file>cubes/bk/bk3.jpg</file>
@@ -74,4 +144,5 @@
         <file>cubes/skin/shaojiu.png</file>
         <file>cubes/skin/Button_Hover_9Slides.png</file>
     </qresource>
+    <qresource prefix="/images"/>
 </RCC>

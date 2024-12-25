@@ -1,5 +1,6 @@
 QT       += core gui
 QT       += multimedia
+QT += quickwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,6 +18,9 @@ SOURCES += \
     code/core/board.cpp \
     code/core/boardmanager.cpp \
     code/core/boardwidget.cpp \
+    code/windows/aboutwindow.cpp \
+    code/windows/audiocontrol.cpp \
+    code/windows/framelesswindow.cpp \
     code/core/dataresource.cpp \
     code/core/entity/coleffect.cpp \
     code/core/entity/eliminateeffect.cpp \
@@ -35,6 +39,13 @@ SOURCES += \
     code/database/database.cpp \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
+    code/windows/mainwindow.cpp \
+    code/windows/modemanager.cpp \
+    code/windows/modeselectionwindow.cpp \
+    code/windows/rankwindow.cpp \
+    code/windows/settingwindow.cpp \
+    code/windows/smallmenuwindow.cpp \
+    code/windows/usermanager.cpp \
     main.cpp
 
 HEADERS += \
@@ -45,6 +56,9 @@ HEADERS += \
     code/core/board.h \
     code/core/boardmanager.h \
     code/core/boardwidget.h \
+    code/windows/aboutwindow.h \
+    code/windows/audiocontrol.h \
+    code/windows/framelesswindow.h \
     code/core/dataresource.h \
     code/core/entity/coleffect.h \
     code/core/entity/eliminateeffect.h \
@@ -62,9 +76,23 @@ HEADERS += \
     code/core/utils/vector2.h \
     code/database/database.h \
     code/windows/gamewidget.h \
+    code/windows/mainwindow.h \
+    code/windows/modemanager.h \
+    code/windows/modeselectionwindow.h \
+    code/windows/rankwindow.h \
+    code/windows/settingwindow.h \
+    code/windows/smallmenuwindow.h \
+    code/windows/usermanager.h
 
 FORMS += \
-    code/windows/gamewidget.ui
+    code/windows/aboutwindow.ui \
+    code/windows/framelesswindow.ui \
+    code/windows/gamewidget.ui \
+    code/windows/mainwindow.ui \
+    code/windows/modeselectionwindow.ui \
+    code/windows/rankwindow.ui \
+    code/windows/settingwindow.ui \
+    code/windows/smallmenuwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

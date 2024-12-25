@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingWindow</class>
+ <widget class="QMainWindow" name="SettingWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>675</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="settingpic">
+   <property name="styleSheet">
+    <string notr="true">#settingpic{border-image:url(:/gui/settingWindow/bk.jpg)}</string>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>60</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 15pt &quot;楷体&quot;;
+font-weight: bold; 
+color:rgb(46, 99, 45)</string>
+    </property>
+    <property name="text">
+     <string>设置</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnReturn">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>70</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton#btnReturn {
+    border: none;
+    }
+
+QPushButton#btnReturn:hover {
+	icon: url(:/gui/aboutWindow/2-.png);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/aboutWindow/2.png</normaloff>:/gui/aboutWindow/2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>40</width>
+      <height>40</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnMusic">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>170</y>
+      <width>70</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">  border: none;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/settingWindow/1.png</normaloff>:/gui/settingWindow/1.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>80</width>
+      <height>80</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnSound">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>310</y>
+      <width>70</width>
+      <height>70</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: none;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resource/resource.qrc">
+      <normaloff>:/gui/settingWindow/3.png</normaloff>:/gui/settingWindow/3.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>70</width>
+      <height>70</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_music">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>240</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>音乐</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sound">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>380</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>音效</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSlider" name="music_slider">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>180</y>
+      <width>311</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSlider::groove:horizontal {
+	image:url(:/gui/settingWindow/4.png);
+    height: 35px;
+    border:0px;
+left:10px;
+right:10px;
+}
+QSlider::handle:horizontal{
+image:url(:/gui/settingWindow/5.png);
+ width: 40px; /* 设置滑块的宽度 */
+    height: 40px; /* 设置滑块的高度 */
+    margin: -15px -15px -15px -15px; /* 调整滑块位置，使其可以滑动到滑轨两端 */
+}
+QSlider {
+    border: none;
+    background: transparent;
+    height: 35px; /* 滑轨的高度 */
+}</string>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="value">
+     <number>50</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="sound_slider">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>320</y>
+      <width>311</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QSlider::groove:horizontal {
+	image:url(:/gui/settingWindow/4.png);
+    height: 35px;
+    border:0px;
+left:10px;
+right:10px;
+}
+QSlider::handle:horizontal{
+image:url(:/gui/settingWindow/5.png);
+ width: 40px; /* 设置滑块的宽度 */
+    height: 40px; /* 设置滑块的高度 */
+    margin: -15px -15px -15px -15px; /* 调整滑块位置，使其可以滑动到滑轨两端 */
+}
+QSlider {
+    border: none;
+    background: transparent;
+    height: 35px; /* 滑轨的高度 */
+}</string>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="value">
+     <number>50</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../resource/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
