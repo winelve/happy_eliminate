@@ -26,6 +26,7 @@ SOURCES += \
     code/test/audio_test/testaudiomain.cpp \
     code/windows/gamewidget.cpp \
     code/windows/mainwindow.cpp \
+    code/windows/modemanager.cpp \
     code/windows/modeselectionwindow.cpp \
     code/windows/rankwindow.cpp \
     code/windows/settingwindow.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     code/database/database.h \
     code/windows/gamewidget.h \
     code/windows/mainwindow.h \
+    code/windows/modemanager.h \
     code/windows/modeselectionwindow.h \
     code/windows/rankwindow.h \
     code/windows/settingwindow.h \

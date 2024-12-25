@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "framelesswindow.h"
 #include "code/audio/audioplayer.h"
+#include "modemanager.h"
 
 namespace Ui {
 class ModeSelectionWindow;
@@ -46,8 +47,11 @@ private slots:
 private:
     Ui::ModeSelectionWindow *ui;
     AudioPlayer* audioPlayer = AudioPlayer::getInstance();
+    ModeManager* modeManager = ModeManager::getinstance();
     int selectionStatus = 0;
-    int selection = 0;
+    // int select_checkerboard = 0;    // 选择棋盘大小
+    // int select_difficulty = 0;  // 选择游戏难度（棋子种类个数）
+    // int select_play = 0;    // 选择玩法
 };
 
 #endif // ModeSelectionWindow_H

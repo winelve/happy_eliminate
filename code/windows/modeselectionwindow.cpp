@@ -15,7 +15,43 @@ ModeSelectionWindow::ModeSelectionWindow(QWidget *parent)
     this->setWindowFlag(Qt::FramelessWindowHint);
     //初始显示在难度选择上面
     ui->stackedWidget->setCurrentWidget(ui->page);
-
+    //初始化Mode
+    // 难度
+    if(modeManager->getDifficulty() == 1){
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4-.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6.png"));
+    }else if(modeManager->getDifficulty() == 2){
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5-.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6.png"));
+    }else if(modeManager->getDifficulty() == 3){
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6-.png"));
+    }
+    // 玩法
+    if(modeManager->getPlay() == 1){
+        ui->btnBreak->setIcon(QIcon(":/gui/modeselectionWindow/7-.png"));
+        ui->btnHeart->setIcon(QIcon(":/gui/modeselectionWindow/8.png"));
+    }else if(modeManager->getPlay() == 2){
+        ui->btnBreak->setIcon(QIcon(":/gui/modeselectionWindow/7.png"));
+        ui->btnHeart->setIcon(QIcon(":/gui/modeselectionWindow/8-.png"));
+    }
+    // 棋盘
+    if(modeManager->getCheckerboard() == 1){
+        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
+        ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+    }else if(modeManager->getCheckerboard() == 2){
+        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
+        ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+    }else if(modeManager->getCheckerboard() == 3){
+        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
+    }
     // 设置字体
     int fontId = QFontDatabase::addApplicationFont(":/font/font.ttf");
     if (fontId == -1) {
@@ -89,11 +125,11 @@ void ModeSelectionWindow::on_btnSize_clicked()
 void ModeSelectionWindow::on_btn6_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
-    if (selection != 1) {
+    if (modeManager->getCheckerboard() != 1) {
         ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
-        selection = 1;
+        modeManager->setCheckerboard(1);
     }
 }
 
@@ -101,11 +137,11 @@ void ModeSelectionWindow::on_btn6_clicked()
 void ModeSelectionWindow::on_btn10_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
-    if (selection != 2) {
+    if (modeManager->getCheckerboard() != 2) {
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
-        selection = 2;
+        modeManager->setCheckerboard(2);
     }
 }
 
@@ -113,11 +149,11 @@ void ModeSelectionWindow::on_btn10_clicked()
 void ModeSelectionWindow::on_btn14_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
-    if (selection != 3) {
+    if (modeManager->getCheckerboard() != 3) {
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
-        selection = 3;
+        modeManager->setCheckerboard(3);
     }
 }
 
@@ -125,29 +161,57 @@ void ModeSelectionWindow::on_btn14_clicked()
 void ModeSelectionWindow::on_btnBreak_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
+    if (modeManager->getPlay() != 1) {
+        ui->btnBreak->setIcon(QIcon(":/gui/modeselectionWindow/7-.png"));
+        ui->btnHeart->setIcon(QIcon(":/gui/modeselectionWindow/8.png"));
+        modeManager->setPlay(1);
+    }
 }
 
 // 限时模式
 void ModeSelectionWindow::on_btnHeart_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
+    if (modeManager->getPlay() != 2) {
+        ui->btnBreak->setIcon(QIcon(":/gui/modeselectionWindow/7.png"));
+        ui->btnHeart->setIcon(QIcon(":/gui/modeselectionWindow/8-.png"));
+        modeManager->setPlay(2);
+    }
 }
 
 // 简单模式
 void ModeSelectionWindow::on_btnEasy_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
+    if (modeManager->getDifficulty() != 1) {
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4-.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6.png"));
+        modeManager->setDifficulty(1);
+    }
 }
 
 // 困难模式
 void ModeSelectionWindow::on_btnDifficult_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
+    if (modeManager->getDifficulty() != 2) {
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5-.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6.png"));
+        modeManager->setDifficulty(2);
+    }
 }
 
 // 极限模式
 void ModeSelectionWindow::on_btnExtreme_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
+    if (modeManager->getDifficulty() != 3) {
+        ui->btnEasy->setIcon(QIcon(":/gui/modeselectionWindow/4.png"));
+        ui->btnDifficult->setIcon(QIcon(":/gui/modeselectionWindow/5.png"));
+        ui->btnExtreme->setIcon(QIcon(":/gui/modeselectionWindow/6-.png"));
+        modeManager->setDifficulty(3);
+    }
 }
 

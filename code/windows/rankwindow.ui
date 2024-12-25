@@ -70,6 +70,66 @@ color:rgb(46, 99, 45)</string>
      <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>140</y>
+      <width>351</width>
+      <height>401</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#listWidget{
+	border-image:url(:/gui/modeselectionWindow/bk.png)
+}
+QListWidget::item {
+    border-radius: 10px; /* 圆角效果 */
+    /*padding: 12px;*/
+    margin-bottom: 5px;
+ color: rgb(152, 122, 93);  
+    background-color:  transparent;
+border: none; /* 确保没有边框 */
+    outline: none; /* 确保没有外框 */
+}
+QListWidget::item:selected {
+    background-color: transparent;  /* 无背景色 */
+    color: rgb(152, 122, 93);  /* 保持文本颜色 */
+    border: none;  /* 去除边框 */
+	outline: none; /* 确保没有外框 */
+}</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>140</y>
+      <width>151</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#listWidget_2{
+	border-image:url(:/gui/modeselectionWindow/bk.png)
+}
+QListWidget::item {
+    border-radius: 10px; /* 圆角效果 */
+    /*padding: 12px;*/
+    margin-bottom: 5px;
+    color: rgb(152, 122, 93);
+    background-color:  transparent;
+border: none; /* 确保没有边框 */
+    outline: none; /* 确保没有外框 */
+}
+QListWidget::item:selected {
+    background-color: transparent;  /* 无背景色 */
+        color: rgb(152, 122, 93); /* 保持文本颜色 */
+    border: none;  /* 去除边框 */
+	outline: none; /* 确保没有外框 */
+}</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

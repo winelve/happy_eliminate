@@ -2,6 +2,7 @@
 #define RANKWINDOW_H
 
 #include <QMainWindow>
+#include "code/windows/usermanager.h"
 #include "framelesswindow.h"
 #include "code/audio/audioplayer.h"
 
@@ -23,6 +24,7 @@ private slots:
 private:
     Ui::RankWindow *ui;
     AudioPlayer* audioPlayer = AudioPlayer::getInstance();
+    void addListItems(QList<QPair<QString, int>> rank_list);
 };
 
 #endif // RANKWINDOW_H
