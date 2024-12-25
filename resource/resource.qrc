@@ -90,7 +90,21 @@
         <file>qml/loginwidget.qml</file>
         <file>gui/aboutWindow/aboutBK.jpg</file>
         <file>gui/aboutWindow/aboutBK.2jpg.jpg</file>
+        <file>gui/smallmenuWindow/2-.png</file>
+        <file>gui/smallmenuWindow/2.png</file>
+        <file>gui/smallmenuWindow/3-.png</file>
+        <file>gui/smallmenuWindow/3.png</file>
+        <file>gui/smallmenuWindow/4-.png</file>
+        <file>gui/smallmenuWindow/4.png</file>
+        <file>gui/smallmenuWindow/bk.png</file>
+        <file>gui/smallmenuWindow/bk2.png</file>
+        <file>gui/modeselectionWindow/1-.png</file>
         <file>gui/modeselectionWindow/1.png</file>
+        <file>gui/modeselectionWindow/2-.png</file>
+        <file>gui/modeselectionWindow/2.png</file>
+        <file>gui/modeselectionWindow/3-.png</file>
+        <file>gui/modeselectionWindow/3.png</file>
+        <file>gui/modeselectionWindow/bk.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

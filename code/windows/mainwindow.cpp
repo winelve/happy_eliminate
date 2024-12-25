@@ -7,6 +7,7 @@
 #include "settingwindow.h"
 #include "rankwindow.h"
 #include "gamewidget.h"
+#include "modeselectionwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : FrameLessWindow(parent)
@@ -86,6 +87,17 @@ void MainWindow::on_btnRank_clicked()
 //退出
 void MainWindow::on_btnQuit_clicked()
 {
+    this->close();
+}
+
+// 模式选择
+void MainWindow::on_btnMode_clicked()
+{
+    audioPlayer->PlaySoundEffect("click.bubble.mp3");
+    ModeSelectionWindow *mw = new ModeSelectionWindow();
+    mw->move(this->pos().x(), this->pos().y());
+    mw->show();
+    delay(150);
     this->close();
 }
 

@@ -29,6 +29,7 @@ SOURCES += \
     code/windows/modeselectionwindow.cpp \
     code/windows/rankwindow.cpp \
     code/windows/settingwindow.cpp \
+    code/windows/smallmenuwindow.cpp \
     code/windows/usermanager.cpp \
     main.cpp
 
@@ -50,6 +51,7 @@ HEADERS += \
     code/windows/modeselectionwindow.h \
     code/windows/rankwindow.h \
     code/windows/settingwindow.h \
+    code/windows/smallmenuwindow.h \
     code/windows/usermanager.h
 
 FORMS += \
@@ -59,7 +61,8 @@ FORMS += \
     code/windows/mainwindow.ui \
     code/windows/modeselectionwindow.ui \
     code/windows/rankwindow.ui \
-    code/windows/settingwindow.ui
+    code/windows/settingwindow.ui \
+    code/windows/smallmenuwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -27,6 +27,8 @@ private slots:
 
     //void on_btnGame_clicked();
 
+    void on_btnMode_clicked();
+
 public slots:
     void showMainWindow();
 
