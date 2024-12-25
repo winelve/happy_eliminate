@@ -105,6 +105,22 @@
         <file>gui/modeselectionWindow/3-.png</file>
         <file>gui/modeselectionWindow/3.png</file>
         <file>gui/modeselectionWindow/bk.png</file>
+        <file>gui/modeselectionWindow/4.png</file>
+        <file>gui/modeselectionWindow/4-.png</file>
+        <file>gui/modeselectionWindow/5.png</file>
+        <file>gui/modeselectionWindow/5-.png</file>
+        <file>gui/modeselectionWindow/6.png</file>
+        <file>gui/modeselectionWindow/6-.png</file>
+        <file>gui/modeselectionWindow/7.png</file>
+        <file>gui/modeselectionWindow/7-.png</file>
+        <file>gui/modeselectionWindow/8.png</file>
+        <file>gui/modeselectionWindow/8-.png</file>
+        <file>gui/modeselectionWindow/0.png</file>
+        <file>gui/modeselectionWindow/0-.png</file>
+        <file>gui/modeselectionWindow/cute.png</file>
+        <file>gui/modeselectionWindow/9.png</file>
+        <file>gui/modeselectionWindow/10.png</file>
+        <file>gui/modeselectionWindow/11.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

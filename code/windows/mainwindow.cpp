@@ -97,7 +97,7 @@ void MainWindow::on_btnMode_clicked()
     ModeSelectionWindow *mw = new ModeSelectionWindow();
     mw->move(this->pos().x(), this->pos().y());
     mw->show();
-    delay(150);
+    delay(20);
     this->close();
 }
 
