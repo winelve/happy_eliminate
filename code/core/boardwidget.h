@@ -29,6 +29,8 @@ public:
 
     QTimer *GetCountDownTimer() { return &count_down_timer_; }
 
+    StateMachine state_machine_;
+
 protected:
     void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
 
@@ -52,7 +54,7 @@ private:
     //背景
     QPixmap board_background_;
     //状态管理
-    StateMachine state_machine_;
+
     bool is_render_ = true;
     void InitStateMachine();
 

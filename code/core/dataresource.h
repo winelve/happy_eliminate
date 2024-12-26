@@ -62,6 +62,8 @@ public:
         emit time_out_signal();
     }
 
+    void reset_all_data();
+
 signals:
 
     void time_out_signal(); //游戏结束信号

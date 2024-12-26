@@ -5,6 +5,7 @@
 #include <QFontDatabase>
 #include "code/windows/mainwindow.h"
 #include "audiocontrol.h"
+#include "code/windows/gamewidget.h"
 
 SmallMenuWindow::SmallMenuWindow(QWidget *parent)
     : FrameLessWindow(parent)
@@ -166,14 +167,27 @@ void SmallMenuWindow::on_sound_slider_valueChanged(int value)
 void SmallMenuWindow::on_btnMode_clicked()
 {
     audioPlayer->PlaySoundEffect("click.bubble.mp3");
+
     MainWindow *mw = new MainWindow();
     mw->show();
     delay(150);
+
+    GameWidget* gameWidget = static_cast<GameWidget*>(parentWidget());
+    gameWidget->closeStateMachine();
+
     this->close();
+    this->parentWidget()->close();
 }
 
 
 void SmallMenuWindow::on_btnRank_clicked()
+{
+    this->close();
+    this->parentWidget()->close();
+}
+
+
+void SmallMenuWindow::on_btnGame_clicked()
 {
     this->close();
 }

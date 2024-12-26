@@ -18,6 +18,7 @@ class GameWidget : public QWidget
 public:
     explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
+    void closeStateMachine();
 
 private slots:
     void onLevelChanged(int level);
@@ -31,6 +32,7 @@ private slots:
     void on_reset_button_clicked();
     void on_time_stoper_button_clicked();
 
+    void on_setting_button_clicked();
 signals:
     void finished(int game_type);
 

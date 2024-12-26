@@ -33,6 +33,8 @@ private slots:
 
     void on_btnRank_clicked();
 
+    void on_btnGame_clicked();
+
 private:
     Ui::SmallMenuWindow *ui;
     AudioPlayer* audioPlayer=AudioPlayer::getInstance();

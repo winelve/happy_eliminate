@@ -411,7 +411,7 @@ QProgressBar::chunk {
 </string>
                </property>
                <property name="value">
-                <number>41</number>
+                <number>60</number>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>

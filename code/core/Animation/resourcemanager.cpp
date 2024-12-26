@@ -35,6 +35,7 @@ ResourceManager::ResourceManager(){
     win_img_.push_back(LoadSingleImg(":/cubes/effect/win.png"));
     win_img_.push_back(LoadSingleImg(":/cubes/effect/next_level.png"));
     game_over_img_.push_back(LoadSingleImg(":/cubes/effect/gameover.png"));
+    game_over_img_.push_back(LoadSingleImg(":/cubes/effect/back_tips.png"));
 
     LoadAllAniResources();
 }

@@ -63,3 +63,14 @@ std::shared_ptr<Board> BoardManager::GetCurrentBoard() const
 {
     return currentBoard_;
 }
+
+void BoardManager::ResetManager()
+{
+    // 清空所有存储的 Board
+    boardPool_.clear();
+
+    // 将当前活动的 Board 设置为 nullptr
+    currentBoard_.reset();
+
+    qDebug() << "BoardManager has been reset.";
+}

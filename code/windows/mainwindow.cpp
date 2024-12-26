@@ -104,7 +104,13 @@ void MainWindow::on_btnMode_clicked()
 void MainWindow::on_btnGame_clicked()
 {
     audioPlayer->PlaySoundEffect("click.bubble.mp3");
-    GameWidget*gw = new GameWidget();
+    RenderManager::instance();
+    BoardManager::instance().ResetManager();
+    // DataResource::instance()->reset_all_data();
+    RenderManager::instance().Reset();
+
+
+    GameWidget* gw = new GameWidget();
     gw->move(this->pos().x(), this->pos().y());
     gw->show();
     delay(20);

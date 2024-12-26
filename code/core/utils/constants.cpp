@@ -22,8 +22,8 @@ QSize k_cube_size = QSize(k_cell_size - 5, k_cell_size - 5);
 int board_width = 10;
 int board_height = 10;
 
-const int k_Max_Time = 1000000;
-const int k_Max_Steps = 1000000;
+const int k_Max_Time = 10000;
+const int k_Max_Steps = 10000;
 
 const int k_cube_pace = 10;
 
@@ -32,6 +32,6 @@ const int k_price_pace = 50;
 const int k_price_magic = 0;
 const int k_price_switch = 80;
 
-Vector2 Word_Pos = Vector2(board_width/2-1,board_width/2);
+Vector2 Word_Pos = Vector2(board_width/2-1,board_width/2-1);
 
 } // namespace Constants

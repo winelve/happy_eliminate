@@ -31,6 +31,7 @@ public:
 
     // 获取当前活动的 Board
     std::shared_ptr<Board> GetCurrentBoard() const;
+    void ResetManager();
 
 private:
     explicit BoardManager(QObject *parent = nullptr); // 私有构造函数

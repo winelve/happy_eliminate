@@ -226,7 +226,7 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev)
     }
 
     // 调用基类的事件处理
-    QWidget::mousePressEvent(ev);
+    // QWidget::mousePressEvent(ev);
 }
 
 bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
@@ -256,6 +256,7 @@ bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
 
 
 void BoardWidget::StartCounter(){
+    disconnect(&count_down_timer_, &QTimer::timeout, this, nullptr);
     connect(&count_down_timer_, &QTimer::timeout, this, [this]() {  // 使用 [this] 而不是 [&]
         DataResource* resource = DataResource::instance();
         // 获取剩余时间
@@ -370,7 +371,7 @@ void BoardWidget::SetGameMode(int choice) {
 
     switch (choice) {
     case 1: { // 闯关
-        int time = 100000000;
+        int time = 1000000;
         int steps = 10;
         DataResource::instance()->set_level(1);
         DataResource::instance()->set_rest_steps(steps);
@@ -383,8 +384,8 @@ void BoardWidget::SetGameMode(int choice) {
     }
     case 2: {
         // 计时
-        int time = 120;
-        int steps = 10000000;
+        int time = 10;
+        int steps = 100000;
         DataResource::instance()->set_level(-1);
         DataResource::instance()->set_rest_steps(steps);
         DataResource::instance()->set_total_steps(steps);
