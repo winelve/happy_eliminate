@@ -15,6 +15,9 @@
 #include "../entity/wordeffect2.h"
 #include "../dataresource.h"
 #include "code/audio/audioplayer.h"
+#include "code/windows/mainwindow.h"
+#include "code/database/database.h"
+#include "code/windows/usermanager.h"
 
 #include <QObject>
 #include <QDebug>
@@ -34,11 +37,14 @@ public:
     explicit WaitingForInputState(QObject *parent = nullptr)
         : StateNode(parent)
     {
-        connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
-        connect(DataResource::instance(), &DataResource::time_out_signal,this, &WaitingForInputState::HandleTimerOver);
+QObject::connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
+
     }
 
     void onEnter() override {
+
+        QObject::connect(DataResource::instance(), &DataResource::time_out_signal, this, &WaitingForInputState::HandleTimerOver);
+        // 重新连接
         qDebug() << "进入状态：等待用户输入";
         // 等待用户操作逻辑
         if(DataResource::instance()->rest_steps()==0){
@@ -49,10 +55,13 @@ public:
     }
     void onUpdate() override {
         if(is_gameover_) {
+            is_gameover_ = true;
             state_machine_->SwitchTo("GameOver");
             qDebug() << ">>>>>>GameOver<<<<<<<";
-            is_gameover_  = false;
         }
+    }
+    void onExit() override {
+        QObject::disconnect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
     }
 
 //这里写一个槽,用来接受信号-->已经完成点击事件的信号
@@ -83,7 +92,7 @@ public:
         : StateNode(parent)
     {
         //关联信号
-        connect(this, &SwappingState::swap_ani_finished, this, &SwappingState::transToChecking,Qt::UniqueConnection);
+        connect(this, &SwappingState::swap_ani_finished, this, &SwappingState::transToChecking);
     }
 
     void onEnter() override {
@@ -113,7 +122,7 @@ public:
             "pos",startPos2,endPos2));
 
         // 连接 finished 信号
-        connect(ani_group, &QParallelAnimationGroup::finished, this, &SwappingState::swap_ani_finished,Qt::UniqueConnection);
+        connect(ani_group, &QParallelAnimationGroup::finished, this, &SwappingState::swap_ani_finished);
         ani_group->start(QAbstractAnimation::DeleteWhenStopped); // 使用 QAbstractAnimation
 
         //数据逻辑
@@ -299,7 +308,7 @@ public:
 
         // 检查匹配逻辑
         std::vector<std::vector<Vector2>> matches = GameLogic::instance().CheckBoard(BoardManager::instance().GetCurrentBoard());
-
+        qDebug() << "SSSSSSSSSSSSSSSize:" <<matches.size();
 
         if (!matches.empty()) {
             state_machine_->SwitchTo("Clearing");
@@ -386,7 +395,7 @@ public:
             }
         }
         // 连接 QParallelAnimationGroup 的 finished 信号，确保所有动画完成后触发回调
-        connect(parallelGroup, &QParallelAnimationGroup::finished,this,&ClearingState::clear_ani_finished, Qt::UniqueConnection);
+        connect(parallelGroup, &QParallelAnimationGroup::finished,this,&ClearingState::clear_ani_finished);
         parallelGroup->start();
         Utils::PlayEliminateMusic(DataResource::instance()->elimination_times());
         qDebug() << "DataResource::instance()->elimination_times()::::::::::::::::::::"<<DataResource::instance()->elimination_times();
@@ -417,6 +426,10 @@ public:
     explicit FallingState(QObject *parent = nullptr)
         : StateNode(parent)
     {
+        // 先断开连接
+        disconnect(this, &FallingState::fall_ani_finished, this, &FallingState::transToEndCheck);
+        disconnect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
+
         connect(this, &FallingState::fall_ani_finished, this, &FallingState::transToEndCheck);
         connect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
     }
@@ -489,7 +502,7 @@ public:
             //无可消除的序列
             if(DataResource::instance()->elimination_times()>=2){
                 WordEffect *effect = new WordEffect(DataResource::instance()->elimination_times());
-                effect->SetRenderPos(Utils::GetRenderPos(3,4));
+                effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
                 QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
                 connect(ani, &QPropertyAnimation::finished, this, [this]() { transTo(); });
                 ani->start();
@@ -525,7 +538,7 @@ public:
         DataResource *data = DataResource::instance();
         if(data->score()>=data->target_score()){
             WordEffect2 *effect = new WordEffect2(1);
-            effect->SetRenderPos(Utils::GetRenderPos(3,4));
+            effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
             QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
             connect(ani, &QPropertyAnimation::finished, this, [this]() { InitNew(); });
             ani->start();
@@ -556,19 +569,38 @@ class GameOverState : public StateNode
 {
     Q_OBJECT
 public:
-    explicit GameOverState(QObject *parent = nullptr)
+    explicit GameOverState(QWidget *parent = nullptr)
         : StateNode(parent){}
 
     void onEnter() override {
         WordEffect2 *effect = new WordEffect2(0);
-        effect->SetRenderPos(Utils::GetRenderPos(3,4));
+        effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
         QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
         ani->start();
         qDebug() << "游戏结束,你的最终得分:" << DataResource::instance()->score();
+
+        // 数据库连接相关
+        DataBase *dataBase = new DataBase();
+        dataBase->BuildDatabase();
+        dataBase->updateUserScore(UserManager::getUsername(),DataResource::instance()->score(),UserManager::getUserkey());
+
         //执行结束逻辑
+        //延时2.3~喵执行
+        QTimer::singleShot(5000, this, [=]() {
+            MainWindow *mw = new MainWindow();
+            mw->show();
+            // delay(150);
+            //这个是BoardWidget
+            QWidget *parentWidget = qobject_cast<QWidget *>(parent());
+            //这个是GameWidget
+            parentWidget->parentWidget()->parentWidget()->close();
+        });
+
     }
     void onUpdate() override { }
 };
+
+
 
 
 

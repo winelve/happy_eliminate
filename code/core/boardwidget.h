@@ -8,6 +8,7 @@
 #include "./gamestate/statemachine.h"
 #include "./gamestate/boardstates.h"
 #include "./dataresource.h"
+#include "./code/windows/modemanager.h"
 
 
 
@@ -27,6 +28,8 @@ public:
     void SetIsRender(bool is_render) { is_render_ = is_render; }
 
     QTimer *GetCountDownTimer() { return &count_down_timer_; }
+
+    StateMachine state_machine_;
 
 protected:
     void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
@@ -51,7 +54,7 @@ private:
     //背景
     QPixmap board_background_;
     //状态管理
-    StateMachine state_machine_;
+
     bool is_render_ = true;
     void InitStateMachine();
 
@@ -68,25 +71,14 @@ private:
     void DrawSelect(QPainter &painter);
     // 辅助函数：将像素坐标转换为棋盘坐标
     bool PixelToBoard(int x, int y, Vector2 &pos);
-    void StartCounter() {
-        connect(&count_down_timer_, &QTimer::timeout, this, [this]() {  // 使用 [this] 而不是 [&]
-            DataResource* resource = DataResource::instance();
-            // 获取剩余时间
-            int rest_time = resource->rest_time();
-
-            if (rest_time <= 0) {
-                // 如果时间已经到了，停止定时器
-                count_down_timer_.stop();
-                resource->timeout();  // 发出 timeout 信号
-                return;
-            }
-            // 更新剩余时间
-            resource->set_rest_time(rest_time - 1);
-        });
-        count_down_timer_.start(1000);
-    }
+    void StartCounter();
+    void SetDifficulty(int choice);
+    void SetBoardSize(int choice);
+    void SetGameMode(int choice);
 public slots:
-    void InitData(int choice = 1);
+    void InitData();
+
+
 };
 
 #endif // BOARDWIDGET_H

@@ -34,6 +34,7 @@ public:
     void RenderAll(QPainter &painter,int layer=0);    // 渲染所有分组的实体（根据层级排序）
     void UpdateAll(int deltaTime);       // 更新所有实体
 
+    void Reset();
 
 private:
     // 私有构造函数

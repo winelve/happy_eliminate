@@ -3,14 +3,15 @@
 
 #include <QSize>
 #include <QPoint>
+#include "code/core/utils/vector2.h"
 
 namespace Constants {
 
 // 使用 extern 声明常量
 extern QPoint k_board_padding;
-extern const int k_cell_size;
+extern int k_cell_size;
 extern const int k_duration_time;
-extern const int ktype_size;
+extern int ktype_size;
 extern const float move_speed;
 extern const int k_frame_duration;
 
@@ -20,7 +21,7 @@ extern const int kspecial_cube_bomb;
 extern const int kspecial_cube_magic;
 
 extern const int k_swap_duration;
-extern const QSize k_cube_size;
+extern QSize k_cube_size;
 
 extern int board_width;
 extern int board_height;
@@ -35,6 +36,7 @@ extern const int k_price_time;
 extern const int k_price_pace;
 extern const int k_price_magic;
 extern const int k_price_switch;
+extern Vector2 Word_Pos;
 
 } // namespace Constants
 

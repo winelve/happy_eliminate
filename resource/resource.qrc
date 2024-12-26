@@ -164,6 +164,7 @@
         <file>cubes/effect/next_level.png</file>
         <file>gui/gameWindow/8.png</file>
         <file>gui/gameWindow/9.png</file>
+        <file>cubes/effect/back_tips.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

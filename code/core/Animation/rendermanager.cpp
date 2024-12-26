@@ -105,3 +105,20 @@ void RenderManager::ClearNullEntity() {
             );
     }
 }
+
+
+void RenderManager::Reset()
+{
+    // 遍历所有分组并清空实体
+    for (auto& group : groups_) {
+        for (Entity* entity : group.second) {
+            delete entity; // 释放动态分配的实体内存
+        }
+        group.second.clear(); // 清空分组内的实体列表
+    }
+
+    // 清空所有分组
+    groups_.clear();
+
+    qDebug() << "RenderManager has been reset.";
+}

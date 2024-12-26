@@ -25,6 +25,7 @@ public:
     void update();
     QString GetCurrentState() { return current_state_name_; }
     std::shared_ptr<StateNode> GetCurrentNode() { return currentState_; }
+    void Clear() { statePool_.clear(); };
 
 };
 

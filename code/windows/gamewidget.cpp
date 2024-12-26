@@ -4,6 +4,9 @@
 #include "code/core/boardmanager.h"
 #include "code/core/utils/messagetips.h"
 #include "code/audio/audioplayer.h"
+#include "code/windows/smallmenuwindow.h"
+#include "code/core/Animation/rendermanager.h"
+#include "code/windows/usermanager.h"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -24,6 +27,20 @@ GameWidget::GameWidget(QWidget *parent)
     // 获取 DataResource 实例
     DataResource* resource = DataResource::instance();
 
+    // 断开所有连接
+    disconnect(resource, &DataResource::level_change_signal,
+               this, &GameWidget::onLevelChanged);
+    disconnect(resource, &DataResource::time_change_signal,
+               this, &GameWidget::onTimeChanged);
+    disconnect(resource, &DataResource::score_change_signal,
+               this, &GameWidget::onScoreChanged);
+    disconnect(resource, &DataResource::target_score_change_signal,
+               this, &GameWidget::onTargetScoreChanged);
+    disconnect(resource, &DataResource::step_change_signal,
+               this, &GameWidget::onStepChanged);
+    disconnect(this, &GameWidget::finished,
+               ui->board_widget, &BoardWidget::InitData);
+
     connect(resource, &DataResource::level_change_signal,
             this, &GameWidget::onLevelChanged);
 
@@ -43,6 +60,7 @@ GameWidget::GameWidget(QWidget *parent)
             ui->board_widget, &BoardWidget::InitData);
     AudioPlayer::getInstance()->PlayBackgroundMusic("gamescenebgm.mp3");
 
+    ui->show_name_label->setText(UserManager::getUsername());
     emit finished(game_type_);
 }
 GameWidget::~GameWidget()
@@ -56,9 +74,9 @@ void GameWidget::CreateMessageBox(QString message){
 }
 
 void GameWidget::onLevelChanged(int level) {
-    // 更新关卡显示
-    // 假设有一个显示关卡的 label
-    ui->show_level_label->setText(QString("关卡: %1").arg(level));
+    if(level==-1) ui->show_level_label->setText("限时模式");
+    else ui->show_level_label->setText(QString("关卡: %1").arg(level));
+
 }
 
 void GameWidget::onTimeChanged(int rest_time) {
@@ -234,7 +252,6 @@ void GameWidget::ResetBoard() {
     // 创建随机数生成器
     std::random_device rd;
     std::mt19937 gen(rd());
-
     // 打乱棋子位置
     bool validBoard = false;
     while (!validBoard) {
@@ -275,3 +292,14 @@ void GameWidget::on_time_stoper_button_clicked()
         ui->time_stoper_button->setIcon(QIcon(":/gui/gameWindow/8.png"));
     }
 }
+
+void GameWidget::on_setting_button_clicked()
+{
+    SmallMenuWindow *menu = new SmallMenuWindow(this);
+    menu->show();
+}
+
+void GameWidget::closeStateMachine(){
+    ui->board_widget->state_machine_.Clear();
+}
+

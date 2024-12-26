@@ -38,32 +38,91 @@ void BoardWidget::DrawBK(int start_x, int start_y, int board_width, int board_he
     painter.setRenderHint(QPainter::Antialiasing);
 
     // 绘制背景（可选）
-    painter.setBrush(QBrush(Qt::lightGray));
-    painter.drawRect(start_x, start_y, board_width, board_height);
-    DrawSelect(painter);
+    painter.setBrush(QBrush(QColor(31, 47, 70)));
+    painter.drawRect(start_x, start_y, board_width, board_height); // 添加 10px 的圆角
 }
 
 void BoardWidget::DrawSelect(QPainter &painter){
     if(!PosManager::instance()->IsChoosed()){
         return ;
     }
-
     QPointF select_pos = Utils::GetRenderPos(PosManager::instance()->GetPos1());
-    // 设置高亮样式
-    QColor highlightColor = QColor(255, 255, 0, 128); // 半透明黄色
-    painter.setBrush(QBrush(highlightColor));
+
+    int x = select_pos.x();
+    int y = select_pos.y();
+    int size = Constants::k_cell_size;
+    int cornerLength = size / 4;
+
+    // 添加内发光效果
+    QColor glowColor(255, 100, 100, 50); // 淡红色半透明
     painter.setPen(Qt::NoPen);
+    painter.setBrush(glowColor);
+    painter.drawRect(x, y, size, size);
 
-    // 绘制选中格子的高亮背景
-    painter.drawRect( select_pos.x(),select_pos.y() ,Constants::k_cell_size , Constants::k_cell_size);
+    // 设置抗锯齿和平滑效果
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    // 如果需要绘制边框
-    painter.setPen(QPen(Qt::red, 3)); // 红色边框，宽度为 3
-    painter.setBrush(Qt::NoBrush);
-    painter.drawRect( select_pos.x(),select_pos.y() ,Constants::k_cell_size , Constants::k_cell_size);
+    // 绘制渐变边角
+    QLinearGradient gradient;
+    gradient.setColorAt(0, Qt::yellow); // 亮红色
+    gradient.setColorAt(1, QColor(255, 253, 208)  ); // 淡红色
+
+    QPen cornerPen(QPen(QBrush(gradient), 3, Qt::SolidLine, Qt::RoundCap));
+    painter.setPen(cornerPen);
+
+    // 左上角
+    gradient.setStart(x, y);
+    gradient.setFinalStop(x + cornerLength, y);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x, y, x + cornerLength, y);
+
+    gradient.setStart(x, y);
+    gradient.setFinalStop(x, y + cornerLength);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x, y, x, y + cornerLength);
+
+    // 右上角
+    gradient.setStart(x + size - cornerLength, y);
+    gradient.setFinalStop(x + size, y);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x + size - cornerLength, y, x + size, y);
+
+    gradient.setStart(x + size, y);
+    gradient.setFinalStop(x + size, y + cornerLength);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x + size, y, x + size, y + cornerLength);
+
+    // 左下角
+    gradient.setStart(x, y + size - cornerLength);
+    gradient.setFinalStop(x, y + size);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x, y + size - cornerLength, x, y + size);
+
+    gradient.setStart(x, y + size);
+    gradient.setFinalStop(x + cornerLength, y + size);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x, y + size, x + cornerLength, y + size);
+
+    // 右下角
+    gradient.setStart(x + size - cornerLength, y + size);
+    gradient.setFinalStop(x + size, y + size);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x + size - cornerLength, y + size, x + size, y + size);
+
+    gradient.setStart(x + size, y + size - cornerLength);
+    gradient.setFinalStop(x + size, y + size);
+    cornerPen.setBrush(gradient);
+    painter.setPen(cornerPen);
+    painter.drawLine(x + size, y + size - cornerLength, x + size, y + size);
 }
-
-
 void BoardWidget::render(QPainter &painter)
 {
     std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
@@ -93,6 +152,7 @@ void BoardWidget::render(QPainter &painter)
         int y = start_y + row * cell_size_;
         painter.drawLine(start_x, y, start_x + board_width, y);
     }
+    DrawSelect(painter);
 
 
     int w = board->GetWidth();
@@ -166,7 +226,7 @@ void BoardWidget::mousePressEvent(QMouseEvent *ev)
     }
 
     // 调用基类的事件处理
-    QWidget::mousePressEvent(ev);
+    // QWidget::mousePressEvent(ev);
 }
 
 bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
@@ -195,6 +255,24 @@ bool BoardWidget::PixelToBoard(int x, int y, Vector2 &pos)
 }
 
 
+void BoardWidget::StartCounter(){
+    disconnect(&count_down_timer_, &QTimer::timeout, this, nullptr);
+    connect(&count_down_timer_, &QTimer::timeout, this, [this]() {  // 使用 [this] 而不是 [&]
+        DataResource* resource = DataResource::instance();
+        // 获取剩余时间
+        int rest_time = resource->rest_time();
+
+        if (rest_time <= 0) {
+            // 如果时间已经到了，停止定时器
+            count_down_timer_.stop();
+            resource->timeout();  // 发出 timeout 信号
+            return;
+        }
+        // 更新剩余时间
+        resource->set_rest_time(rest_time - 1);
+    });
+    count_down_timer_.start(1000);
+}
 
 
 
@@ -213,27 +291,112 @@ void BoardWidget::InitStateMachine(){
 
 
 
-void BoardWidget::InitData(int choice){
-    if(choice==1){
-        int time = 1000;
-        int steps = 10;
-        DataResource::instance()->set_level(1);
-        DataResource::instance()->set_rest_steps(steps);
-        DataResource::instance()->set_total_steps(steps);
-        DataResource::instance()->set_score(0);
-        DataResource::instance()->set_target_score(300);
-        DataResource::instance()->set_rest_time(time);
-        DataResource::instance()->set_total_time(time);
-    }
+void BoardWidget::InitData(){
+    int game_difficulty = ModeManager::getinstance()->getDifficulty();
+    int board_size = ModeManager::getinstance()->getCheckerboard();
+    int game_mode = ModeManager::getinstance()->getPlay();
+
+    qDebug() << "game_difficulty:" << game_difficulty;
+    qDebug() << "board_size:" << board_size;
+    qDebug() << "game_mode:" << game_mode;
+
+    SetDifficulty(game_difficulty);
+    SetBoardSize(board_size);
+    SetGameMode(game_mode);
+
+
+    // if(choice==1){
+    //     int time = 1000;
+    //     int steps = 10;
+    //     DataResource::instance()->set_level(1);
+    //     DataResource::instance()->set_rest_steps(steps);
+    //     DataResource::instance()->set_total_steps(steps);
+    //     DataResource::instance()->set_score(0);
+    //     DataResource::instance()->set_target_score(300);
+    //     DataResource::instance()->set_rest_time(time);
+    //     DataResource::instance()->set_total_time(time);
+    // }
 }
 
 
 
 
+void BoardWidget::SetDifficulty(int choice) {
 
+    switch (choice) {
+    case 1: // 简单
+        Constants::ktype_size = 4;
+        break;
+    case 2: // 中等
+        Constants::ktype_size = 5;
+        break;
+    case 3: // 困难
+        Constants::ktype_size = 6;
+        break;
+    default:
+        Constants::ktype_size = 6;
+        break;
+    }
+}
 
+void BoardWidget::SetBoardSize(int choice) {
+    switch (choice) {
+    case 1: // 小
+        Constants::board_width = 8;
+        Constants::board_height = 8;
+        Constants::k_cell_size = 64;
+        break;
+    case 2: // 中
+        Constants::board_width = 10;
+        Constants::board_height = 10;
+        Constants::k_cell_size = 50;
+        break;
+    case 3: // 大
+        Constants::board_width = 12;
+        Constants::board_height = 12;
+        Constants::k_cell_size = 42;
+        break;
+    default:
+        Constants::board_width = 8;
+        Constants::board_height = 8;
+        Constants::k_cell_size = 64;
+        break;
+    }
+    Constants::k_cube_size.setWidth(Constants::k_cell_size - 5);
+    Constants::k_cube_size.setWidth(Constants::k_cell_size - 5);
 
+}
 
+void BoardWidget::SetGameMode(int choice) {
+
+    switch (choice) {
+    case 1: { // 闯关
+        int time = 1000000;
+        int steps = 10;
+        DataResource::instance()->set_level(1);
+        DataResource::instance()->set_rest_steps(steps);
+        DataResource::instance()->set_total_steps(steps);
+        DataResource::instance()->set_score(0);
+        DataResource::instance()->set_target_score(1500);
+        DataResource::instance()->set_rest_time(time);
+        DataResource::instance()->set_total_time(time);
+        break;
+    }
+    case 2: {
+        // 计时
+        int time = 10;
+        int steps = 100000;
+        DataResource::instance()->set_level(-1);
+        DataResource::instance()->set_rest_steps(steps);
+        DataResource::instance()->set_total_steps(steps);
+        DataResource::instance()->set_score(0);
+        DataResource::instance()->set_target_score(0);
+        DataResource::instance()->set_rest_time(time);
+        DataResource::instance()->set_total_time(time);
+        break;
+    }
+    }
+}
 
 
 

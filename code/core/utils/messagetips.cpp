@@ -84,7 +84,7 @@ void MessageTips::InitLayout()
     // 移动窗口到屏幕底部居中位置
     this->move(
         (screenGeometry.width() - mText->width()) / 2,          // 水平居中
-        (screenGeometry.height() - mText->height()) * 1 / 8     // 垂直位置在屏幕底部偏上
+        (screenGeometry.height() - mText->height()) * 2 / 8     // 垂直位置在屏幕底部偏上
         );
 
     // 设置窗口透明以允许鼠标事件穿透
