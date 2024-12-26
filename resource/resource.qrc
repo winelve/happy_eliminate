@@ -165,6 +165,8 @@
         <file>gui/gameWindow/8.png</file>
         <file>gui/gameWindow/9.png</file>
         <file>cubes/effect/back_tips.png</file>
+        <file>gui/images/help.jpg</file>
+        <file>gui/aboutWindow/about.jpg</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>
