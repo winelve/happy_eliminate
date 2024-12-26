@@ -25,24 +25,23 @@ private slots:
     void onScoreChanged(int score);
     void onTargetScoreChanged(int target_score);
     void onStepChanged(int rest_steps);
-
     void on_score_button_clicked();
-
     void on_time_button_clicked();
-
     void on_magic_button_clicked();
+    void on_reset_button_clicked();
+    void on_time_stoper_button_clicked();
 
 signals:
     void finished(int game_type);
 
 private:
     Ui::GameWidget *ui;
+    int game_type_ = 1; //设置的时候使用
 
-    int game_type_ = 1;
-
-    void RandomMagic();
-    void modifyFont();
-
+    void modifyFont();  // 修改字体
+    void RandomMagic(); //随机产生猫咪
+    void ResetBoard(); //用于随机打乱棋盘
+    void CreateMessageBox(QString message);
 };
 
 #endif // GAMEWIDGET_H

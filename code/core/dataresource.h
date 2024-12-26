@@ -21,23 +21,17 @@ public:
     int total_time() const { return total_time_; }
     int total_steps() const { return total_steps_; }
     int pace() const { return pace_; }
+    int elimination_times() const { return elimination_times_; }
 
-    void add_score(int cube_number){
-        set_score(score_ + cube_number * pace_);
-    }
 
-    void set_total_time(int total_time) {
-        total_time_ = total_time;
-        // emit level_change_signal(level);
-    }
-    void set_total_steps(int total_steps) {
-        total_steps_ = total_steps;
-        // emit level_change_signal(level);
-    }
+    void set_elimination_times(int times) { elimination_times_ = times; }
+    void elimination_times_add_one() { if(elimination_times_<6) ++elimination_times_; }
+    void reset_elimination_times() { elimination_times_ = 1; }
 
-    void set_pace(int pace) {
-        pace_ = pace;
-    }
+    void add_score(int cube_number){ set_score(score_ + cube_number * pace_); }
+    void set_total_time(int total_time) { total_time_ = total_time; }
+    void set_total_steps(int total_steps) { total_steps_ = total_steps; }
+    void set_pace(int pace) { pace_ = pace; }
 
     void set_level(int level) {
         level_ = level;
@@ -98,6 +92,8 @@ private:
     int rest_steps_ = 0;     // 剩余步数
     int total_steps_ = 0;
     int pace_ = 10;
+
+    int elimination_times_ = 1; //连续消除次数
 };
 
 #endif // DATARESOURCE_H

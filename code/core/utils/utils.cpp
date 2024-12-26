@@ -1,5 +1,7 @@
 #include "utils.h"
 #include <random>
+#include <unordered_set>
+#include "code/audio/audioplayer.h"
 
 namespace Utils {
 
@@ -46,6 +48,43 @@ void PrintMatches(const std::vector<std::vector<Vector2>> &matches) {
             qDebug() << "(" << vec.GetRow() << "," << vec.GetColumn() << ")";
         }
     }
+}
+
+void RemoveDuplicates(std::vector<std::vector<Vector2>> &matches) {
+    for (auto &innerVec : matches) {
+        // Use an unordered_set to track unique Vector2 elements
+        std::unordered_set<Vector2> uniqueElements;
+        auto it = innerVec.begin();
+
+        while (it != innerVec.end()) {
+            // If the element is already in the set, erase it
+            if (!uniqueElements.insert(*it).second) {
+                it = innerVec.erase(it);
+                qDebug() << "!!!!!!!!!!!!!!!!!!!!!!重复!!!!!!!!!!!!!!!!!!!";
+            } else {
+                ++it;
+            }
+        }
+    }
+}
+
+void PlayLevelMusic(int times) {
+    AudioPlayer* audio = AudioPlayer::getInstance();
+    if(times == 2) audio->PlaySoundEffect("contnuousMatch3.mp3");
+    else if(times == 3) audio->PlaySoundEffect("contnuousMatch5.mp3");
+    else if(times == 4) audio->PlaySoundEffect("contnuousMatch7.mp3");
+    else if(times == 5) audio->PlaySoundEffect("contnuousMatch9.mp3");
+    else if(times == 6) audio->PlaySoundEffect("contnuousMatch11.mp3");
+}
+
+void PlayEliminateMusic(int times){
+    AudioPlayer* audio = AudioPlayer::getInstance();
+    if(times == 1) audio->PlaySoundEffect("eliminate1.mp3");
+    else if(times == 2) audio->PlaySoundEffect("eliminate2.mp3");
+    else if(times == 3) audio->PlaySoundEffect("eliminate3.mp3");
+    else if(times == 4) audio->PlaySoundEffect("eliminate4.mp3");
+    else if(times == 5) audio->PlaySoundEffect("eliminate5.mp3");
+    else audio->PlaySoundEffect("eliminate6.mp3");
 }
 
 

@@ -154,6 +154,14 @@
         <file>gui/gameWindow/7.png</file>
         <file>cubes/skin/bk-.jpg</file>
         <file>gui/modeselectionWindow/9.png</file>
+        <file>cubes/effect/amazing.png</file>
+        <file>cubes/effect/execellent.png</file>
+        <file>cubes/effect/good.png</file>
+        <file>cubes/effect/great.png</file>
+        <file>cubes/effect/unbelievable.png</file>
+        <file>cubes/effect/gameover.png</file>
+        <file>cubes/effect/win.png</file>
+        <file>cubes/effect/next_level.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

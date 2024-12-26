@@ -23,7 +23,11 @@ public:
     void render(QPainter &painter); // 用于渲染
     void Update();
 
-    QTimer count_down_timer_;
+    bool IsRender() { return is_render_; }
+    void SetIsRender(bool is_render) { is_render_ = is_render; }
+
+    QTimer *GetCountDownTimer() { return &count_down_timer_; }
+
 protected:
     void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
 
@@ -32,19 +36,23 @@ protected:
         Q_UNUSED(event);
         QPainter painter(this);
 
-        render(painter);
+        if(is_render_) {
+            render(painter);
+        }
+
     }
 
 
 private:
     QTimer game_timer_;
-
+    QTimer count_down_timer_;
     QElapsedTimer elapsed_timer_;
 
     //背景
     QPixmap board_background_;
     //状态管理
     StateMachine state_machine_;
+    bool is_render_ = true;
     void InitStateMachine();
 
     //属性
@@ -52,7 +60,6 @@ private:
     int height_;
     int cell_size_;
     QPoint padding_;
-
     // 维护鼠标事件
 
 

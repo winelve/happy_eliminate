@@ -32,31 +32,24 @@ void RenderManager::ClearGroup(const QString &groupName) {
     groups_.erase(groupName);
 }
 
-void RenderManager::RenderAll(QPainter &painter) {
-    // 临时容器，用于按层级排序后的渲染
-    std::vector<Entity*> allEntities;
-    // 合并所有分组中的实体到一个容器中
+void RenderManager::RenderAll(QPainter &painter, int layer) {
+    // 临时容器，用于存储指定层级的实体
+    std::vector<Entity*> selectedEntities;
+
+    // 遍历所有分组，筛选出指定层级的实体
     for (auto &[groupName, entities] : groups_) {
-        allEntities.insert(allEntities.end(), entities.begin(), entities.end());
+        for (Entity *entity : entities) {
+            if (entity && entity->GetLayer() == layer) {
+                selectedEntities.push_back(entity);
+            }
+        }
     }
-
-
-
-    // 按层级（layer）从小到大排序
-    std::sort(allEntities.begin(), allEntities.end(), [](Entity* a, Entity* b) {
-        return a->GetLayer() < b->GetLayer();
-    });
-
-
-    // qDebug() << "Render:size:" << groups_["detroy"].size();
-    // qDebug() << "<<<<<<<<<<<<<<<<Before Render>>>>>>>>>>>>>>";
-    // 渲染所有实体
-    for (Entity *entity : allEntities) {
+    // 渲染所有符合条件的实体
+    for (Entity *entity : selectedEntities) {
         if (entity) {
             entity->render(painter);
         }
     }
-    // qDebug() << "<<<<<<<<<<<<<<<<After Render>>>>>>>>>>>>>>";
 }
 
 void RenderManager::UpdateAll(int deltaTime) {
