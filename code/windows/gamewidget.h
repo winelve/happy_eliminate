@@ -36,9 +36,9 @@ signals:
 
 private:
     Ui::GameWidget *ui;
-
     int game_type_ = 1; //设置的时候使用
 
+    void modifyFont();  // 修改字体
     void RandomMagic(); //随机产生猫咪
     void ResetBoard(); //用于随机打乱棋盘
     void CreateMessageBox(QString message);
