@@ -489,7 +489,7 @@ public:
             //无可消除的序列
             if(DataResource::instance()->elimination_times()>=2){
                 WordEffect *effect = new WordEffect(DataResource::instance()->elimination_times());
-                effect->SetRenderPos(Utils::GetRenderPos(3,4));
+                effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
                 QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
                 connect(ani, &QPropertyAnimation::finished, this, [this]() { transTo(); });
                 ani->start();
@@ -525,7 +525,7 @@ public:
         DataResource *data = DataResource::instance();
         if(data->score()>=data->target_score()){
             WordEffect2 *effect = new WordEffect2(1);
-            effect->SetRenderPos(Utils::GetRenderPos(3,4));
+            effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
             QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
             connect(ani, &QPropertyAnimation::finished, this, [this]() { InitNew(); });
             ani->start();
@@ -561,7 +561,7 @@ public:
 
     void onEnter() override {
         WordEffect2 *effect = new WordEffect2(0);
-        effect->SetRenderPos(Utils::GetRenderPos(3,4));
+        effect->SetRenderPos(Utils::GetRenderPos(Constants::Word_Pos));
         QPropertyAnimation *ani = effect->CreatMotionAni("opacity",0,1,700,QEasingCurve::OutQuint);
         ani->start();
         qDebug() << "游戏结束,你的最终得分:" << DataResource::instance()->score();

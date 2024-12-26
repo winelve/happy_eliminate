@@ -55,9 +55,9 @@ void GameWidget::CreateMessageBox(QString message){
 }
 
 void GameWidget::onLevelChanged(int level) {
-    // 更新关卡显示
-    // 假设有一个显示关卡的 label
-    ui->show_level_label->setText(QString("关卡: %1").arg(level));
+    if(level==-1) ui->show_level_label->setText("限时模式");
+    else ui->show_level_label->setText(QString("关卡: %1").arg(level));
+
 }
 
 void GameWidget::onTimeChanged(int rest_time) {
@@ -208,7 +208,6 @@ void GameWidget::ResetBoard() {
     // 创建随机数生成器
     std::random_device rd;
     std::mt19937 gen(rd());
-
     // 打乱棋子位置
     bool validBoard = false;
     while (!validBoard) {
