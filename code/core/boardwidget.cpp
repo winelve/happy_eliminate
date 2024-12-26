@@ -266,10 +266,12 @@ void BoardWidget::StartCounter(){
             // 如果时间已经到了，停止定时器
             count_down_timer_.stop();
             resource->timeout();  // 发出 timeout 信号
+            DataResource::instance()->game_over = true;
             return;
         }
         // 更新剩余时间
         resource->set_rest_time(rest_time - 1);
+
     });
     count_down_timer_.start(1000);
 }
@@ -384,7 +386,7 @@ void BoardWidget::SetGameMode(int choice) {
     }
     case 2: {
         // 计时
-        int time = 10;
+        int time = 120;
         int steps = 100000;
         DataResource::instance()->set_level(-1);
         DataResource::instance()->set_rest_steps(steps);

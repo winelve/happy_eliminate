@@ -18,7 +18,6 @@
 #include "code/windows/mainwindow.h"
 #include "code/database/database.h"
 #include "code/windows/usermanager.h"
-
 #include <QObject>
 #include <QDebug>
 #include <QPropertyAnimation>
@@ -37,13 +36,12 @@ public:
     explicit WaitingForInputState(QObject *parent = nullptr)
         : StateNode(parent)
     {
-QObject::connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
 
     }
 
     void onEnter() override {
+        QObject::connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, this, &WaitingForInputState::HandleMouseSignal);
 
-        QObject::connect(DataResource::instance(), &DataResource::time_out_signal, this, &WaitingForInputState::HandleTimerOver);
         // 重新连接
         qDebug() << "进入状态：等待用户输入";
         // 等待用户操作逻辑
@@ -54,8 +52,8 @@ QObject::connect(PosManager::instance(), &PosManager::finish_choose_pos_singal, 
 
     }
     void onUpdate() override {
-        if(is_gameover_) {
-            is_gameover_ = true;
+        if(DataResource::instance()->game_over) {
+            is_gameover_ = false;
             state_machine_->SwitchTo("GameOver");
             qDebug() << ">>>>>>GameOver<<<<<<<";
         }
@@ -426,15 +424,13 @@ public:
     explicit FallingState(QObject *parent = nullptr)
         : StateNode(parent)
     {
-        // 先断开连接
-        disconnect(this, &FallingState::fall_ani_finished, this, &FallingState::transToEndCheck);
-        disconnect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
-
         connect(this, &FallingState::fall_ani_finished, this, &FallingState::transToEndCheck);
-        connect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
     }
 
     void onEnter() override {
+
+        connect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
+
         qDebug() << "进入状态：下落中";
         std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
         ani_group = new QParallelAnimationGroup(this);
@@ -451,6 +447,12 @@ public:
             ani_group->start(QAbstractAnimation::DeleteWhenStopped); // 使用 QAbstractAnimation
         }
 
+    }
+
+    void onExit() override {
+        // 先断开连接
+        // disconnect(this, &FallingState::fall_ani_finished, this, &FallingState::transToEndCheck);
+        disconnect(&GameLogic::instance(), &GameLogic::fallEvent, this, &FallingState::onCubeFall);
     }
 private:
     QParallelAnimationGroup* ani_group;
@@ -554,7 +556,7 @@ public slots:
         DataResource::instance()->set_level(DataResource::instance()->level()+1);
         DataResource::instance()->set_target_score(DataResource::instance()->target_score() * DataResource::instance()->level());
         DataResource::instance()->set_score(0);
-        DataResource::instance()->set_rest_steps(DataResource::instance()->total_steps() * DataResource::instance()->level());
+        DataResource::instance()->set_rest_steps(DataResource::instance()->total_steps() + 5);
         //初始化棋子
         // initBoard();
         std::shared_ptr<Board> board =  BoardManager::instance().GetCurrentBoard();

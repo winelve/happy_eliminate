@@ -26,7 +26,7 @@ GameWidget::GameWidget(QWidget *parent)
     modifyFont();
     // 获取 DataResource 实例
     DataResource* resource = DataResource::instance();
-
+    resource->game_over = false;
     // 断开所有连接
     disconnect(resource, &DataResource::level_change_signal,
                this, &GameWidget::onLevelChanged);

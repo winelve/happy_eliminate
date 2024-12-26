@@ -90,41 +90,21 @@ void DataBase::updateUserScore(const QString &name, int score, int key) {
 
     QSqlQuery query(db);
 
-    query.prepare("SELECT score FROM users WHERE name = :name");
+    // 直接插入新记录
+    query.prepare("INSERT INTO users (name, score, key) VALUES (:name, :score, :key)");
     query.bindValue(":name", name);
+    query.bindValue(":score", score);
+    query.bindValue(":key", key);
+
     if (!query.exec()) {
-        qCritical() << "查询执行失败:" << query.lastError().text();
-        db.close();
-        return;
-    }
-
-    if (query.next()) {
-        int currentScore = query.value(0).toInt();
-        int newScore = currentScore + score;
-        query.prepare("UPDATE users SET score = :newScore, key = :key WHERE name = :name");
-        query.bindValue(":name", name);
-        query.bindValue(":newScore", newScore);
-        query.bindValue(":key", key);
-
-        if (!query.exec()) {
-            qCritical() << "更新失败:" << query.lastError().text();
-        } else {
-            qDebug() << "用户 " << name << " 的得分更新成功，新得分为" << newScore;
-        }
+        qCritical() << "插入失败:" << query.lastError().text();
     } else {
-        query.prepare("INSERT INTO users (name, score, key) VALUES (:name, :score, :key)");
-        query.bindValue(":name", name);
-        query.bindValue(":score", score);
-        query.bindValue(":key", key);
-        if (!query.exec()) {
-            qCritical() << "插入失败:" << query.lastError().text();
-        } else {
-            qDebug() << "新用户 " << name << " 添加成功，得分为" << score;
-        }
+        qDebug() << "用户 " << name << " 新增记录成功，得分为" << score;
     }
 
     db.close();
 }
+
 QList<QPair<QString, int>> DataBase::fetchUsersByScore() {
     QList<QPair<QString, int>> userScores;
 

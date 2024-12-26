@@ -29,7 +29,7 @@ const int k_cube_pace = 10;
 
 const int k_price_time = 500;
 const int k_price_pace = 50;
-const int k_price_magic = 0;
+const int k_price_magic = 800;
 const int k_price_switch = 80;
 
 Vector2 Word_Pos = Vector2(board_width/2-1,board_width/2-1);
