@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1020</width>
+    <width>1001</width>
     <height>681</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
      </property>
      <property name="styleSheet">
       <string notr="true">#back_ground {
-	background-image: url(:/cubes/bk/bk3.jpg);
+	background-image: url(:/gui/gameWindow/bk.jpg)
 }
 </string>
      </property>
@@ -48,36 +48,101 @@
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
             <widget class="QPushButton" name="setting_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>设置</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/7.png</normaloff>:/gui/gameWindow/7.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>50</width>
+               <height>55</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="time_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>时间延长</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/4.png</normaloff>:/gui/gameWindow/4.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="score_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>得分*1.5</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/3.png</normaloff>:/gui/gameWindow/3.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="magic_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>随机猫咪</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/6.png</normaloff>:/gui/gameWindow/6.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>65</width>
+               <height>65</height>
+              </size>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="reset_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>重置棋盘</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/5.png</normaloff>:/gui/gameWindow/5.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>60</width>
+               <height>60</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -113,7 +178,7 @@
           <property name="styleSheet">
            <string notr="true">#right_widget {
 	
-	background-image: url(:/cubes/skin/Button_Hover_9Slides.png);
+	background-image:url(:/cubes/skin/2.png);
     background-size: cover;                       /* 图片自适应控件大小 */
 }</string>
           </property>
@@ -141,12 +206,15 @@
                 </font>
                </property>
                <property name="styleSheet">
-                <string notr="true">image: url(:/cubes/skin/steps.png);
+                <string notr="true">image:url(:/cubes/skin/steps_3.png);
 
 </string>
                </property>
                <property name="text">
-                <string>   20</string>
+                <string/>
+               </property>
+               <property name="scaledContents">
+                <bool>false</bool>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -170,38 +238,6 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="user_name_label">
-               <property name="minimumSize">
-                <size>
-                 <width>60</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>等线</family>
-                 <pointsize>9</pointsize>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QLabel {
-    
-	image: url(:/cubes/skin/user_name.png);
-}</string>
-               </property>
-               <property name="lineWidth">
-                <number>1</number>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QLabel" name="show_name_label">
                <property name="font">
                 <font>
@@ -209,7 +245,7 @@
                 </font>
                </property>
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
+                <string notr="true">color:rgb(148, 75, 43)</string>
                </property>
                <property name="text">
                 <string>kevin</string>
@@ -220,12 +256,51 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="socre_label">
+              <widget class="QLabel" name="show_level_label">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
+                <string notr="true">color:rgb(148, 75, 43)</string>
                </property>
                <property name="text">
-                <string>得分</string>
+                <string>第一关</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="target_label">
+               <property name="styleSheet">
+                <string notr="true">color:rgb(148, 75, 43)</string>
+               </property>
+               <property name="text">
+                <string>目标得分</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="show_taget_label">
+               <property name="styleSheet">
+                <string notr="true">color:rgb(255, 12, 44)</string>
+               </property>
+               <property name="text">
+                <string>10000</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="socre_label">
+               <property name="styleSheet">
+                <string notr="true">color:rgb(148, 75, 43)</string>
+               </property>
+               <property name="text">
+                <string>你的得分</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -235,7 +310,7 @@
              <item>
               <widget class="QLabel" name="show_socre_label">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
+                <string notr="true">color:rgb(103, 182, 54)</string>
                </property>
                <property name="text">
                 <string>0</string>
@@ -248,7 +323,7 @@
              <item>
               <widget class="QLabel" name="rest_time">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
+                <string notr="true">color:rgb(148, 75, 43)</string>
                </property>
                <property name="text">
                 <string>剩余时长</string>
@@ -261,7 +336,7 @@
              <item>
               <widget class="QLabel" name="show_time_label">
                <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
+                <string notr="true">color:rgb(148, 75, 43)</string>
                </property>
                <property name="text">
                 <string>9999</string>
@@ -273,9 +348,15 @@
              </item>
              <item>
               <widget class="QProgressBar" name="progressBar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
-                 <width>120</width>
+                 <width>185</width>
                  <height>0</height>
                 </size>
                </property>
@@ -290,10 +371,9 @@
                </property>
                <property name="styleSheet">
                 <string notr="true">QProgressBar {
-    border: 2px solid #2a2a2a;   /* 外边框颜色 */
+    border:  none;   /* 外边框颜色 */
     border-radius: 10px;         /* 圆角边框 */
-    background-color: #1e1e1e;   /* 背景颜色 */
-    color: white;                /* 显示的文本颜色 */
+    background-color:rgb(239, 220, 177);   /* 背景颜色 */
     text-align: center;          /* 文本居中显示 */
     font-size: 14px;             /* 字体大小 */
     text-align: center;  /* 设置文本位置 */
@@ -303,54 +383,15 @@
 QProgressBar::chunk {
     background: qlineargradient(
         spread:pad, x1:0, y1:0.5, x2:1, y2:0.5,
-        stop:0 #ff7f50, stop:1 #87cefa
+        stop:0 rgb(171, 71, 17), stop:1 rgb(225, 184, 128)
     );                          /* 渐变效果，从珊瑚橙到天蓝色 */
     border-radius: 8px;         /* 圆角分块 */
-    margin: 2px;                /* 分块间距 */
+    margin: 1px;                /* 分块间距 */
 }
 </string>
                </property>
                <property name="value">
                 <number>41</number>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="show_level_label">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
-               </property>
-               <property name="text">
-                <string>第一关</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="target_label">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
-               </property>
-               <property name="text">
-                <string>目标得分</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="show_taget_label">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
-               </property>
-               <property name="text">
-                <string>10000</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -369,6 +410,32 @@ QProgressBar::chunk {
                 </size>
                </property>
               </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border:none;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../resource/resource.qrc">
+                 <normaloff>:/gui/modeselectionWindow/cute.png</normaloff>:/gui/modeselectionWindow/cute.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>130</width>
+                 <height>145</height>
+                </size>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -390,6 +457,8 @@ QProgressBar::chunk {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resource/resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

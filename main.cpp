@@ -7,6 +7,7 @@
 #include "./code/windows/usermanager.h"
 
 //#include "code/windows/smallmenuwindow.h"
+// #include "code/windows/gamewidget.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +34,9 @@ int main(int argc, char *argv[])
 
     // SmallMenuWindow mw;
     // mw.show();
+
+    // GameWidget gw;
+    // gw.show();
 
     // 启动应用
     return a.exec();

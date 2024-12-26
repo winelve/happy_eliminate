@@ -41,6 +41,7 @@ private:
     int game_type_ = 1;
 
     void RandomMagic();
+    void modifyFont();
 
 };
 
