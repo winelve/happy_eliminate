@@ -8,7 +8,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QPainter>
-
+#include <QFontDatabase>
 #include <random>       // 用于 random_device, mt19937, uniform_int_distribution
 #include <algorithm>    // 用于 shuffle
 #include <utility>      // 用于 std::pair
@@ -20,6 +20,7 @@ GameWidget::GameWidget(QWidget *parent)
 {
 
     ui->setupUi(this);
+    modifyFont();
     // 获取 DataResource 实例
     DataResource* resource = DataResource::instance();
 
@@ -189,6 +190,31 @@ void GameWidget::RandomMagic() {
     }
 }
 
+void GameWidget::modifyFont()
+{
+    // 设置字体
+    int fontId = QFontDatabase::addApplicationFont(":/font/font.ttf");
+    if (fontId == -1) {
+        qWarning() << "没有找到字体！";
+    } else {
+        QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+        QFont font(family);
+        font.setPointSize(25);
+        ui->show_name_label->setFont(font);
+        font.setPointSize(15);
+        ui->socre_label->setFont(font);
+        ui->show_socre_label->setFont(font);
+        ui->rest_time->setFont(font);
+        ui->show_time_label->setFont(font);
+        ui->target_label->setFont(font);
+        ui->show_taget_label->setFont(font);
+        font.setPointSize(20);
+        ui->show_level_label->setFont(font);
+
+
+    }
+}
+
 void GameWidget::ResetBoard() {
     std::shared_ptr<Board> board = BoardManager::instance().GetCurrentBoard();
     int width = board->GetWidth();
@@ -242,12 +268,10 @@ void GameWidget::on_time_stoper_button_clicked()
     if(timer->isActive()){
         timer->stop();
         ui->board_widget->SetIsRender(false);
+        ui->time_stoper_button->setIcon(QIcon(":/gui/gameWindow/9.png"));
     }else {
         timer->start();
         ui->board_widget->SetIsRender(true);
+        ui->time_stoper_button->setIcon(QIcon(":/gui/gameWindow/8.png"));
     }
 }
-
-
-
-

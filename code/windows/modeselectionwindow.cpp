@@ -40,15 +40,15 @@ ModeSelectionWindow::ModeSelectionWindow(QWidget *parent)
     }
     // 棋盘
     if(modeManager->getCheckerboard() == 1){
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
     }else if(modeManager->getCheckerboard() == 2){
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
     }else if(modeManager->getCheckerboard() == 3){
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
     }
@@ -121,12 +121,12 @@ void ModeSelectionWindow::on_btnSize_clicked()
 
 
 
-// 6*6
-void ModeSelectionWindow::on_btn6_clicked()
+// 8*8
+void ModeSelectionWindow::on_btn8_clicked()
 {
     audioPlayer->PlaySoundEffect("swap.mp3");
     if (modeManager->getCheckerboard() != 1) {
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         modeManager->setCheckerboard(1);
@@ -139,7 +139,7 @@ void ModeSelectionWindow::on_btn10_clicked()
     audioPlayer->PlaySoundEffect("swap.mp3");
     if (modeManager->getCheckerboard() != 2) {
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         modeManager->setCheckerboard(2);
     }
@@ -151,7 +151,7 @@ void ModeSelectionWindow::on_btn14_clicked()
     audioPlayer->PlaySoundEffect("swap.mp3");
     if (modeManager->getCheckerboard() != 3) {
         ui->btn14->setIcon(QIcon(":/gui/modeselectionWindow/0-.png"));
-        ui->btn6->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
+        ui->btn8->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         ui->btn10->setIcon(QIcon(":/gui/modeselectionWindow/0.png"));
         modeManager->setCheckerboard(3);
     }
@@ -214,4 +214,7 @@ void ModeSelectionWindow::on_btnExtreme_clicked()
         modeManager->setDifficulty(3);
     }
 }
+
+
+
 
