@@ -268,8 +268,10 @@ void GameWidget::on_time_stoper_button_clicked()
     if(timer->isActive()){
         timer->stop();
         ui->board_widget->SetIsRender(false);
+        ui->time_stoper_button->setIcon(QIcon(":/gui/gameWindow/9.png"));
     }else {
         timer->start();
         ui->board_widget->SetIsRender(true);
+        ui->time_stoper_button->setIcon(QIcon(":/gui/gameWindow/8.png"));
     }
 }

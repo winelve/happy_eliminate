@@ -48,8 +48,21 @@
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
             <widget class="QPushButton" name="time_stoper_button">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
              <property name="text">
-              <string>时停</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resource/resource.qrc">
+               <normaloff>:/gui/gameWindow/8.png</normaloff>:/gui/gameWindow/8.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>55</width>
+               <height>55</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -67,7 +80,7 @@
              </property>
              <property name="iconSize">
               <size>
-               <width>50</width>
+               <width>55</width>
                <height>55</height>
               </size>
              </property>

@@ -162,6 +162,8 @@
         <file>cubes/effect/gameover.png</file>
         <file>cubes/effect/win.png</file>
         <file>cubes/effect/next_level.png</file>
+        <file>gui/gameWindow/8.png</file>
+        <file>gui/gameWindow/9.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>
