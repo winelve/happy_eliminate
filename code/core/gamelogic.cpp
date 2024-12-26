@@ -174,16 +174,22 @@ void GameLogic::Fall(std::shared_ptr<Board> board) {
 }
 
 void GameLogic::Fill(std::shared_ptr<Board> board) {
+    qDebug() << "2Filllllllllllllllllllllllll";
     for (int col = 0; col < board->GetWidth(); ++col) {
         int empty_above = 0;
+        qDebug() << "2Filllllllllllllllllllllllll";
         for (int row = board->GetHeight() - 1; row >= 0; --row) {
+            qDebug() << "3Filllllllllllllllllllllllll";
             if (!board->GetCube(row, col) || board->GetCube(row, col)->Empty()) {
+
                 auto new_cube = Utils::GenerateCube();
+                qDebug() << "4Filllllllllllllllllllllllll";
                 new_cube->SetPos(Vector2(row, col));
                 board->SetCube(row, col, new_cube);
                 //这边也是掉落动画
                 emit fallEvent(-1-empty_above,col,row,col,new_cube);
                 empty_above++;
+                qDebug() << "1Filllllllllllllllllllllllll";
             }else empty_above = 0;
         }
 

@@ -63,6 +63,7 @@ public:
     }
 
     void reset_all_data();
+    bool game_over = false;
 
 signals:
 
@@ -94,6 +95,8 @@ private:
     int rest_steps_ = 0;     // 剩余步数
     int total_steps_ = 0;
     int pace_ = 10;
+
+
 
     int elimination_times_ = 1; //连续消除次数
 };
