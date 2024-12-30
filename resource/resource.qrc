@@ -167,6 +167,7 @@
         <file>cubes/effect/back_tips.png</file>
         <file>gui/images/help.jpg</file>
         <file>gui/aboutWindow/about.jpg</file>
+        <file>cubes/skin/funky.png</file>
     </qresource>
     <qresource prefix="/images"/>
 </RCC>

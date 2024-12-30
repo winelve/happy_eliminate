@@ -19,6 +19,8 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
     void closeStateMachine();
+    void disconnect_board();
+    void disconnect_counter();
 
 private slots:
     void onLevelChanged(int level);

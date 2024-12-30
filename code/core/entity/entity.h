@@ -39,7 +39,6 @@ public:
     void SetOpacity(qreal opacity) { opacity_ = opacity; }
 
 private:
-
     AnimationComponent ani_player_;
     QPointF position_;
     qreal opacity_ = 1.0;

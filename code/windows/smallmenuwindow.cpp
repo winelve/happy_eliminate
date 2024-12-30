@@ -174,6 +174,8 @@ void SmallMenuWindow::on_btnMode_clicked()
 
     GameWidget* gameWidget = static_cast<GameWidget*>(parentWidget());
     gameWidget->closeStateMachine();
+    gameWidget->disconnect_board();
+    gameWidget->disconnect_counter();
 
     this->close();
     this->parentWidget()->close();

@@ -256,10 +256,16 @@
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">image: url(:/cubes/bear/bear_cube.png);</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap resource="../../resource/resource.qrc">:/cubes/skin/funky.png</pixmap>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
                </property>
               </widget>
              </item>

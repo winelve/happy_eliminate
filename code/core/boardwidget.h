@@ -30,7 +30,12 @@ public:
     QTimer *GetCountDownTimer() { return &count_down_timer_; }
 
     StateMachine state_machine_;
-
+    void disconnect_board_widget(){
+        disconnect(&game_timer_, &QTimer::timeout, this, &BoardWidget::Update);
+    }
+    void disconnect_counter() {
+        disconnect(&count_down_timer_, &QTimer::timeout, this, nullptr);;
+    }
 protected:
     void mousePressEvent(QMouseEvent *ev) override;    // 由这个类来处理鼠标事件
 

@@ -302,4 +302,11 @@ void GameWidget::on_setting_button_clicked()
 void GameWidget::closeStateMachine(){
     ui->board_widget->state_machine_.Clear();
 }
+void GameWidget::disconnect_board(){
+    ui->board_widget->disconnect_board_widget();
+}
+
+void GameWidget::disconnect_counter(){
+    ui->board_widget->disconnect_counter();
+}
 
